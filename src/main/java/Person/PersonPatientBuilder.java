@@ -17,7 +17,7 @@ public class PersonPatientBuilder {
     private String host;
     private String uName;
     private String uPass;
-    private final String sqlScriptFilePath = "src/resource/sql_personPatient.sql";
+    private final String sqlScriptFilePath = "src/resource/PersonPatient.sql";
 
     public PersonPatientBuilder(String host, String uName, String uPass) {
         this.host = host;
@@ -27,19 +27,21 @@ public class PersonPatientBuilder {
 
     public void buildPersonPatient() throws SQLException, ClassNotFoundException, IOException, PersonInitializationException {
 
-        //final String scriptFilePath = "src/resource/sql_personPatient.sql";
         Path file = Path.of(sqlScriptFilePath);
-        BufferedReader reader = null;
+        //BufferedReader reader = null;
 
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         Connection myConnection = dbConnection.createConnection();
 
+        /*
         try {
             reader = new BufferedReader(new FileReader(sqlScriptFilePath));
         } catch (
                 FileNotFoundException e) {
             e.printStackTrace();
         }
+         */
+
         //String sqlStatement = reader.read();
         String sqlStatement = Files.readString(file);
         Statement statement = myConnection.createStatement();

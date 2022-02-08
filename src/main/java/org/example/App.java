@@ -24,5 +24,8 @@ public class App
         var personPat = new PersonPatientBuilder(host, uName, uPass);
         personPat.buildPersonPatient();
 
+        var personCharge = new PersonInChargeBuilder(host, uName, uPass);
+        //personCharge.buildPersonInCharge();
+
     }
 }

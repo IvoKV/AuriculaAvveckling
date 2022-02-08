@@ -1,5 +1,7 @@
 package Person;
 
+import java.util.Objects;
+
 public class PersonInCharge {
     private String id;
     private String title;
@@ -7,12 +9,23 @@ public class PersonInCharge {
     private String firstName;
     private String lastName;
 
-    public PersonInCharge(String id, String title, String groupId, String firstName, String lastName) {
+    public PersonInCharge(String id, String title, String groupId, String firstName, String lastName) throws PersonInChargeException {
         this.id = id;
         this.title = title;
         this.groupId = groupId;
         this.firstName = firstName;
         this.lastName = lastName;
+
+        try {
+            Objects.requireNonNullElse(id, "id is null");
+            Objects.requireNonNullElse(title, "title is null");
+            Objects.requireNonNullElse(groupId, "groupId is null");
+            Objects.requireNonNullElse(firstName, "firstName is null");
+            Objects.requireNonNullElse(lastName, "lastName is null");
+
+        }catch (NullPointerException npe) {
+            throw new PersonInChargeException(npe.getMessage());
+        }
     }
 
     public void setId(String id) {
