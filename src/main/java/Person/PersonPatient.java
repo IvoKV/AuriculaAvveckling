@@ -3,6 +3,7 @@ package Person;
 import java.util.Objects;
 
 public class PersonPatient {
+
     private String id;
     private String firstName;
     private String lastName;
@@ -32,6 +33,18 @@ public class PersonPatient {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     @Override

@@ -9,6 +9,8 @@ public class PersonInCharge {
     private String firstName;
     private String lastName;
 
+
+
     public PersonInCharge(String id, String title, String groupId, String firstName, String lastName) throws PersonInChargeException {
         this.id = id;
         this.title = title;
@@ -46,6 +48,26 @@ public class PersonInCharge {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     @Override

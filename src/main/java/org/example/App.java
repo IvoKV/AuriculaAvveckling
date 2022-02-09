@@ -16,16 +16,16 @@ import java.util.List;
  */
 public class App 
 {
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException {
+    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException {
         final String host = "jdbc:mysql://localhost:3306/auricula_export_tio_100";
         final String uName = "root";
         final String uPass = "ivo64..";
 
         var personPat = new PersonPatientBuilder(host, uName, uPass);
-        personPat.buildPersonPatient();
+        personPat.buildPersonPatient(false);         // boolean: write to file
 
         var personCharge = new PersonInChargeBuilder(host, uName, uPass);
-        //personCharge.buildPersonInCharge();
+        personCharge.buildPersonInCharge(true);     // boolean: write to file
 
     }
 }
