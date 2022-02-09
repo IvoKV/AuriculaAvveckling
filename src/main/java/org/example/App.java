@@ -1,14 +1,12 @@
 package org.example;
 
-import DBSource.DBConnection;
-import Person.*;
+import Person.PersonInChargeBuilder;
+import Person.PersonInChargeException;
+import Person.PersonInitializationException;
+import Person.PersonPatientBuilder;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Auricula Personobjekt
@@ -22,7 +20,7 @@ public class App
         final String uPass = "ivo64..";
 
         var personPat = new PersonPatientBuilder(host, uName, uPass);
-        personPat.buildPersonPatient(false);         // boolean: write to file
+        personPat.buildPersonPatient(true);         // boolean: write to file
 
         var personCharge = new PersonInChargeBuilder(host, uName, uPass);
         personCharge.buildPersonInCharge(true);     // boolean: write to file

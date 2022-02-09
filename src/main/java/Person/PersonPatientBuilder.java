@@ -1,11 +1,11 @@
 package Person;
 
 import DBSource.DBConnection;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class PersonPatientBuilder {
 
@@ -22,8 +21,8 @@ public class PersonPatientBuilder {
     private String uName;
     private String uPass;
     private final String sqlScriptFilePath = "src/resource/PersonPatient.sql";
-    private final String POJOFileName = "personPatients.txt";
-    private final String JSONFileName = "personPatients.json";
+    private final String POJOFileName = "temp/personPatients.txt";
+    private final String JSONFileName = "temp/personPatients.json";
 
     public PersonPatientBuilder(String host, String uName, String uPass) {
         this.host = host;

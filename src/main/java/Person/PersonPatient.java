@@ -3,7 +3,6 @@ package Person;
 import java.util.Objects;
 
 public class PersonPatient {
-
     private String id;
     private String firstName;
     private String lastName;
