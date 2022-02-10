@@ -8,15 +8,15 @@ public class PersonInCharge {
     private String groupId;
     private String firstName;
     private String lastName;
+    private String befattningskod;
 
-
-
-    public PersonInCharge(String id, String title, String groupId, String firstName, String lastName) throws PersonInChargeException {
+    public PersonInCharge(String id, String title, String groupId, String firstName, String lastName, String befattning) throws PersonInChargeException {
         this.id = id;
         this.title = title;
         this.groupId = groupId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.befattningskod = befattning;
 
         try {
             Objects.requireNonNullElse(id, "id is null");
@@ -24,6 +24,7 @@ public class PersonInCharge {
             Objects.requireNonNullElse(groupId, "groupId is null");
             Objects.requireNonNullElse(firstName, "firstName is null");
             Objects.requireNonNullElse(lastName, "lastName is null");
+            Objects.requireNonNullElse(befattningskod, "no mapping value");
 
         }catch (NullPointerException npe) {
             throw new PersonInChargeException(npe.getMessage());
@@ -68,6 +69,14 @@ public class PersonInCharge {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public String getBefattningskod() {
+        return befattningskod;
+    }
+
+    public void setBefattningskod(String befattningskod) {
+        this.befattningskod = befattningskod;
     }
 
     @Override

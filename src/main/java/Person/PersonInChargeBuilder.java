@@ -1,6 +1,7 @@
 package Person;
 
 import DBSource.DBConnection;
+import auxilliary.MappingPositions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -41,14 +42,17 @@ public class PersonInChargeBuilder {
         ResultSet rs = statement.executeQuery(sqlStatement);
 
         List<PersonInCharge> personsInCharge = new ArrayList<>();
-
+        MappingPositions map = new MappingPositions();
         while (rs.next()) {
+            String befattningskod = map.getBefattning(rs.getString("titel"));
             PersonInCharge personCharge = new PersonInCharge(
                     rs.getString("id"),
                     rs.getString("titel"),
                     rs.getString("groupId"),
                     rs.getString("firstName"),
-                    rs.getString("lastName"));
+                    rs.getString("lastName"),
+                    befattningskod
+            );
             personsInCharge.add(personCharge);
         }
 
@@ -60,6 +64,8 @@ public class PersonInChargeBuilder {
             POJOListToJSONToFile(personsInCharge);
         }
     }
+
+
 
     private void extractToFile(List<PersonInCharge> personsInCharge) throws IOException {
         FileWriter writer = new FileWriter(POJOFileName);
