@@ -1,3 +1,4 @@
+# Detta sql script lämpas sig för att skriva ut alla befintliga befattningar i Auricula db.
 select u.ID, user_title_text.TEXT as titel, u.GROUPID, u.FIRSTNAME, u.LASTNAME
 from user u
     left outer join listboxtextrow user_title_row on user_title_row.TEXTVALUE = u.TITLE and user_title_row.id = 'USER_TITLE_L'

@@ -19,11 +19,11 @@ public class App
         final String uName = "root";
         final String uPass = "ivo64..";
 
-        var personPat = new PersonPatientBuilder(host, uName, uPass);
-        personPat.buildPersonPatient(true);         // boolean: write to file
+//        var personPat = new PersonPatientBuilder(host, uName, uPass);
+//        personPat.buildPersonPatient(true);         // boolean: write to file
 
         var personCharge = new PersonInChargeBuilder(host, uName, uPass);
-        personCharge.buildPersonInCharge(true);     // boolean: write to file
+        personCharge.buildPersonInCharge(true, "Group");     // boolean: write to file; Group || All
 
     }
 }

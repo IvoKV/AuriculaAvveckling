@@ -20,9 +20,11 @@ public class PersonInChargeBuilder {
     private String host;
     private String uName;
     private String uPass;
-    private final String sqlScriptFilePath = "src/resource/PersonInCharge.sql";
-    private final String POJOFileName = "temp/personInCharge.txt";
-    private final String JSONFileName = "temp/personInCharge.json";
+    private final String sqlScriptFilePathAll = "src/resource/PersonInChargeAll.sql";      // All titles, creating a total of employees in charge
+    private final String sqlScriptFilePathGroup = "src/resource/PersonInChargeGroupBy.sql";    // Set of Titles that exist in DB
+
+    private String POJOFileName = "";
+    private String JSONFileName = "";
 
     public PersonInChargeBuilder(String host, String uName, String uPass) {
         this.host = host;
@@ -30,8 +32,20 @@ public class PersonInChargeBuilder {
         this.uPass = uPass;
     }
 
-    public void buildPersonInCharge(Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInChargeException {
-        Path file = Path.of(sqlScriptFilePath);
+    public void buildPersonInCharge(Boolean writeToFile, String mode) throws SQLException, ClassNotFoundException, IOException, PersonInChargeException {
+        Path file = null;
+        switch (mode){
+            case "Group":
+                file = Path.of(sqlScriptFilePathGroup);
+                POJOFileName = "temp/personInChargeGroupBy.txt";
+                JSONFileName = "temp/personInChargeGroupBy.json";
+                break;
+            case "All":
+                file = Path.of(sqlScriptFilePathAll);
+                POJOFileName = "temp/personInChargeAll.txt";
+                JSONFileName = "temp/personInChargeAll.json";
+                break;
+        }
 
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         Connection myConnection = dbConnection.createConnection();
@@ -44,6 +58,8 @@ public class PersonInChargeBuilder {
         List<PersonInCharge> personsInCharge = new ArrayList<>();
         MappingPositions map = new MappingPositions();
         while (rs.next()) {
+            if(rs.getString("titel") == null)
+                continue;
             String befattningskod = map.getBefattning(rs.getString("titel"));
             PersonInCharge personCharge = new PersonInCharge(
                     rs.getString("id"),
