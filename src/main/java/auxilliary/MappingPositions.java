@@ -2,8 +2,6 @@ package auxilliary;
 
 import leverans.patientjournal.elektroniskjournalpost.Befattning;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
