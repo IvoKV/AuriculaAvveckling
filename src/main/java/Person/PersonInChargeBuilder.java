@@ -20,22 +20,28 @@ public class PersonInChargeBuilder {
     private String host;
     private String uName;
     private String uPass;
-    private final String sqlScriptFilePathAll = "src/resource/PersonInChargeAll.sql";      // All titles, creating a total of employees in charge
-    private final String sqlScriptFilePathGroup = "src/resource/PersonInChargeGroupBy.sql";    // Set of Titles that exist in DB
+    private final String sqlScriptFilePathAll = "src/resource/sql/person/PersonInChargeAll.sql";      // All titles, creating a total of employees in charge
+    private final String sqlScriptFilePathGroup = "src/resource/sql/person/PersonInChargeGroupBy.sql";    // Set of Titles that exist in DB
 
     private String POJOFileName = "";
     private String JSONFileName = "";
 
-    public PersonInChargeBuilder(String host, String uName, String uPass) {
-        this.host = host;
-        this.uName = uName;
-        this.uPass = uPass;
+    public PersonInChargeBuilder(final String connectionFilePath) throws IOException {
+        extractConnectionAttributes(connectionFilePath);
+    }
+
+    private void extractConnectionAttributes(String filePath) throws IOException {
+        Path path = Path.of(filePath);
+        String connectionString = Files.readString(path);
+        this.host = connectionString.split(";")[0];
+        this.uName = connectionString.split(";")[1];
+        this.uPass = connectionString.split(";")[2];
     }
 
     public void buildPersonInCharge(Boolean writeToFile, String mode) throws SQLException, ClassNotFoundException, IOException, PersonInChargeException {
         Path file = null;
         switch (mode){
-            case "Group":
+            case "GroupBy":
                 file = Path.of(sqlScriptFilePathGroup);
                 POJOFileName = "temp/personInChargeGroupBy.txt";
                 JSONFileName = "temp/personInChargeGroupBy.json";
@@ -45,6 +51,9 @@ public class PersonInChargeBuilder {
                 POJOFileName = "temp/personInChargeAll.txt";
                 JSONFileName = "temp/personInChargeAll.json";
                 break;
+                default:
+                    System.out.println("Felaktigt val till sql satsen!");
+                    return;
         }
 
         DBConnection dbConnection = new DBConnection(host, uName, uPass);

@@ -20,7 +20,7 @@ public class PersonPatientBuilder {
     private String uName = null;
     private String uPass = null;
 
-    private final String sqlScriptFilePath = "src/resource/PersonPatient.sql";
+    private final String sqlScriptFilePath = "src/resource/sql/person/PersonPatient.sql";
     private final String POJOFileName = "temp/personPatients.txt";
     private final String JSONFileName = "temp/personPatients.json";
     private final String JSONFilePersonsId = "temp/personPatientsID.json";
@@ -28,7 +28,7 @@ public class PersonPatientBuilder {
     private int listCount = -99999;
     private int jsonCount = 0;
 
-    public PersonPatientBuilder(String connectionFilePath) throws IOException {
+    public PersonPatientBuilder(final String connectionFilePath) throws IOException {
         extractConnectionAttributes(connectionFilePath);
     }
 
@@ -73,6 +73,7 @@ public class PersonPatientBuilder {
             // write JSON
             extractPersonID(personPatients);
         }
+        System.out.println("Antal poster: " + listCount);
     }
 
     public Connection getConnection() throws SQLException, ClassNotFoundException {

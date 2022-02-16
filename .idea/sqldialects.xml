@@ -2,7 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/../../../../Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.26.jar" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/resource/PersonPatient.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/resource/sql/person/PersonPatient.sql" dialect="GenericSQL" />
     <file url="PROJECT" dialect="MySQL" />
   </component>
 </project>
