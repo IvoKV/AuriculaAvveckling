@@ -79,6 +79,7 @@ public class OrdinationsPeriodBuilder {
 
     private void writePOJOToFile(List<Ordinationsperiod> ordp) throws IOException {
         FileWriter pojoWriter = new FileWriter(POJOFileName);
+        pojoWriter.write("Listar patienternas antal av ordinationer:\n");
         for (Ordinationsperiod op : ordp) {
             pojoWriter.write(op + System.lineSeparator());
         }
