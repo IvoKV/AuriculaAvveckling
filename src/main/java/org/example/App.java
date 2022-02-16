@@ -1,14 +1,17 @@
 package org.example;
 
-import DBSource.DBConnection;
-import Person.*;
+/** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
+import Person.PersonInChargeBuilder;
+import Person.PersonInChargeException;
+import Person.PersonInitializationException;
+import Person.PersonPatientBuilder;
+import ordination.OrdinationsInitializeException;
+import ordination.OrdinationsPeriodBuilder;
+import ordination.Ordinationsperiod;
 
-import java.io.*;
-import java.nio.file.Files;
+import java.io.IOException;
 import java.nio.file.Path;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLException;
 
 /**
  * Auricula Personobjekt
@@ -16,13 +19,20 @@ import java.util.List;
  */
 public class App 
 {
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException {
-        final String host = "jdbc:mysql://localhost:3306/auricula_export_tio_100";
-        final String uName = "root";
-        final String uPass = "ivo64..";
+    private static final String connectionFilePath = "src/resource/ConnectionString.txt";
 
-        var personPat = new PersonPatientBuilder(host, uName, uPass);
-        personPat.buildPersonPatient();
+    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsInitializeException {
+
+        Path filePath = Path.of(connectionFilePath);
+
+//        var personPat = new PersonPatientBuilder(connectionFilePath);
+//        personPat.buildPersonPatient(true);         // boolean: write to file
+
+//        var personCharge = new PersonInChargeBuilder(connectionFilePath);
+//        personCharge.buildPersonInCharge(true, "GroupBy");     // boolean: write to file; Group || All
+
+        OrdinationsPeriodBuilder ordinationsPeriodBuilder = new OrdinationsPeriodBuilder(connectionFilePath);
+        ordinationsPeriodBuilder.buildPersonPatient(true);
 
     }
 }

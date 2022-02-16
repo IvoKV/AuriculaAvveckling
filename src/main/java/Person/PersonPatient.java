@@ -34,6 +34,18 @@ public class PersonPatient {
         this.lastName = lastName;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
