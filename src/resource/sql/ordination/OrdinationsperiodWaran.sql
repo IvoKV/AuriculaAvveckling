@@ -29,7 +29,6 @@ SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
         WHEN 32 THEN 'Lixiana 60 mg tabl 1 gång dagligen'
         WHEN 21 THEN 'Warankapsel 0,3 mg kapsel'
         WHEN 22 THEN 'Warankapsel 0,9 mg kapsel'
-        ELSE 0
         END as      MEDICIN_TXT,
 
     /*	-- Indikation - FF*/
@@ -37,7 +36,7 @@ SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
             WHEN 1 THEN 'FF primärprevention (I489)'
             WHEN 3 THEN 'FF + Artäremboli (I489+I749)'
             WHEN 2 THEN 'FF + Stroke/TIA (I489+I639)'
-            ELSE 0
+            ELSE ''
             END AS      ATRIAL_FIB_TXT,
 
     /*-- Indikation - Klaff*/
@@ -49,7 +48,7 @@ SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
             WHEN 3 THEN 'Mekanisk mitralis + aortaklaff (I059+I359+Z952)'
             WHEN 6 THEN 'Mitralisstenos (I050)'
             WHEN 7 THEN 'Tricuspidalis klaff (I079+Z952)'
-            ELSE 0
+            ELSE ''
             END AS      VALVE_MALFUNCTION_TXT,
 
     /*-- Indikation - Venös tromboembolism*/
@@ -67,7 +66,7 @@ SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
             WHEN 10 THEN 'Tromboflebit (I809)'
             WHEN 11 THEN 'Trombos v. jugularis (I828)'
             WHEN 13 THEN 'Vena Cava trombos (I822)'
-            ELSE 0
+            ELSE ''
             END AS      VENOUS_TROMB_TXT,
 
     /*-- Indikation - Övrigt*/
@@ -88,21 +87,21 @@ SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
             WHEN 1 THEN  'Vänsterkammardysfunktion (Q234)'
             WHEN 2 THEN  'Vänsterkammartromb (I513)'
             WHEN 101 THEN 'Övrig Barnspecifik indikation'
-            ELSE 0
+            ELSE ''
             END AS      INDICATION_OTHER_TXT,
 
     /*	-- Övrig Barnspecifik indikation*/
         CASE op.OTHERCHILDINDICATION
             WHEN 1 THEN 'Medfödd hjärtanomali'
             WHEN 2 THEN 'Fallots tetrad'
-            ELSE 0
+            ELSE ''
             END AS      OTHERCHILDINDICATION_TXT,
 
     /*-- Elkonvertering*/
         CASE op.DCCONVERSION
             WHEN 1 THEN 'Nej'
             WHEN 2 THEN 'Ja (DF026)'
-            ELSE 0
+            ELSE ''
             END AS      DCCONVERSION_TXT,
 
 /*	-- Behandlingstid*/
@@ -114,7 +113,7 @@ SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
             WHEN 4 THEN 'Tolv månader'
             WHEN 5 THEN 'Tillsvidare'
             WHEN 6 THEN 'Annan behandlingslängd'
-            ELSE 0
+            ELSE ''
             END AS PERIOD_LENGTH_TXT
 
 FROM centre as c

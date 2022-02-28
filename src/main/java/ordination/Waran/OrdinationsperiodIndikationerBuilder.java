@@ -42,7 +42,6 @@ public class OrdinationsperiodIndikationerBuilder {
     }
 
     public void buildPersonPatient(Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException {
-
         Path file = Path.of(sqlScriptFilePath);
         myConnection = getConnection();
 
@@ -52,38 +51,31 @@ public class OrdinationsperiodIndikationerBuilder {
         selectOrdinationWaran.setInt(2, 54241);
         var rs = selectOrdinationWaran.executeQuery();
 
-//        Statement statement = myConnection.createStatement();
-//        ResultSet rs = statement.executeQuery(sqlStatement);
-
-        //PreparedStatement preparedStatement = null;
-        //preparedStatement = myConnection.prepareStatement(sqlStatement, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
         List<OrdinationsperiodIndikationer> ordinationsperiodIndikationerList = new ArrayList<>();
 
         while (rs.next()) {
             OrdinationsperiodIndikationer op = new OrdinationsperiodIndikationer(
-                    rs.getString("c.id"),
-                    rs.getInt("p.pid"),
-                    rs.getString("p.SSN"),
-                    rs.getString("p.SSN_TYPE"),
-                    rs.getString("rp.FIRSTNAME"),
-                    rs.getString("rp.LASTNAME"),
-                    rs.getString("pal.PAL_TITLE"),
-                    rs.getString("pal.PAL_FIRSTNAME"),
-                    rs.getString("pal.PAL_LASTNAME"),
-                    rs.getDate("op.STARTDATE"),
-                    rs.getString("opat.COMMENT_ORDPATIENT"),
-                    rs.getShort(11),       // MEDICIN_TXT
-                    rs.getString(12),              // ATRIAL_FIB_TXT
-                    rs.getShort(13),       // VALVE_MALFUNCTION_TXT
-                    rs.getShort(14),    // VENOUS_TROMB
-                    rs.getShort(15),   // INDICATION_OTHER_TXT
-                    rs.getShort(16),  // OTHERCHILDINDICATION_TXT
-                    rs.getShort(17),   // DCCONVERSION_TXT
-                    rs.getShort("op.PERIOD_LENGTH_TXT")
+                    rs.getString("c.id"),               // varchar(30)
+                    rs.getInt("p.pid"),                 // int unsigned
+                    rs.getString("p.SSN"),              // varchar(30)
+                    rs.getShort("p.SSN_TYPE"),         // tinyiny
+                    rs.getString("rp.FIRSTNAME"),       // varchar(60)
+                    rs.getString("rp.LASTNAME"),        // varchar(60)
+                    rs.getShort("pal.PAL_TITLE"),      // tinyint
+                    rs.getString("pal.PAL_FIRSTNAME"),  // varchar(40)
+                    rs.getString("pal.PAL_LASTNAME"),   // varchar(40)
+                    rs.getDate("op.STARTDATE"),         // date
+                    rs.getString("opat.COMMENT_ORDPATIENT"),    // varchar(12000)
+                    rs.getString(11),                             // MEDICIN_TXT       // tinyint
+                    rs.getString(12),                             // ATRIAL_FIB_TXT    // tinyint
+                    rs.getString(13),                     // VALVE_MALFUNCTION_TXT     // tinyint
+                    rs.getString(14),                  // VENOUS_TROMB                 // tinyint
+                    rs.getString(15),                 // INDICATION_OTHER_TXT          // tinyint
+                    rs.getString(16),                 // OTHERCHILDINDICATION_TXT       // tinyint
+                    rs.getString(17),                 // DCCONVERSION_TXT              // tinyint
+                    rs.getString(18)                 // tinyint
             );
-
             ordinationsperiodIndikationerList.add(op);
-            totalOfOrdinationer += rs.getInt(2);
         }
         myConnection.close();
 
@@ -104,11 +96,11 @@ public class OrdinationsperiodIndikationerBuilder {
 
     private void writePOJOToFile(List<OrdinationsperiodIndikationer> ordp) throws IOException {
         FileWriter pojoWriter = new FileWriter(POJOFileName);
-        pojoWriter.write("Listar patienternas antal av ordinationer:\n");
+        pojoWriter.write("Ordinationstillfälle för patient:\n");
         for (OrdinationsperiodIndikationer op : ordp) {
             pojoWriter.write(op + System.lineSeparator());
         }
-        pojoWriter.write("Total antal ordinationer: " + totalOfOrdinationer + "\n");
+        //pojoWriter.write("Total antal ordinationer: " + totalOfOrdinationer + "\n");
         pojoWriter.close();
     }
 
