@@ -23,7 +23,7 @@ public class OrdinationsperiodIndikationerBuilder {
     private String uName = null;
     private String uPass = null;
 
-    private final String sqlScriptFilePath = "src/resource/sql/ordination/OrdinationsperiodWaran.sql";
+    private String sqlScriptFilePath = null;
     private final String POJOFileName = "temp/ordination/ordinationsperiodWaran.txt";
     private final String JSONFileName = "temp/ordination/ordinationsperiodWaran.json";
     private Connection myConnection = null;
@@ -41,42 +41,59 @@ public class OrdinationsperiodIndikationerBuilder {
         this.uPass = connectionString.split(";")[2];
     }
 
-    public void buildPersonPatient(Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException {
-        Path file = Path.of(sqlScriptFilePath);
+    public void buildPersonPatient(String centreId, int regpatId,  Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException {
+
+        ResultSet rsOrdinationer = null;
         myConnection = getConnection();
-
-        String sqlStatement = Files.readString(file);
-        PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
-        selectOrdinationWaran.setString(1,"11012AK");
-        selectOrdinationWaran.setInt(2, 54241);
-        var rs = selectOrdinationWaran.executeQuery();
-
         List<OrdinationsperiodIndikationer> ordinationsperiodIndikationerList = new ArrayList<>();
 
-        while (rs.next()) {
+        if(regpatId > 0) {
+            // ONE regpatId
+            sqlScriptFilePath = "src/resource/sql/ordination/OrdinationsperiodWaranOne.sql";
+            Path file = Path.of(sqlScriptFilePath);
+            String sqlStatement = Files.readString(file);
+
+            PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
+            selectOrdinationWaran.setString(1, centreId);
+            selectOrdinationWaran.setInt(2, regpatId);
+            rsOrdinationer = selectOrdinationWaran.executeQuery();
+        }
+        else{
+            // ALL regpatId
+            sqlScriptFilePath = "src/resource/sql/ordination/OrdinationsperiodWaranAll.sql";
+            Path file = Path.of(sqlScriptFilePath);
+            String sqlStatement = Files.readString(file);
+
+            PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
+            selectOrdinationWaran.setString(1, centreId);
+            rsOrdinationer = selectOrdinationWaran.executeQuery();
+        }
+
+        while (rsOrdinationer.next()) {
             OrdinationsperiodIndikationer op = new OrdinationsperiodIndikationer(
-                    rs.getString("c.id"),               // varchar(30)
-                    rs.getInt("p.pid"),                 // int unsigned
-                    rs.getString("p.SSN"),              // varchar(30)
-                    rs.getShort("p.SSN_TYPE"),         // tinyiny
-                    rs.getString("rp.FIRSTNAME"),       // varchar(60)
-                    rs.getString("rp.LASTNAME"),        // varchar(60)
-                    rs.getShort("pal.PAL_TITLE"),      // tinyint
-                    rs.getString("pal.PAL_FIRSTNAME"),  // varchar(40)
-                    rs.getString("pal.PAL_LASTNAME"),   // varchar(40)
-                    rs.getDate("op.STARTDATE"),         // date
-                    rs.getString("opat.COMMENT_ORDPATIENT"),    // varchar(12000)
-                    rs.getString(11),                             // MEDICIN_TXT       // tinyint
-                    rs.getString(12),                             // ATRIAL_FIB_TXT    // tinyint
-                    rs.getString(13),                     // VALVE_MALFUNCTION_TXT     // tinyint
-                    rs.getString(14),                  // VENOUS_TROMB                 // tinyint
-                    rs.getString(15),                 // INDICATION_OTHER_TXT          // tinyint
-                    rs.getString(16),                 // OTHERCHILDINDICATION_TXT       // tinyint
-                    rs.getString(17),                 // DCCONVERSION_TXT              // tinyint
-                    rs.getString(18)                 // tinyint
+                    rsOrdinationer.getString("c.id"),               // varchar(30)
+                    rsOrdinationer.getInt("p.pid"),                 // int unsigned
+                    rsOrdinationer.getString("p.SSN"),              // varchar(30)
+                    rsOrdinationer.getShort("p.SSN_TYPE"),         // tinyiny
+                    rsOrdinationer.getString("rp.FIRSTNAME"),       // varchar(60)
+                    rsOrdinationer.getString("rp.LASTNAME"),        // varchar(60)
+                    rsOrdinationer.getShort("pal.PAL_TITLE"),      // tinyint
+                    rsOrdinationer.getString("pal.PAL_FIRSTNAME"),  // varchar(40)
+                    rsOrdinationer.getString("pal.PAL_LASTNAME"),   // varchar(40)
+                    rsOrdinationer.getDate("op.STARTDATE"),         // date
+                    rsOrdinationer.getString("opat.COMMENT_ORDPATIENT"),    // varchar(12000)
+                    rsOrdinationer.getString(11),                             // MEDICIN_TXT       // tinyint
+                    rsOrdinationer.getString(12),                             // ATRIAL_FIB_TXT    // tinyint
+                    rsOrdinationer.getString(13),                     // VALVE_MALFUNCTION_TXT     // tinyint
+                    rsOrdinationer.getString(14),                  // VENOUS_TROMB                 // tinyint
+                    rsOrdinationer.getString(15),                 // INDICATION_OTHER_TXT          // tinyint
+                    rsOrdinationer.getString(16),                 // OTHERCHILDINDICATION_TXT       // tinyint
+                    rsOrdinationer.getString(17),                 // DCCONVERSION_TXT              // tinyint
+                    rsOrdinationer.getString(18)                 // tinyint
             );
             ordinationsperiodIndikationerList.add(op);
         }
+        int listSize = ordinationsperiodIndikationerList.size();
         myConnection.close();
 
         ordinationsperiodIndikationerList.stream()
@@ -89,7 +106,7 @@ public class OrdinationsperiodIndikationerBuilder {
         }
     }
 
-    public Connection getConnection() throws SQLException, ClassNotFoundException {
+    private Connection getConnection() throws SQLException, ClassNotFoundException {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
     }

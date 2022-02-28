@@ -126,5 +126,5 @@ FROM centre as c
 WHERE c.ID = ?
   AND rp.PID = ?
 
-group by p.PID
-order by p.pid;
+#group by p.PID
+order by rp.pid;
