@@ -3,6 +3,8 @@ package org.example;
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
 import Person.PersonInChargeException;
 import Person.PersonInitializationException;
+import ordination.Waran.Hemorrhages;
+import ordination.Waran.HemorrhagesBuilder;
 import ordination.Waran.OrdinationsperiodInitializeException;
 import ordination.Waran.OrdinationsperiodIndikationerBuilder;
 
@@ -32,8 +34,10 @@ public class App
         String centreID = "11012AK";
         int regpatId = 0;   // <0>: all patients, <regpatid>: only chosen patient
         //int regpatId = 54241;
-        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(connectionFilePath);
-        ordinationsPeriodBuilder.buildPersonPatient(centreID, regpatId, true);   // true: write to file
+//        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(connectionFilePath);
+//        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatId, true);   // true: write to file
 
+        HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(connectionFilePath);
+        hemorrhagesBuilder.buildHemorrhages(centreID, regpatId, true);
     }
 }

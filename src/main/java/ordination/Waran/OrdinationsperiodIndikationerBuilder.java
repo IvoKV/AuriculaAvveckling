@@ -33,7 +33,7 @@ public class OrdinationsperiodIndikationerBuilder {
         extractConnectionAttributes(connectionFilePath);
     }
 
-    private void extractConnectionAttributes(String filePath) throws IOException, IOException {
+    private void extractConnectionAttributes(String filePath) throws IOException {
         Path path = Path.of(filePath);
         String connectionString = Files.readString(path);
         this.host = connectionString.split(";")[0];
@@ -41,8 +41,7 @@ public class OrdinationsperiodIndikationerBuilder {
         this.uPass = connectionString.split(";")[2];
     }
 
-    public void buildPersonPatient(String centreId, int regpatId,  Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException {
-
+    public void buildOrdinationPeriodIndikation(String centreId, int regpatId, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException {
         ResultSet rsOrdinationer = null;
         myConnection = getConnection();
         List<OrdinationsperiodIndikationer> ordinationsperiodIndikationerList = new ArrayList<>();
