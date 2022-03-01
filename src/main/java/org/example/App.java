@@ -31,7 +31,7 @@ public class App
 
         String centreID = "11012AK";
         int regpatId = 0;   // <0>: all patients, <regpatid>: only chosen patient
-//        int = 54241
+        //int regpatId = 54241;
         OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(connectionFilePath);
         ordinationsPeriodBuilder.buildPersonPatient(centreID, regpatId, true);   // true: write to file
 

@@ -24,8 +24,8 @@ public class OrdinationsperiodIndikationerBuilder {
     private String uPass = null;
 
     private String sqlScriptFilePath = null;
-    private final String POJOFileName = "temp/ordination/ordinationsperiodWaran.txt";
-    private final String JSONFileName = "temp/ordination/ordinationsperiodWaran.json";
+    private String POJOFileName = "temp/ordination/ordinationsperiodWaran.txt";
+    private String JSONFileName = "temp/ordination/ordinationsperiodWaran.json";
     private Connection myConnection = null;
     private int totalOfOrdinationer = 0;
 
@@ -101,8 +101,8 @@ public class OrdinationsperiodIndikationerBuilder {
         System.out.println("Total antal ordinationer: " + totalOfOrdinationer);
 
         if(writeToFile){
-            writePOJOToFile(ordinationsperiodIndikationerList);
-            POJOListToJSONToFile(ordinationsperiodIndikationerList);
+            writePOJOToFile(ordinationsperiodIndikationerList, regpatId);
+            POJOListToJSONToFile(ordinationsperiodIndikationerList, regpatId);
         }
     }
 
@@ -111,7 +111,17 @@ public class OrdinationsperiodIndikationerBuilder {
         return dbConnection.createConnection();
     }
 
-    private void writePOJOToFile(List<OrdinationsperiodIndikationer> ordp) throws IOException {
+    private void writePOJOToFile(List<OrdinationsperiodIndikationer> ordp, int regpat) throws IOException {
+
+        if(regpat > 0) {
+            POJOFileName = insertString(POJOFileName, "One");
+            JSONFileName = insertString(JSONFileName, "One");
+        }
+        else {
+            POJOFileName = insertString(POJOFileName, "All");
+            JSONFileName = insertString(JSONFileName, "All");
+        }
+
         FileWriter pojoWriter = new FileWriter(POJOFileName);
         pojoWriter.write("Ordinationstillfälle för patient:\n");
         for (OrdinationsperiodIndikationer op : ordp) {
@@ -121,16 +131,25 @@ public class OrdinationsperiodIndikationerBuilder {
         pojoWriter.close();
     }
 
-    private void POJOListToJSONToFile(List<OrdinationsperiodIndikationer> ordp) throws IOException {
+    private void POJOListToJSONToFile(List<OrdinationsperiodIndikationer> ordp, int regpat) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         String listToJson = objectMapper.writeValueAsString(ordp);
-        // 1. Convert List of person objects to JSON :");
+        // Convert List of person objects to JSON :");
         System.out.println(listToJson);
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
         jsonWriter.write(listToJson);
         jsonWriter.close();
+    }
+
+    private String insertString(String original, String mode){
+        StringBuffer outfile = new StringBuffer(original);
+        int indexPos = outfile.lastIndexOf(".");
+        if(mode == "One")
+            return outfile.insert(indexPos, "One-Patient").toString();
+        else
+            return outfile.insert(indexPos, "All-Patients").toString();
     }
 }
