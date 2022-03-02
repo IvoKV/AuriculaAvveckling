@@ -10,7 +10,8 @@ public class Hemorrhages {
     private Short palTitle;
     private String palFirstname;
     private String palLastname;
-    /*** Hemorrhages ***/
+
+    /** Hemorrhages **/
     private String leverNjursjukdom;
     private String etanolmissbruk;
     private String malignitet;
@@ -19,6 +20,8 @@ public class Hemorrhages {
     private String hypertoni;
     private String anemi;
     private String genetiskaFaktorer;
+
+    /** Genetiska faktorer (CYP2C9, VKORC1 **/
     private String storRiskForFall;
     private String stroke;
 
