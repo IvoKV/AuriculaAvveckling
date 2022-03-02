@@ -30,6 +30,9 @@ public class HemorrhagesBuilder {
     private Connection myConnection = null;
     private int totalHemorrhagesPoster = 0;
 
+    private long countObjChars;
+    private long hemorrhagesListCount;
+
     public HemorrhagesBuilder(final String connectionFilePath) throws IOException {
         extractConnectionAttributes(connectionFilePath);
     }
@@ -106,7 +109,8 @@ public class HemorrhagesBuilder {
         }
     }
 
-    private Connection getConnection() throws SQLException, ClassNotFoundException {
+    // must be accessible for test class
+    public Connection getConnection() throws SQLException, ClassNotFoundException {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
     }
@@ -139,20 +143,13 @@ public class HemorrhagesBuilder {
         // Convert List of person objects to JSON :");
         System.out.println(listToJson);
 
-        //todo: count objects in JSON array
-/*
-        JSONArray jsonArray = new JSONArray();                          // onödigt
-        var t = jsonArray.put(hemorrhagesList);                 // onödigt
-
-        JSONObject jsonObject = new JSONObject();
-        var obj = JSON.parse(listToJson);
-        shareInfoLen = Object.keys(obj.shareInfo[0]).length;
-
- */
+        char search = '{';
+        countObjChars = listToJson.chars().filter(ch -> ch == search).count();
+        hemorrhagesListCount = hemorrhagesList.size();
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
         jsonWriter.write(listToJson);
-        //jsonWriter.write("Total antal hemorrhages poster: " + );
+        jsonWriter.write("\nTotal antal hemorrhages poster: " + hemorrhagesList.size() + System.lineSeparator());
         jsonWriter.close();
     }
 
@@ -163,5 +160,9 @@ public class HemorrhagesBuilder {
             return outfile.insert(indexPos, "One-Patient").toString();
         else
             return outfile.insert(indexPos, "All-Patients").toString();
+    }
+
+    public boolean compareResults(){
+        return countObjChars == hemorrhagesListCount;
     }
 }
