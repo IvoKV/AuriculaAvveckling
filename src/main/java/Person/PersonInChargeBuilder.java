@@ -91,7 +91,6 @@ public class PersonInChargeBuilder {
     }
 
 
-
     private void extractToFile(List<PersonInCharge> personsInCharge) throws IOException {
         FileWriter writer = new FileWriter(POJOFileName);
         for (PersonInCharge person : personsInCharge) {

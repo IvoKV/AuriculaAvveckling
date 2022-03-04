@@ -1,13 +1,12 @@
 package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
-import Person.PersonInChargeBuilder;
 import Person.PersonInChargeException;
 import Person.PersonInitializationException;
-import Person.PersonPatientBuilder;
-import ordination.OrdinationsInitializeException;
-import ordination.OrdinationsPeriodBuilder;
-import ordination.Ordinationsperiod;
+import ordination.Waran.Hemorrhages;
+import ordination.Waran.HemorrhagesBuilder;
+import ordination.Waran.OrdinationsperiodInitializeException;
+import ordination.Waran.OrdinationsperiodIndikationerBuilder;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,7 +20,7 @@ public class App
 {
     private static final String connectionFilePath = "src/resource/ConnectionString.txt";
 
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsInitializeException {
+    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException {
 
         Path filePath = Path.of(connectionFilePath);
 
@@ -31,8 +30,14 @@ public class App
 //        var personCharge = new PersonInChargeBuilder(connectionFilePath);
 //        personCharge.buildPersonInCharge(true, "GroupBy");     // boolean: write to file; Group || All
 
-        OrdinationsPeriodBuilder ordinationsPeriodBuilder = new OrdinationsPeriodBuilder(connectionFilePath);
-        ordinationsPeriodBuilder.buildPersonPatient(true);
 
+        String centreID = "11012AK";
+        int regpatId = 0;   // <0>: all patients, <regpatid>: only chosen patient
+        //int regpatId = 54241;
+//        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(connectionFilePath);
+//        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatId, true);   // true: write to file
+
+        HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(connectionFilePath);
+        hemorrhagesBuilder.buildHemorrhages(centreID, regpatId, true);
     }
 }

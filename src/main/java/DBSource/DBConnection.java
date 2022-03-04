@@ -28,12 +28,4 @@ public class DBConnection {
         return con = DriverManager.getConnection(host, uName, uPass);
         //Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }
-/*
-    public void closeConnection(Connection con) throws SQLException {
-        if (!con.isClosed()) {
-            con.close();
-        }
-    }
-
- */
 }

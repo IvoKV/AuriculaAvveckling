@@ -51,4 +51,7 @@ temp/
 /nbdist/
 /.nb-gradle/
 
+### TortoiseGit
+/TortoiseGit*
+
 
