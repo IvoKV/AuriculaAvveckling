@@ -3,10 +3,7 @@ package org.example;
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
 import Person.PersonInChargeException;
 import Person.PersonInitializationException;
-import ordination.Waran.Hemorrhages;
-import ordination.Waran.HemorrhagesBuilder;
-import ordination.Waran.OrdinationsperiodInitializeException;
-import ordination.Waran.OrdinationsperiodIndikationerBuilder;
+import ordination.Waran.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,12 +29,17 @@ public class App
 
 
         String centreID = "11012AK";
-        int regpatId = 0;   // <0>: all patients, <regpatid>: only chosen patient
+        //int regpatId = 0;   // <0>: all patients, <regpatid>: only chosen patient
         //int regpatId = 54241;
+        //int regpatId = 489980;
+        int regpatId = 0;
 //        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(connectionFilePath);
 //        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatId, true);   // true: write to file
 
-        HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(connectionFilePath);
-        hemorrhagesBuilder.buildHemorrhages(centreID, regpatId, true);
+//        HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(connectionFilePath);
+//        hemorrhagesBuilder.buildHemorrhages(centreID, regpatId, true);
+
+        BehandlingOchDoseringsperiodBuilder behandlingOchDoseringsperiodBuilder = new BehandlingOchDoseringsperiodBuilder(connectionFilePath);
+        behandlingOchDoseringsperiodBuilder.buildBehandlingOchDosering(centreID, regpatId, true);
     }
 }

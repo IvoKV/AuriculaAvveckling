@@ -25,7 +25,7 @@ public class HemorrhagesBuilder {
     private String uPass = null;
 
     private String sqlScriptFilePath = null;
-    private String POJOFileName = "temp/ordination/hemorrhagesWaras.txt";
+    private String POJOFileName = "temp/ordination/hemorrhagesWaran.txt";
     private String JSONFileName = "temp/ordination/hemorrhagesWaran.json";
     private Connection myConnection = null;
     private int totalHemorrhagesPoster = 0;
