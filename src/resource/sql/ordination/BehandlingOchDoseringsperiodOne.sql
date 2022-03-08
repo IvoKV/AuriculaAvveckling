@@ -28,7 +28,7 @@ SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
            ELSE ''
            END AS MEDICIN,
 
-        CASE op.DOSE_MODE                                           /* 10 */
+        CASE op.DOSE_MODE                                               /* 10 */
             WHEN 1 THEN 'Alltid hela tabletter'
             WHEN 2 THEN 'Alltid halva tabletter'
             WHEN 5 THEN 'Kan doseras i kvartstabletter'
@@ -37,26 +37,50 @@ SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
             ELSE ''
             END AS DOSE_MODE,
 
-        op.PREFERED_INTERVAL_START,                                 /* 11 */
-        op.PREFERED_INTERVAL_END,                                   /* 12 */
-        op.INRMETHOD,                                               /* 13 */
-        op.WEIGHT,                                                  /* 14 */
-        op.WEIGHTDATE,                                              /* 15 */
+        op.PREFERED_INTERVAL_START,                                     /* 11 */
+        op.PREFERED_INTERVAL_END,                                       /* 12 */
+        op.INRMETHOD,                                                   /* 13 */
+        op.WEIGHT,                                                      /* 14 */
+        op.WEIGHTDATE,                                                  /* 15 */
 
-        LMH.DOSE,                                                   /* 16*/
-        LMH.FROMDATE,                                               /* 17 */
-        LMH.TODATE,                                                 /* 18 */
+        LMH.DOSE,                                                       /* 16*/
+        LMH.FROMDATE,                                                   /* 17 */
+        LMH.TODATE,                                                     /* 18 */
 
     /* Doseringsperiod */
-        op.STARTDATE,                                               /* 19 */
-        op.PERIOD_LENGTH,                                           /* 20 */
-        op.LENGTHCOMMENT                                            /* 21 */
+        op.STARTDATE,                                                   /* 19 */
+        op.PERIOD_LENGTH,                                               /* 20 */
+        op.LENGTHCOMMENT,                                               /* 21 */
+
+    /* Avslut */
+        op.ENDDATE,                                                     /* 22 */
+
+        CASE op.REASON_STOPPED
+            WHEN 11 THEN 'Ny behandlingsindikation gäller'
+            WHEN 13 THEN 'Ny behandlingsindikation gäller'
+            WHEN 99 THEN 'Ny period importerad'
+            WHEN 12 THEN 'Patient har avlidit'
+            WHEN 7 THEN 'Patient ska ha ny typ av medicin'
+            WHEN 16 THEN 'Byte till annan antikoagulantia'
+            WHEN 10 THEN 'Patient ska ha nytt målvärde'
+            WHEN 1 THEN 'Planenligt'
+            WHEN 8 THEN 'På grund av alkoholproblem'
+            WHEN 6 THEN 'På grund av andra biverkningar'
+            WHEN 3 THEN 'På grund av andra sjukdomar'
+            WHEN 2 THEN 'På grund av blödning'
+            WHEN 4 THEN 'På grund av dålig följsamhet'
+            WHEN 14 THEN 'På grund av falltendens'
+            WHEN 15 THEN 'På grund av GI-biverkan'
+            WHEN 5 THEN 'På patientens bebäran'
+            WHEN 9 THEN 'Utgår på grund av flyttning'
+            ELSE ''
+            END AS REASON_STOPPED                                       /* 23 */
 
 FROM centre as c
          join centrepatient as cp on c.id = cp.CENTREID
          join regionpatient as rp on cp.RPID = rp.RPID
          join ordinationperiod as op on op.CPID = cp.CPID
-         LEFT OUTER JOIN inr on op.oid = inr.OID
+         JOIN inr on op.oid = inr.OID
          JOIN lmh on inr.INRID  = lmh.INRID
          join patient as p on rp.PID = p.PID
          join people AS pal on cp.PAL = pal.PEOPLEID

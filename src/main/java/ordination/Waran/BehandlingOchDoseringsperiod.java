@@ -34,6 +34,9 @@ public class BehandlingOchDoseringsperiod {
     private Date currentOpStartDate;
     private String periodLength;
     private String lengthComment;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date enddate;
+    private String reasonStopped;
 
     public BehandlingOchDoseringsperiod(String cid,
                                         int pid,
@@ -57,7 +60,9 @@ public class BehandlingOchDoseringsperiod {
                                         Date toDate,                            // 18
                                         Date currentOpStartDate,                // 19
                                         String periodLength,                    // 20
-                                        String lengthComment                    // 21
+                                        String lengthComment,                   // 21
+                                        Date enddate,                           // 22
+                                        String reasonStopped                    // 23
     ) {
         this.cid = cid;
         this.pid = pid;
@@ -81,6 +86,8 @@ public class BehandlingOchDoseringsperiod {
         this.currentOpStartDate = currentOpStartDate;
         this.periodLength = periodLength;
         this.lengthComment = lengthComment;
+        this.enddate = enddate;
+        this.reasonStopped = reasonStopped;
     }
 
     public String getCid() {
@@ -259,6 +266,22 @@ public class BehandlingOchDoseringsperiod {
         this.lengthComment = lengthComment;
     }
 
+    public Date getEnddate() {
+        return enddate;
+    }
+
+    public void setEnddate(Date enddate) {
+        this.enddate = enddate;
+    }
+
+    public String getReasonStopped() {
+        return reasonStopped;
+    }
+
+    public void setReasonStopped(String reasonStopped) {
+        this.reasonStopped = reasonStopped;
+    }
+
     @Override
     public String toString() {
         return "BehandlingOchDoseringsperiod{" +
@@ -276,14 +299,16 @@ public class BehandlingOchDoseringsperiod {
                 ", prefferedIntervalStart='" + prefferedIntervalStart + '\'' +
                 ", prefferedIntervalEnd='" + prefferedIntervalEnd + '\'' +
                 ", inrMethod='" + inrMethod + '\'' +
-                ", Weight=" + weight +
-                ", Weightdate=" + weightdate +
+                ", weight=" + weight +
+                ", weightdate=" + weightdate +
                 ", dose='" + dose + '\'' +
                 ", fromDate=" + fromDate +
                 ", toDate=" + toDate +
                 ", currentOpStartDate=" + currentOpStartDate +
                 ", periodLength='" + periodLength + '\'' +
                 ", lengthComment='" + lengthComment + '\'' +
+                ", enddate=" + enddate +
+                ", reasonStopped='" + reasonStopped + '\'' +
                 '}';
     }
 }

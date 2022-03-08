@@ -92,7 +92,9 @@ public class BehandlingOchDoseringsperiodBuilder {
                     rsDoseringsperiod.getDate(18),                 //
                     rsDoseringsperiod.getDate(19),                 //
                     rsDoseringsperiod.getString(20),                 //
-                    rsDoseringsperiod.getString(21)                 //
+                    rsDoseringsperiod.getString(21),                 //
+                    rsDoseringsperiod.getDate("op.enddate"),                 // op.enddate
+                    rsDoseringsperiod.getString("REASON_STOPPED")             // op.reason_stopped
             );
             behandlingOchDoseringsperiods.add(bdp);
         }
