@@ -56,7 +56,7 @@ public class BehandlingOchDoseringsperiod {
                                         Double weight,                          // 14
                                         Date weightdate,                        // 15
                                         String dose,                            // 16
-                                        Long fromDate,                          // 17
+                                        Date fromDate,                          // 17
                                         Date toDate,                            // 18
                                         Date currentOpStartDate,                // 19
                                         String periodLength,                    // 20
@@ -81,7 +81,7 @@ public class BehandlingOchDoseringsperiod {
         this.weight = weight;
         this.weightdate = weightdate;
         this.dose = dose;
-        this.fromDate = new Date(fromDate); // todo: samråd med Mårten, varför det måste vara en 'long'
+        this.fromDate = fromDate;  //new Date(fromDate); // todo: samråd med Mårten, varför det måste vara en 'long'
         this.toDate = toDate;
         this.currentOpStartDate = currentOpStartDate;
         this.periodLength = periodLength;

@@ -30,7 +30,7 @@ public class Complication {
                         Short palTitle,
                         String palFirstname,
                         String palLastname,
-                        String comlexExists,
+                        String complexExists,
                         String bleeding,
                         String trombosis,
                         int daysOfCare,
@@ -46,11 +46,152 @@ public class Complication {
         this.palTitle = palTitle;
         this.palFirstname = palFirstname;
         this.palLastname = palLastname;
-        this.comlexExists = comlexExists;
+        this.complexExists = complexExists;
         this.bleeding = bleeding;
         this.trombosis = trombosis;
         this.daysOfCare = daysOfCare;
         this.PKINR = PKINR;
         this.status = status;
+    }
+
+    public String getCid() {
+        return cid;
+    }
+
+    public void setCid(String cid) {
+        this.cid = cid;
+    }
+
+    public int getPid() {
+        return pid;
+    }
+
+    public void setPid(int pid) {
+        this.pid = pid;
+    }
+
+    public String getSSN() {
+        return SSN;
+    }
+
+    public void setSSN(String SSN) {
+        this.SSN = SSN;
+    }
+
+    public Short getSSN_TYPE() {
+        return SSN_TYPE;
+    }
+
+    public void setSSN_TYPE(Short SSN_TYPE) {
+        this.SSN_TYPE = SSN_TYPE;
+    }
+
+    public String getPatFirstname() {
+        return patFirstname;
+    }
+
+    public void setPatFirstname(String patFirstname) {
+        this.patFirstname = patFirstname;
+    }
+
+    public String getPatLastname() {
+        return patLastname;
+    }
+
+    public void setPatLastname(String patLastname) {
+        this.patLastname = patLastname;
+    }
+
+    public Short getPalTitle() {
+        return palTitle;
+    }
+
+    public void setPalTitle(Short palTitle) {
+        this.palTitle = palTitle;
+    }
+
+    public String getPalFirstname() {
+        return palFirstname;
+    }
+
+    public void setPalFirstname(String palFirstname) {
+        this.palFirstname = palFirstname;
+    }
+
+    public String getPalLastname() {
+        return palLastname;
+    }
+
+    public void setPalLastname(String palLastname) {
+        this.palLastname = palLastname;
+    }
+
+    public String getComplexExists() {
+        return complexExists;
+    }
+
+    public void setComplexExists(String complexExists) {
+        this.complexExists = complexExists;
+    }
+
+    public String getBleeding() {
+        return bleeding;
+    }
+
+    public void setBleeding(String bleeding) {
+        this.bleeding = bleeding;
+    }
+
+    public String getTrombosis() {
+        return trombosis;
+    }
+
+    public void setTrombosis(String trombosis) {
+        this.trombosis = trombosis;
+    }
+
+    public int getDaysOfCare() {
+        return daysOfCare;
+    }
+
+    public void setDaysOfCare(int daysOfCare) {
+        this.daysOfCare = daysOfCare;
+    }
+
+    public BigDecimal getPKINR() {
+        return PKINR;
+    }
+
+    public void setPKINR(BigDecimal PKINR) {
+        this.PKINR = PKINR;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Complication{" +
+                "cid='" + cid + '\'' +
+                ", pid=" + pid +
+                ", SSN='" + SSN + '\'' +
+                ", SSN_TYPE=" + SSN_TYPE +
+                ", patFirstname='" + patFirstname + '\'' +
+                ", patLastname='" + patLastname + '\'' +
+                ", palTitle=" + palTitle +
+                ", palFirstname='" + palFirstname + '\'' +
+                ", palLastname='" + palLastname + '\'' +
+                ", complexExists='" + complexExists + '\'' +
+                ", bleeding='" + bleeding + '\'' +
+                ", trombosis='" + trombosis + '\'' +
+                ", daysOfCare=" + daysOfCare +
+                ", PKINR=" + PKINR +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

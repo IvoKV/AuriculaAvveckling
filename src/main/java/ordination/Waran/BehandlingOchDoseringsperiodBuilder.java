@@ -80,21 +80,21 @@ public class BehandlingOchDoseringsperiodBuilder {
                     rsDoseringsperiod.getShort("pal.PAL_TITLE"),      // tinyint
                     rsDoseringsperiod.getString("pal.PAL_FIRSTNAME"),  // varchar(40)
                     rsDoseringsperiod.getString("pal.PAL_LASTNAME"),   // varchar(40)
-                    rsDoseringsperiod.getString(9),
-                    rsDoseringsperiod.getString(10),    // varchar(12000)
-                    rsDoseringsperiod.getString(11),                             // MEDICIN_TXT       // tinyint
-                    rsDoseringsperiod.getString(12),                             // ATRIAL_FIB_TXT    // tinyint
-                    rsDoseringsperiod.getString(13),                     // VALVE_MALFUNCTION_TXT     // tinyint
-                    rsDoseringsperiod.getDouble(14),                  // VENOUS_TROMB                 // tinyint
-                    rsDoseringsperiod.getDate(15),                 // INDICATION_OTHER_TXT          // tinyint
-                    rsDoseringsperiod.getString(16),                 // OTHERCHILDINDICATION_TXT       // tinyint
-                    rsDoseringsperiod.getLong(17),                 // DCCONVERSION_TXT              // tinyint
-                    rsDoseringsperiod.getDate(18),                 //
-                    rsDoseringsperiod.getDate(19),                 //
-                    rsDoseringsperiod.getString(20),                 //
-                    rsDoseringsperiod.getString(21),                 //
-                    rsDoseringsperiod.getDate("op.enddate"),                 // op.enddate
-                    rsDoseringsperiod.getString("REASON_STOPPED")             // op.reason_stopped
+                    rsDoseringsperiod.getString(9),                             // MEDICINE
+                    rsDoseringsperiod.getString(10),                            // DOSE_MODE
+                    rsDoseringsperiod.getString(11),                            // PREFERED_INTERVAL_START
+                    rsDoseringsperiod.getString(12),                            // PREFERED_INTERVAL_END
+                    rsDoseringsperiod.getString(13),                            // INRMETHOD
+                    rsDoseringsperiod.getDouble(14),                            // WEIGHT
+                    rsDoseringsperiod.getDate(15),                              // WEIGHTDATE
+                    rsDoseringsperiod.getString(16),                            // DOSE
+                    rsDoseringsperiod.getDate("FROMDATE"),                      // FROMDATE
+                    rsDoseringsperiod.getDate(18),                              // TODATE
+                    rsDoseringsperiod.getDate(19),                              // STARTDATE
+                    rsDoseringsperiod.getString(20),                            // PERIOD_LENGTH
+                    rsDoseringsperiod.getString(21),                            // LENGTHCOMMENT
+                    rsDoseringsperiod.getDate("op.enddate"),                    // op.enddate       // ENDDATE
+                    rsDoseringsperiod.getString("REASON_STOPPED")               // op.reason_stopped // REASON_STOPPED
             );
             behandlingOchDoseringsperiods.add(bdp);
         }
