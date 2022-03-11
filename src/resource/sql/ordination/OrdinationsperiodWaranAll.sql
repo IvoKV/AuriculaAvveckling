@@ -114,7 +114,13 @@ SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
             WHEN 5 THEN 'Tillsvidare'
             WHEN 6 THEN 'Annan behandlingslängd'
             ELSE ''
-            END AS PERIOD_LENGTH_TXT
+            END AS PERIOD_LENGTH_TXT,
+
+        CASE op.LMH
+            WHEN 0 THEN 'inget klaffel'
+            WHEN 1 THEN 'KLAFFEL'
+            ELSE ''
+        END AS LMH_KLAFFEL
 
 FROM centre as c
          join centrepatient as cp on c.id = cp.CENTREID
