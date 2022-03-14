@@ -35,8 +35,9 @@ public class App
         String centreID = "11012AK";
         //int regpatId = 0;   // <0>: all patients, <regpatid>: only chosen patient
         //int regpatId = 54241;
-        int regpatId = 489980;
-        //int regpatId = 0;
+        //int regpatId = 489980;
+        int regpatId = 0;
+
 //        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(connectionFilePath);
 //        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatId, true);   // true: write to file
 
@@ -49,7 +50,11 @@ public class App
 //        MatvardeBuilder matvardeBuilder = new MatvardeBuilder(connectionFilePath);
 //        matvardeBuilder.buildMatvarde(centreID, regpatId, true);
 
-          LabInrBuilder labInrBuilder = new LabInrBuilder(connectionFilePath);
-          labInrBuilder.buildLabINR(centreID, regpatId, Boolean.TRUE);
+//          LabInrBuilder labInrBuilder = new LabInrBuilder(connectionFilePath);
+//          labInrBuilder.buildLabINR(centreID, regpatId, Boolean.TRUE);
+
+        MatvardeBuilder matvardeBuilder = new MatvardeBuilder(connectionFilePath);
+        matvardeBuilder.buildMatvarde(centreID, regpatId, true);
+
     }
 }

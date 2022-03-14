@@ -84,6 +84,7 @@ public class LabInrBuilder {
                     rsLabInr.getDate("INRDATE"),    // varchar(12000)
                     rsLabInr.getString("LABREM_COMMENT"),                             // MEDICIN_TXT       // tinyint
                     rsLabInr.getString("SPECIMEN_COMMENT"),                             // ATRIAL_FIB_TXT    // tinyint
+                    // todo: ANALYSIS COMMENT HAR HTML tecken, bör tas bort
                     rsLabInr.getString("ANALYSIS_COMMENT")                     // VALVE_MALFUNCTION_TXT     // tinyint
             );
             labinrList.add(labInr);
