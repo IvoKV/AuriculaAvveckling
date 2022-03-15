@@ -17,7 +17,7 @@ public class LMH {
     private String palLastname;
 
     /* LMH */
-    private short lmhtype;
+    private String lmhtype;
     private int dose;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date fromdate;
@@ -34,7 +34,7 @@ public class LMH {
                Short palTitle,
                String palFirstname,
                String palLastname,
-               short lmhtype,
+               String lmhtype,
                int dose,
                Date fromdate,
                Date todate) {
@@ -125,11 +125,11 @@ public class LMH {
         this.palLastname = palLastname;
     }
 
-    public short getLmhtype() {
+    public String getLmhtype() {
         return lmhtype;
     }
 
-    public void setLmhtype(short lmhtype) {
+    public void setLmhtype(String lmhtype) {
         this.lmhtype = lmhtype;
     }
 

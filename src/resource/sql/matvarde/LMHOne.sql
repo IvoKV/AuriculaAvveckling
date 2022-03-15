@@ -11,7 +11,17 @@
             pal.LASTNAME as PAL_LASTNAME,
 
         /* LMH */
-            LMH.LMHTYPE,                                    # tynint
+            CASE LMH.LMHTYPE
+                WHEN 1 THEN 'Fragmin 5000E'
+                WHEN 2 THEN 'Fragmin (dos anges vid dosering)'
+                WHEN 3 THEN 'Klexane 40mg'
+                WHEN 4 THEN 'Klexane (dos anges vid dosering)'
+                WHEN 5 THEN 'Innohep 4500E'
+                WHEN 6 THEN 'Innohep (dos anges vid dosering)'
+                WHEN 7 THEN 'Anges i brevmeddelandet'
+                ELSE ''
+            END AS LMH_TYPE ,                                    # tynint
+
             LMH.DOSE,                                       # int
             LMH.FROMDATE,                                   # date
             LMH.TODATE                                     # date
