@@ -82,7 +82,7 @@ public class LMHBuilder {
                     rsLMH.getShort("pal.PAL_TITLE"),      // tinyint
                     rsLMH.getString("pal.PAL_FIRSTNAME"),  // varchar(40)
                     rsLMH.getString("pal.PAL_LASTNAME"),                             // varchar(40)
-                    rsLMH.getShort("LMHTYPE"),         // date
+                    rsLMH.getString("LMH_TYPE"),         // date
                     rsLMH.getInt("DOSE"),    // varchar(12000)
                     rsLMH.getDate("FROMDATE"),                             // MEDICIN_TXT       // tinyint
                     rsLMH.getDate("TODATE")                           // ATRIAL_FIB_TXT    // tinyint
