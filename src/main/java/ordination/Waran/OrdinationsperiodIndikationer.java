@@ -23,6 +23,7 @@ public class OrdinationsperiodIndikationer {
     private String OTHERCHILDINDICATION_TXT;            // Övrig Banrspecifik indikation
     private String DCCONVERSION_TXT;                    // Elkonvertering
     private String PERIOD_LENGTH_TXT;                   // Behandlingstid
+    private String lmh;                                 // Klaffel indikator
 
     /* Bevakningar */
     private String ovrigt;
@@ -45,7 +46,8 @@ public class OrdinationsperiodIndikationer {
                                          String INDICATION_OTHER_TXT,
                                          String OTHERCHILDINDICATION_TXT,
                                          String DCCONVERSION_TXT,
-                                         String PERIOD_LENGTH_TXT
+                                         String PERIOD_LENGTH_TXT,
+                                         String lmh
                                          )
     {
         this.cid = cid;
@@ -68,6 +70,7 @@ public class OrdinationsperiodIndikationer {
         this.DCCONVERSION_TXT = DCCONVERSION_TXT;
         this.PERIOD_LENGTH_TXT = PERIOD_LENGTH_TXT;
         this.ovrigt = ovrigt;
+        this.lmh = lmh;
     }
 
     public String getCid() {
@@ -230,16 +233,24 @@ public class OrdinationsperiodIndikationer {
         this.ovrigt = ovrigt;
     }
 
+    public String getLmh() {
+        return lmh;
+    }
+
+    public void setLmh(String lmh) {
+        this.lmh = lmh;
+    }
+
     @Override
     public String toString() {
         return "OrdinationsperiodIndikationer{" +
                 "cid='" + cid + '\'' +
                 ", pid=" + pid +
                 ", SSN='" + SSN + '\'' +
-                ", SSN_TYPE='" + SSN_TYPE + '\'' +
+                ", SSN_TYPE=" + SSN_TYPE +
                 ", patFirstname='" + patFirstname + '\'' +
                 ", patLastname='" + patLastname + '\'' +
-                ", palTitle='" + palTitle + '\'' +
+                ", palTitle=" + palTitle +
                 ", palFirstname='" + palFirstname + '\'' +
                 ", palLastname='" + palLastname + '\'' +
                 ", STARTDATE=" + STARTDATE +
@@ -251,7 +262,8 @@ public class OrdinationsperiodIndikationer {
                 ", INDICATION_OTHER_TXT='" + INDICATION_OTHER_TXT + '\'' +
                 ", OTHERCHILDINDICATION_TXT='" + OTHERCHILDINDICATION_TXT + '\'' +
                 ", DCCONVERSION_TXT='" + DCCONVERSION_TXT + '\'' +
-                ", PERIOD_LENGTH_TXT=" + PERIOD_LENGTH_TXT +
+                ", PERIOD_LENGTH_TXT='" + PERIOD_LENGTH_TXT + '\'' +
+                ", lmh=" + lmh +
                 ", ovrigt='" + ovrigt + '\'' +
                 '}';
     }

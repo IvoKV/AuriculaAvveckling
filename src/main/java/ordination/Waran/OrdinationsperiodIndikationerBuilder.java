@@ -88,7 +88,8 @@ public class OrdinationsperiodIndikationerBuilder {
                     rsOrdinationer.getString(15),                 // INDICATION_OTHER_TXT          // tinyint
                     rsOrdinationer.getString(16),                 // OTHERCHILDINDICATION_TXT       // tinyint
                     rsOrdinationer.getString(17),                 // DCCONVERSION_TXT              // tinyint
-                    rsOrdinationer.getString(18)                 // tinyint
+                    rsOrdinationer.getString(18),                 // tinyint
+                    rsOrdinationer.getString("null.LMH_KLAFFEL")                    // lmh_KLAFFEL
             );
             ordinationsperiodIndikationerList.add(op);
         }
