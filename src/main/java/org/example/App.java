@@ -3,8 +3,8 @@ package org.example;
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
 import Person.PersonInChargeException;
 import Person.PersonInitializationException;
+import ordination.Matvarde.LMHBuilder;
 import ordination.Matvarde.LabInr;
-import ordination.Matvarde.LabInrBuilder;
 import ordination.Matvarde.MatvardeBuilder;
 import ordination.Matvarde.MatvardeInitializationException;
 import ordination.Waran.*;
@@ -53,8 +53,10 @@ public class App
 //          LabInrBuilder labInrBuilder = new LabInrBuilder(connectionFilePath);
 //          labInrBuilder.buildLabINR(centreID, regpatId, Boolean.TRUE);
 
-        MatvardeBuilder matvardeBuilder = new MatvardeBuilder(connectionFilePath);
-        matvardeBuilder.buildMatvarde(centreID, regpatId, true);
+//        MatvardeBuilder matvardeBuilder = new MatvardeBuilder(connectionFilePath);
+//        matvardeBuilder.buildMatvarde(centreID, regpatId, true);
 
+          LMHBuilder lmhBuilder = new LMHBuilder(connectionFilePath);
+          lmhBuilder.buildLMH(centreID, regpatId, true);
     }
 }

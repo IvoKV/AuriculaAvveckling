@@ -94,7 +94,7 @@ public class MatvardeBuilder {
 
         matvarden.stream()
                 .forEach(System.out::println);
-        System.out.println("Total antal hemorrhages popster: " + listSize);
+        System.out.println("Total antal mätvärde popster: " + listSize);
 
         if(writeToFile){
             writePOJOToFile(matvarden, regpatId);

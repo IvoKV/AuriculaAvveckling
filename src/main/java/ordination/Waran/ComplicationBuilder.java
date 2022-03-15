@@ -94,7 +94,7 @@ public class ComplicationBuilder {
 
         complications.stream()
                 .forEach(System.out::println);
-        System.out.println("Total antal hemorrhages popster: " + listSize);
+        System.out.println("Total antal complication popster: " + listSize);
 
         if(writeToFile){
             writePOJOToFile(complications, regpatId);
@@ -142,7 +142,7 @@ public class ComplicationBuilder {
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
         jsonWriter.write(listToJson);
-        jsonWriter.write("\nTotal antal hemorrhages poster: " + hemorrhagesList.size() + System.lineSeparator());
+        jsonWriter.write("\nTotal antal hemorrhages poster: " + countObjChars + System.lineSeparator());
         jsonWriter.close();
     }
 
