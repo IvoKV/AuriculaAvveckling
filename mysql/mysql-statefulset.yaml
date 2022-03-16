@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-auricula
+  namespace: auricula
+  labels:
+    db: auricula
+spec:
+  selector:
+    matchLabels:
+      app: mysql-auricula
+  serviceName: mysql-auricula
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql-auricula
+    spec:      
+      containers:
+      - name: mysql-auricula
+        image: mysql:8.0.28-debian
+        envFrom:
+          - secretRef:
+              name: mysql-secret
+          - configMapRef:
+              name: mysql-cm
+        ports:
+        - containerPort: 3306
+          hostPort: 3306          
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-data
+    spec:
+      storageClassName: migration-database-storage
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
