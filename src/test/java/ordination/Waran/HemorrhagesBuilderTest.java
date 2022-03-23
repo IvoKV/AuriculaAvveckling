@@ -2,6 +2,7 @@ package ordination.Waran;
 
 import Person.PersonInitializationException;
 import Person.PersonPatientBuilder;
+import com.jcraft.jsch.JSchException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +38,7 @@ class HemorrhagesBuilderTest {
 
     @Test
     @DisplayName("Count of hemorrhages")
-    void listHemorrhagesItemsShouldBeEqualToJSONObjectCount() throws ClassNotFoundException, SQLException, PersonInitializationException, IOException, OrdinationsperiodInitializeException {
+    void listHemorrhagesItemsShouldBeEqualToJSONObjectCount() throws ClassNotFoundException, SQLException, PersonInitializationException, IOException, OrdinationsperiodInitializeException, JSchException {
         // given
         String centreId = "11012AK";
         //int regpatId = 0;
