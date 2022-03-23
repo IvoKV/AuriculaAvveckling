@@ -43,8 +43,8 @@ public class App
         //int regpatId = 489980;
         int regpatId = 0;
 
-//        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(connectionFilePath);
-//        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatId, false);   // true: write to file
+        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(connectionFilePath);
+        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatId, false);   // true: write to file
 
 //        HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(connectionFilePath);
 //        hemorrhagesBuilder.buildHemorrhages(centreID, regpatId, true);

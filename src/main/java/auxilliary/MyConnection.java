@@ -105,7 +105,7 @@ public class MyConnection {
         String connectionString = Files.readString(path);
 
         String url = connectionString + ":" + forwardedPort;
-        //url = connectionString;
+        url = "jdbc:mysql://localhost:" + forwardedPort;
 
         try {
             Connection con = DriverManager.getConnection(url, databaseUsername, databasePassword);
