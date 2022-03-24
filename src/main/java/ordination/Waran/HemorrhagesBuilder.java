@@ -2,7 +2,6 @@ package ordination.Waran;
 
 import DBSource.DBConnection;
 import Person.PersonInitializationException;
-import auxilliary.MyConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jcraft.jsch.JSchException;
@@ -12,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,26 +32,34 @@ public class HemorrhagesBuilder {
     private long countObjChars;
     private long hemorrhagesListCount;
 
-    public HemorrhagesBuilder(final String connectionFilePath) throws IOException {
-        extractConnectionAttributes(connectionFilePath);
+    private Connection myconnection = null;
+
+    public HemorrhagesBuilder(final Connection con) {
+        //extractConnectionAttributes(connectionFilePath);
+        this.myconnection = con;
     }
 
+    /*
     private void extractConnectionAttributes(String filePath) throws IOException {
         Path path = Path.of(filePath);
         String connectionString = Files.readString(path);
         this.host = connectionString.split(";")[0];
         this.uName = connectionString.split(";")[1];
         this.uPass = connectionString.split(";")[2];
+        
     }
+
+     */
 
     public void buildHemorrhages(String centreId, int regpatId, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException, JSchException {
         ResultSet rsHemorrhages = null;
+        /*
         MyConnection myConnection;
         myConnection = new MyConnection();
         myConnection.createSshTunnel();
+        */
         List<Hemorrhages> hemorrhagesList = new ArrayList<>();
 
-        /*
         if(regpatId > 0) {
             // ONE regpatId
             sqlScriptFilePath = "src/resource/sql/ordination/HemorrhagesWaranOne.sql";
@@ -109,12 +117,10 @@ public class HemorrhagesBuilder {
             writePOJOToFile(hemorrhagesList, regpatId);
             POJOListToJSONToFile(hemorrhagesList, regpatId);
         }
-
-         */
     }
 
     // must be accessible for test class
-    public Connection getConnection() throws SQLException, ClassNotFoundException {
+    public Connection getMyconnection() throws SQLException, ClassNotFoundException {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
     }

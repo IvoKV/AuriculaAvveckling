@@ -27,12 +27,10 @@ public class MyConnection {
     private final String databaseHost = "sllmltprodapp01.dc.sll.se";  // databaseHost
     private final int databasePort = 30306;  // databasePort
     private final String databaseUsername = "cwz7";            //databaseUsername
-    private final String databasePassword = "ivo64..";     //databasePassword
+    private final String databasePassword = "ivo64..";      //databasePassword
+    private String databaseUse = null;                      // vilken databas som väljs
 
     private Session session = null;
-
-
-
 
     //private final String strSshHost = "localhost";
     //private final int nSshPort = 22;
@@ -44,25 +42,19 @@ public class MyConnection {
 
     private Connection connection = null;
 
-    public MyConnection() throws JSchException, SQLException, IOException, ClassNotFoundException {
-        //doSshTunnel();
-        //connection = getSSHConnection();
-        //getSSHConnection();
+    // ssh uppkoppling genom tunnel
+    public MyConnection(String dbUse) throws JSchException, SQLException, IOException, ClassNotFoundException {
+        this.databaseUse = dbUse;
     }
 
+    // vanlig uppkoppling
     public MyConnection(String host, String uName, String uPass) throws JSchException, SQLException, IOException, ClassNotFoundException {
         this.host = host;
         this.uName = uName;
         this.uPass = uPass;
-
-        connection = getConnection();
     }
 
-
-    // must be accessible for test class
     public void createSshTunnel() throws SQLException, ClassNotFoundException, IOException, JSchException {
-
-
         JSch jSch = new JSch();
         jSch.addIdentity("c:\\Users\\cwz7\\.ssh\\id_rsa");
 
@@ -72,31 +64,17 @@ public class MyConnection {
         config.put("StrictHostKeyChecking", "no");
         session.setConfig(config);
 
-        session.connect();
-
-        System.out.println("Connection lyckades!");
-
-        int forwardedPort =  session.setPortForwardingL(0, databaseHost, databasePort);
-
-
-
-        /*
-        try {
-            //Class.forName("com.mysql.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(connectionString, databaseUsername, databasePassword);
+        try{
+            session.connect();
+            System.out.println("Connection lyckades!");
         }
         catch (Exception e){
+            System.out.println("Tunnel kunde inte skapas.");
             e.printStackTrace();
-        }
-        finally {
             System.exit(0);
         }
-        return connection;
+        int forwardedPort =  session.setPortForwardingL(0, databaseHost, databasePort);
     }
-
- */
-    }
-
 
     public  Connection getDbConnection() throws JSchException, IOException {
         int forwardedPort =  session.setPortForwardingL(0, databaseHost, databasePort);
@@ -104,10 +82,13 @@ public class MyConnection {
         Path path = Path.of(connectionFilePath);
         String connectionString = Files.readString(path);
 
-        String url = connectionString + ":" + forwardedPort;
-        url = "jdbc:mysql://localhost:" + forwardedPort;
+        //String url = connectionString + ":" + forwardedPort;
+        //String url = "jdbc:mysql://localhost:" + forwardedPort;
+        // todo: has to be tested!
+        String url = "jdbc:mysql://localhost:" + forwardedPort + "/" + databaseUse;
 
         try {
+            //Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(url, databaseUsername, databasePassword);
             return con;
         }
@@ -115,16 +96,25 @@ public class MyConnection {
             e1.printStackTrace();
             System.exit(0);
         }
+        finally {
+            System.exit(0);
+        }
 
         return null;
-
     }
-
 
     public Connection getConnection() throws SQLException, ClassNotFoundException {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
     }
+/*
+    private void extractConnectionAttributes(String filePath) throws IOException {
+        Path path = Path.of(filePath);
+        String connectionString = Files.readString(path);
+        this.host = connectionString.split(";")[0];
+        this.uName = connectionString.split(";")[1];
+        this.uPass = connectionString.split(";")[2];
+    }
 
-
+ */
 }
