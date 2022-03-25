@@ -90,15 +90,20 @@ public class MyConnection {
         try {
             //Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(url, databaseUsername, databasePassword);
+            if(con == null)
+                System.out.println("con is null");
             return con;
         }
         catch (SQLException e1) {
             e1.printStackTrace();
             System.exit(0);
         }
+        /*
         finally {
             System.exit(0);
         }
+
+         */
 
         return null;
     }
