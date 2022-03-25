@@ -66,7 +66,7 @@ public class App
 //        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatId, false);   // true: write to file
 
         HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(dbConnection);
-        hemorrhagesBuilder.buildHemorrhages(centreID, regpatId, true);
+        hemorrhagesBuilder.buildHemorrhages(centreID, regpatId, false);
 
 //        BehandlingOchDoseringsperiodBuilder behandlingOchDoseringsperiodBuilder = new BehandlingOchDoseringsperiodBuilder(connectionFilePath);
 //        behandlingOchDoseringsperiodBuilder.buildBehandlingOchDosering(centreID, regpatId, true);

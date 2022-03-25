@@ -26,17 +26,17 @@ public class HemorrhagesBuilder {
     private String sqlScriptFilePath = null;
     private String POJOFileName = "temp/ordination/hemorrhagesWaran.txt";
     private String JSONFileName = "temp/ordination/hemorrhagesWaran.json";
-    private Connection myConnection = null;
+    //private Connection myConnection = null;
     private int totalHemorrhagesPoster = 0;
 
     private long countObjChars;
     private long hemorrhagesListCount;
 
-    private Connection myconnection = null;
+    private Connection myConnection = null;
 
     public HemorrhagesBuilder(final Connection con) {
         //extractConnectionAttributes(connectionFilePath);
-        this.myconnection = con;
+        this.myConnection = con;
     }
 
     /*
