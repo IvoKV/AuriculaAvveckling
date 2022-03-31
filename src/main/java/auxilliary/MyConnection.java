@@ -32,12 +32,6 @@ public class MyConnection {
 
     private Session session = null;
 
-    //private final String strSshHost = "localhost";
-    //private final int nSshPort = 22;
-
-    //private final int nLocalPort = 4321;
-
-
     private static final String connectionFilePath = "src/resource/ConnectionStringSshTunnel.txt";
 
     private Connection connection = null;
@@ -76,17 +70,13 @@ public class MyConnection {
         int forwardedPort =  session.setPortForwardingL(0, databaseHost, databasePort);
     }
 
-    public  Connection getDbConnection() throws JSchException, IOException {
+    public Connection getDbConnection() throws JSchException, IOException {
         int forwardedPort =  session.setPortForwardingL(0, databaseHost, databasePort);
 
         Path path = Path.of(connectionFilePath);
         String connectionString = Files.readString(path);
 
-        //String url = connectionString + ":" + forwardedPort;
-        //String url = "jdbc:mysql://localhost:" + forwardedPort;
-        // todo: has to be tested!
         String url = "jdbc:mysql://localhost:" + forwardedPort + "/" + databaseUse;
-
         try {
             //Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(url, databaseUsername, databasePassword);
@@ -105,14 +95,17 @@ public class MyConnection {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
     }
-/*
-    private void extractConnectionAttributes(String filePath) throws IOException {
-        Path path = Path.of(filePath);
-        String connectionString = Files.readString(path);
-        this.host = connectionString.split(";")[0];
-        this.uName = connectionString.split(";")[1];
-        this.uPass = connectionString.split(";")[2];
+
+    public void closeConnection() throws SQLException {
+        if(this.connection != null){
+            if(!connection.isClosed()) {
+                connection.close();
+            }
+            connection = null;
+        }
     }
 
- */
+    public void disconnectSession(){
+        session.disconnect();
+    }
 }

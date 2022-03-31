@@ -43,9 +43,9 @@ SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
         op.WEIGHT,                                                      /* 14 */
         op.WEIGHTDATE,                                                  /* 15 */
 
-        LMH.DOSE,                                                       /* 16*/
-        LMH.FROMDATE,                                                   /* 17 */
-        LMH.TODATE,                                                     /* 18 */
+        lmh.DOSE,                                                       /* 16*/
+        lmh.FROMDATE,                                                   /* 17 */
+        lmh.TODATE,                                                     /* 18 */
 
     /* Doseringsperiod */
         op.STARTDATE,                                                   /* 19 */
@@ -84,6 +84,6 @@ FROM centre as c
          JOIN lmh on inr.INRID  = lmh.INRID
          join patient as p on rp.PID = p.PID
          join people AS pal on cp.PAL = pal.PEOPLEID
-where C.ID = ?
-AND p.PID = ?
+WHERE c.ID = ?
+AND p.SSN = ?
 order by p.PID;

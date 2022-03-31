@@ -26,7 +26,6 @@ public class HemorrhagesBuilder {
     private String sqlScriptFilePath = null;
     private String POJOFileName = "temp/ordination/hemorrhagesWaran.txt";
     private String JSONFileName = "temp/ordination/hemorrhagesWaran.json";
-    //private Connection myConnection = null;
     private int totalHemorrhagesPoster = 0;
 
     private long countObjChars;
@@ -39,16 +38,12 @@ public class HemorrhagesBuilder {
         this.myConnection = con;
     }
 
-    public void buildHemorrhages(String centreId, int regpatId, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException, JSchException {
+    public void buildHemorrhages(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException, JSchException {
         ResultSet rsHemorrhages = null;
-        /*
-        MyConnection myConnection;
-        myConnection = new MyConnection();
-        myConnection.createSshTunnel();
-        */
+
         List<Hemorrhages> hemorrhagesList = new ArrayList<>();
 
-        if(regpatId > 0) {
+        if(regpatSSN.length() > 0) {
             // ONE regpatId
             sqlScriptFilePath = "src/resource/sql/ordination/HemorrhagesWaranOne.sql";
             Path file = Path.of(sqlScriptFilePath);
@@ -56,10 +51,10 @@ public class HemorrhagesBuilder {
 
             PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
             selectOrdinationWaran.setString(1, centreId);
-            selectOrdinationWaran.setInt(2, regpatId);
+            selectOrdinationWaran.setString(2, regpatSSN);
             rsHemorrhages = selectOrdinationWaran.executeQuery();
         }
-        else{
+        else if (regpatSSN.length() == 0){
             // ALL regpatId
             sqlScriptFilePath = "src/resource/sql/ordination/HemorrhagesWaranAll.sql";
             Path file = Path.of(sqlScriptFilePath);
@@ -68,6 +63,10 @@ public class HemorrhagesBuilder {
             PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
             selectOrdinationWaran.setString(1, centreId);
             rsHemorrhages = selectOrdinationWaran.executeQuery();
+        }
+        else{
+            System.out.println("Verification of SSN: Wrong format. Program abort.");
+            System.exit(0);
         }
 
         while (rsHemorrhages.next()) {
@@ -102,8 +101,8 @@ public class HemorrhagesBuilder {
         System.out.println("Total antal hemorrhages popster: " + listSize);
 
         if(writeToFile){
-            writePOJOToFile(hemorrhagesList, regpatId);
-            POJOListToJSONToFile(hemorrhagesList, regpatId);
+        writePOJOToFile(hemorrhagesList, regpatSSN);
+            POJOListToJSONToFile(hemorrhagesList);
         }
     }
 
@@ -114,9 +113,9 @@ public class HemorrhagesBuilder {
         return dbConnection.createConnection();
     }
 
-    private void writePOJOToFile(List<Hemorrhages> ordp, int regpat) throws IOException {
+    private void writePOJOToFile(List<Hemorrhages> ordp, String regpat) throws IOException {
 
-        if(regpat > 0) {
+        if(regpat.length() > 0) {
             POJOFileName = insertString(POJOFileName, "One");
             JSONFileName = insertString(JSONFileName, "One");
         }
@@ -134,7 +133,7 @@ public class HemorrhagesBuilder {
         pojoWriter.close();
     }
 
-    private void POJOListToJSONToFile(List<Hemorrhages> hemorrhagesList, int regpat) throws IOException {
+    private void POJOListToJSONToFile(List<Hemorrhages> hemorrhagesList) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
