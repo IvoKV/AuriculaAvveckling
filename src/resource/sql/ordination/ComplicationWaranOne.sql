@@ -1,5 +1,5 @@
 # Complication, ALL patients
-    SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
+    SELECT  c.ID, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
         /* Patientansvarig läkare/enhet */
             pal.TITLE AS PAL_TITLE,
             pal.FIRSTNAME AS PAL_FIRSTNAME,
@@ -32,12 +32,12 @@
             comp.STATUS
 
     FROM centre as c
-             join centrepatient as cp on c.id = cp.CENTREID
-             join regionpatient as rp on cp.RPID = rp.RPID
-             join ordinationperiod as op on  cp.CPID = op.CPID
+             JOIN centrepatient as cp on c.ID = cp.CENTREID
+             JOIN regionpatient as rp on cp.RPID = rp.RPID
+             JOIN ordinationperiod as op on  cp.CPID = op.CPID
              JOIN complication comp on op.OID = comp.OID
-             join patient as p on rp.PID = p.PID
-             join people AS pal on cp.PAL = pal.PEOPLEID
-    where C.ID = ?
+             JOIN patient as p on rp.PID = p.PID
+             JOIN people AS pal on cp.PAL = pal.PEOPLEID
+    WHERE c.ID = ?
     AND p.pid = ?
-    order by p.PID;
+    ORDER BY p.PID;

@@ -2,7 +2,8 @@ package Person;
 
 import java.util.Objects;
 
-public class PersonInCharge {
+public class PersonInChargeAllEmployees {
+
     private String id;
     private String title;
     private String groupId;
@@ -10,7 +11,7 @@ public class PersonInCharge {
     private String lastName;
     private String befattningskod;
 
-    public PersonInCharge(String id, String title, String groupId, String firstName, String lastName, String befattning) throws PersonInChargeException {
+    public PersonInChargeAllEmployees(String id, String title, String groupId, String firstName, String lastName, String befattning) throws PersonInChargeException {
         this.id = id;
         this.title = title;
         this.groupId = groupId;
@@ -29,6 +30,10 @@ public class PersonInCharge {
         }catch (NullPointerException npe) {
             throw new PersonInChargeException(npe.getMessage());
         }
+    }
+
+    public PersonInChargeAllEmployees(String title) {
+        this.title = title;
     }
 
     public void setId(String id) {
