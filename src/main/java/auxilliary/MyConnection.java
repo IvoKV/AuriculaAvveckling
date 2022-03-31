@@ -98,13 +98,6 @@ public class MyConnection {
             e1.printStackTrace();
             System.exit(0);
         }
-        /*
-        finally {
-            System.exit(0);
-        }
-
-         */
-
         return null;
     }
 

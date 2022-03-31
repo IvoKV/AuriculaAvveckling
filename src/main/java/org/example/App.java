@@ -20,15 +20,13 @@ import java.sql.SQLException;
  */
 public class App 
 {
-    private static final String simpleConnectionFilePath = "src/resource/ConnectionString.txt";     // Används endast vid öppen kanal till db source/-host
+    private static final String simpleConnectionFilePath = "src/resource/ConnectionString.txt";     // Används endast för öppen kanal till db source/-host
     private static final String databaseUse = "auricula_export_TIO_100";
     private static Connection dbConnection = null;
 
     private static final String datasourceHost = "cluster";
 
     public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException {
-
-        //Path filePath = Path.of(simpleConnectionFilePath);
 
         if(datasourceHost == "cluster") {
             MyConnection myConnection = new MyConnection(databaseUse);
