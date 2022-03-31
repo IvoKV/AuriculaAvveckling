@@ -39,18 +39,6 @@ public class HemorrhagesBuilder {
         this.myConnection = con;
     }
 
-    /*
-    private void extractConnectionAttributes(String filePath) throws IOException {
-        Path path = Path.of(filePath);
-        String connectionString = Files.readString(path);
-        this.host = connectionString.split(";")[0];
-        this.uName = connectionString.split(";")[1];
-        this.uPass = connectionString.split(";")[2];
-        
-    }
-
-     */
-
     public void buildHemorrhages(String centreId, int regpatId, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException, JSchException {
         ResultSet rsHemorrhages = null;
         /*
@@ -120,6 +108,7 @@ public class HemorrhagesBuilder {
     }
 
     // must be accessible for test class
+    // todo: modify connection in test for  db in cluster
     public Connection getMyconnection() throws SQLException, ClassNotFoundException {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
