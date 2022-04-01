@@ -1,8 +1,11 @@
 package Person;
 
 import auxilliary.MappingPositions;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,63 +29,75 @@ public class PersonInChargeAllEmployeesBuilder {
     private String POJOFileName = "";
     private String JSONFileName = "";
 
-    public PersonInChargeAllEmployeesBuilder(final Connection con) throws IOException, PersonInChargeException, SQLException {
+    public PersonInChargeAllEmployeesBuilder(final Connection con) {
         this.myConnection = con;
     }
 
-    public void buildPersonInCharge(Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInChargeException {
+    public void buildPersonInChargeEmployees(Boolean writeToFile) throws SQLException, IOException, PersonInChargeException {
         Path file = null;
 
         file = Path.of(sqlScriptFilePathAllTitles);
-        POJOFileName = "temp/personInChargeGroupBy.txt";
-        JSONFileName = "temp/personInChargeGroupBy.json";
+        POJOFileName = "temp/personInChargeAllEmps.txt";
+        JSONFileName = "temp/personInChargeAllEmps.json";
 
         String sqlStatement = Files.readString(file);
         Statement statement = myConnection.createStatement();
 
         ResultSet rs = statement.executeQuery(sqlStatement);
 
-        List<PersonInChargeAllTitles> personsInCharge = new ArrayList<>();
+        List<PersonInChargeAllEmployees> personsInChargeEmployees = new ArrayList<>();
         MappingPositions map = new MappingPositions();
         while (rs.next()) {
             if(rs.getString("titel") == null)
                 continue;
             String befattningskod = map.getBefattning(rs.getString("titel"));
-            PersonInChargeAllTitles personCharge = new PersonInChargeAllTitles(
+            PersonInChargeAllEmployees pEmployee = new PersonInChargeAllEmployees(
+                    rs.getString("id"),
                     rs.getString("titel"),
+                    rs.getString("groupid"),
+                    rs.getString("firstname"),
+                    rs.getString("lastname"),
                     befattningskod
             );
-            personsInCharge.add(personCharge);
+            personsInChargeEmployees.add(pEmployee);
         }
 
-        personsInCharge.stream()
+        personsInChargeEmployees.stream()
                 .forEach(System.out::println);
+        System.out.println("Total antal poster: " + personsInChargeEmployees.size());
 
         if(writeToFile){
-            extractToFile(personsInCharge);
-            POJOListToJSONToFile(personsInCharge);
+            POJOToFile(personsInChargeEmployees);
+            POJOListToJSONToFile(personsInChargeEmployees);
         }
     }
 
 
-    private void extractToFile(List<PersonInChargeAllTitles> personsInCharge) throws IOException {
+    private void POJOToFile(List<PersonInChargeAllEmployees> pEmps) throws IOException {
         FileWriter writer = new FileWriter(POJOFileName);
-        for (PersonInChargeAllTitles person : personsInCharge) {
+        long count = pEmps.stream().count();
+        for (PersonInChargeAllEmployees person : pEmps) {
             writer.write(person + System.lineSeparator());
         }
+        writer.write("Total antal poster: " + count + System.lineSeparator());
         writer.close();
     }
 
-    private void POJOListToJSONToFile(List<PersonInChargeAllTitles> personsInCharge) throws IOException {
+    private void POJOListToJSONToFile(List<PersonInChargeAllEmployees> pEmps) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        String arrayToJson = objectMapper.writeValueAsString(personsInCharge);
+        String arrayToJson = objectMapper.writeValueAsString(pEmps);
+        //JSONObject jobj = new JSONObject(arrayToJson);
+        JSONArray jArr = new JSONArray(arrayToJson);
+
         // 1. Convert List of person objects to JSON :");
         System.out.println(arrayToJson);
+        System.out.println("Total antal poster (json objekt): " + jArr.length());
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
         jsonWriter.write(arrayToJson);
+        jsonWriter.write("\nTotal antal poster (json objekt): " + jArr.length() + System.lineSeparator());
         jsonWriter.close();
     }
 }
