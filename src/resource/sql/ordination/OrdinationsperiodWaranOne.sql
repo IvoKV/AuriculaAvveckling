@@ -130,7 +130,5 @@ FROM centre as c
          join ordinationperiod as op on op.CPID = cp.CPID
         join people AS pal on cp.PAL = pal.PEOPLEID
 WHERE c.ID = ?
-  AND rp.PID = ?
-
-#group by p.PID
-order by rp.pid;
+  AND p.ssn = ?
+ORDER BY rp.pid;

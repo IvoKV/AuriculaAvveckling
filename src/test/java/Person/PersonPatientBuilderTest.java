@@ -15,11 +15,11 @@ public class PersonPatientBuilderTest {
     private final String connectionString = "src/resource/ConnectionString.txt";
     private Connection connection = null;
 
-    PersonPatientBuilder underTest = new PersonPatientBuilder(connectionString);
+    //PersonPatientBuilder underTest = new PersonPatientBuilder(connectionString);
 
     public PersonPatientBuilderTest() throws IOException {
     }
-
+/*
     @Test
     @DisplayName("it Should return valid connection")
     void itShouldReturnConnection() throws SQLException, ClassNotFoundException {
@@ -43,4 +43,6 @@ public class PersonPatientBuilderTest {
         assertThat(underTest.comparePersonListCountWithJsonPersonCount()).isTrue();
     }
 
+
+ */
 }

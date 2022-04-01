@@ -1,11 +1,9 @@
 package ordination.Matvarde;
 
-import DBSource.DBConnection;
-import Person.PersonInitializationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import ordination.Waran.Complication;
-import ordination.Waran.OrdinationsperiodInitializeException;
+import com.mysql.cj.xdevapi.JsonArray;
+import org.json.JSONArray;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,48 +17,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatvardeBuilder {
-    private String host = null;
-    private String uName = null;
-    private String uPass = null;
-    private Connection myConnection = null;
-
     private String sqlScriptFilePath = null;
     private String POJOFileName = "temp/matvarde/matvarde.txt";
     private String JSONFileName = "temp/matvarde/matvarde.json";
 
+    private Connection myConnection = null;
+
     private long countObjChars;
     private long matvardeListCount;
 
-    public MatvardeBuilder(final String connectionFilePath) throws IOException {
-        extractConnectionAttributes(connectionFilePath);
+    public MatvardeBuilder(final Connection con) {
+        this.myConnection = con;
     }
 
-    private void extractConnectionAttributes(String filePath) throws IOException {
-        Path path = Path.of(filePath);
-        String connectionString = Files.readString(path);
-        this.host = connectionString.split(";")[0];
-        this.uName = connectionString.split(";")[1];
-        this.uPass = connectionString.split(";")[2];
-    }
-
-    public void buildMatvarde(String centreId, int regpatId, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, MatvardeInitializationException {
+    public void buildMatvarde(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, MatvardeInitializationException {
         ResultSet rsMatvarde = null;
-        myConnection = getConnection();
-        List<Matvarde> matvarden = new ArrayList<>();
+        List<Matvarde> matvardes = new ArrayList<>();
 
-        if(regpatId > 0) {
-            // ONE regpatId
+        if(regpatSSN.length() > 0) {
+            // ONE regpatSSN
             sqlScriptFilePath = "src/resource/sql/matvarde/MatvardeOne.sql";
             Path file = Path.of(sqlScriptFilePath);
             String sqlStatement = Files.readString(file);
 
             PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
             selectOrdinationWaran.setString(1, centreId);
-            selectOrdinationWaran.setInt(2, regpatId);
+            selectOrdinationWaran.setString(2, regpatSSN);
             rsMatvarde = selectOrdinationWaran.executeQuery();
         }
-        else{
-            // ALL regpatId
+        else if(regpatSSN.length() == 0){
+            // ALL regpatSSN
             sqlScriptFilePath = "src/resource/sql/matvarde/MatvardeAll.sql";
             Path file = Path.of(sqlScriptFilePath);
             String sqlStatement = Files.readString(file);
@@ -68,6 +54,10 @@ public class MatvardeBuilder {
             PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
             selectOrdinationWaran.setString(1, centreId);
             rsMatvarde = selectOrdinationWaran.executeQuery();
+        }
+        else {
+            System.out.println("Verification of SSN: Wrong format. Program abort.");
+            System.exit(0);
         }
 
         while (rsMatvarde.next()) {
@@ -87,29 +77,32 @@ public class MatvardeBuilder {
                     rsMatvarde.getString(12),                       // remissComment
                     rsMatvarde.getString(13)                        // analysisComment
             );
-            matvarden.add(comp);
+            matvardes.add(comp);
         }
-        int listSize = matvarden.size();
+        int listSize = matvardes.size();
         myConnection.close();
 
-        matvarden.stream()
+        matvardes.stream()
                 .forEach(System.out::println);
         System.out.println("Total antal mätvärde popster: " + listSize);
 
         if(writeToFile){
-            writePOJOToFile(matvarden, regpatId);
-            POJOListToJSONToFile(matvarden, regpatId);
+            POJOToFile(matvardes, regpatSSN);
+            POJOListToJSONToFile(matvardes);
         }
     }
 
+    /*
     // must be accessible for test class
     public Connection getConnection() throws SQLException, ClassNotFoundException {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
     }
 
-    private void writePOJOToFile(List<Matvarde> ordp, int regpat) throws IOException {
-        if(regpat > 0) {
+     */
+
+    private void POJOToFile(List<Matvarde> matvardes, String regpatSSN) throws IOException {
+        if(regpatSSN.length() > 0) {
             POJOFileName = insertString(POJOFileName, "One");
             JSONFileName = insertString(JSONFileName, "One");
         }
@@ -120,28 +113,26 @@ public class MatvardeBuilder {
 
         FileWriter pojoWriter = new FileWriter(POJOFileName);
         pojoWriter.write("Mätvärde för patient:\n");
-        for (Matvarde matvarde : ordp) {
+        for (Matvarde matvarde : matvardes) {
             pojoWriter.write(matvarde + System.lineSeparator());
         }
-        //pojoWriter.write("Total antal ordinationer: " + totalOfOrdinationer + "\n");
+        pojoWriter.write("Total antal poster: " + matvardes.size() + "\n");
         pojoWriter.close();
     }
 
-    private void POJOListToJSONToFile(List<Matvarde> matvardeList, int regpat) throws IOException {
+    private void POJOListToJSONToFile(List<Matvarde> matvardeList) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         String listToJson = objectMapper.writeValueAsString(matvardeList);
-        // Convert List of person objects to JSON :");
-        System.out.println(listToJson);
+        JSONArray jArr = new JSONArray(listToJson);
 
-        char search = '{';
-        countObjChars = listToJson.chars().filter(ch -> ch == search).count();
-        matvardeListCount = matvardeList.size();
+        System.out.println(listToJson);
+        System.out.println("Total antal poster: " + jArr.length());
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
         jsonWriter.write(listToJson);
-        jsonWriter.write("\nTotal antal mätvärde poster: " + matvardeListCount + System.lineSeparator());
+        jsonWriter.write("\nTotal antal poster: " + jArr.length() + System.lineSeparator());
         jsonWriter.close();
     }
 

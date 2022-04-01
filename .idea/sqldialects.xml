@@ -2,5 +2,6 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/../../../../TempAuricula/unz_TIO-100-pre/auricula_export_TIO_100-pre-210603_223553.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/resource/sql/person/PersonPatient.sql" dialect="GenericSQL" />
   </component>
 </project>

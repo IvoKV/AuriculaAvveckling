@@ -3,6 +3,7 @@ package Person;
 import auxilliary.MappingPositions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.json.JSONArray;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -15,10 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonInChargeAllTitlesBuilder {
-
-    private String host;
-    private String uName;
-    private String uPass;
     private final String sqlScriptFilePathAllTitles = "src/resource/sql/person/PersonInChargeAllTitles.sql";      // All titles, creating a total of employees in charge
     private Connection myConnection = null;
 
@@ -30,11 +27,9 @@ public class PersonInChargeAllTitlesBuilder {
     }
 
     public void buildPersonInCharge(Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInChargeException {
-        Path file = null;
-
-        file = Path.of(sqlScriptFilePathAllTitles);
-        POJOFileName = "temp/personInChargeGroupBy.txt";
-        JSONFileName = "temp/personInChargeGroupBy.json";
+        Path file = Path.of(sqlScriptFilePathAllTitles);
+        POJOFileName = "temp/personInChargeAllTitles.txt";
+        JSONFileName = "temp/personInChargeAllTitles.json";
 
         String sqlStatement = Files.readString(file);
         Statement statement = myConnection.createStatement();
@@ -56,19 +51,21 @@ public class PersonInChargeAllTitlesBuilder {
 
         personsInCharge.stream()
                 .forEach(System.out::println);
+        System.out.println("Antal poster: " + personsInCharge.size());
 
         if(writeToFile){
-            extractToFile(personsInCharge);
+            POJOToFile(personsInCharge);
             POJOListToJSONToFile(personsInCharge);
         }
     }
 
 
-    private void extractToFile(List<PersonInChargeAllTitles> personsInCharge) throws IOException {
+    private void POJOToFile(List<PersonInChargeAllTitles> personsInCharge) throws IOException {
         FileWriter writer = new FileWriter(POJOFileName);
         for (PersonInChargeAllTitles person : personsInCharge) {
             writer.write(person + System.lineSeparator());
         }
+        writer.write("Antal poster: " + personsInCharge.size());
         writer.close();
     }
 
@@ -77,11 +74,14 @@ public class PersonInChargeAllTitlesBuilder {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         String arrayToJson = objectMapper.writeValueAsString(personsInCharge);
+        JSONArray jArr = new JSONArray(arrayToJson);
         // 1. Convert List of person objects to JSON :");
         System.out.println(arrayToJson);
+        System.out.println("Antal poster: " + jArr.length());
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
         jsonWriter.write(arrayToJson);
+        jsonWriter.write("\nAntal poster: " + jArr.length() + System.lineSeparator());
         jsonWriter.close();
     }
 }

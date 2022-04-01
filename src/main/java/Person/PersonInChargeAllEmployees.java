@@ -3,7 +3,6 @@ package Person;
 import java.util.Objects;
 
 public class PersonInChargeAllEmployees {
-
     private String id;
     private String title;
     private String groupId;
