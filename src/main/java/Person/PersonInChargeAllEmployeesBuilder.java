@@ -19,26 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonInChargeAllEmployeesBuilder {
-
-    private String host;
-    private String uName;
-    private String uPass;
     private final String sqlScriptFilePathAllTitles = "src/resource/sql/person/PersonInChargeAllEmployees.sql";      // All titles, creating a total of employees in charge
     private Connection myConnection = null;
 
-    private String POJOFileName = "";
-    private String JSONFileName = "";
+    private final String POJOFileName = "temp/personInChargeAllEmps.txt";
+    private final String JSONFileName = "temp/personInChargeAllEmps.json";
 
     public PersonInChargeAllEmployeesBuilder(final Connection con) {
         this.myConnection = con;
     }
 
     public void buildPersonInChargeEmployees(Boolean writeToFile) throws SQLException, IOException, PersonInChargeException {
-        Path file = null;
-
-        file = Path.of(sqlScriptFilePathAllTitles);
-        POJOFileName = "temp/personInChargeAllEmps.txt";
-        JSONFileName = "temp/personInChargeAllEmps.json";
+        Path file = Path.of(sqlScriptFilePathAllTitles);
 
         String sqlStatement = Files.readString(file);
         Statement statement = myConnection.createStatement();
@@ -72,7 +64,6 @@ public class PersonInChargeAllEmployeesBuilder {
         }
     }
 
-
     private void POJOToFile(List<PersonInChargeAllEmployees> pEmps) throws IOException {
         FileWriter writer = new FileWriter(POJOFileName);
         long count = pEmps.stream().count();
@@ -88,7 +79,6 @@ public class PersonInChargeAllEmployeesBuilder {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         String arrayToJson = objectMapper.writeValueAsString(pEmps);
-        //JSONObject jobj = new JSONObject(arrayToJson);
         JSONArray jArr = new JSONArray(arrayToJson);
 
         // 1. Convert List of person objects to JSON :");

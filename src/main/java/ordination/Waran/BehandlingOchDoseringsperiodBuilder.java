@@ -4,6 +4,7 @@ import DBSource.DBConnection;
 import Person.PersonInitializationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.json.JSONArray;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,11 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BehandlingOchDoseringsperiodBuilder {
-
-    private String host = null;
-    private String uName = null;
-    private String uPass = null;
-
     private String sqlScriptFilePath = null;
     private String POJOFileName = "temp/ordination/behandlingOchDoseringsperiod.txt";
     private String JSONFileName = "temp/ordination/behandlingOchDoseringsperiod.json";
@@ -131,7 +127,7 @@ public class BehandlingOchDoseringsperiodBuilder {
         for (BehandlingOchDoseringsperiod dosbeh : ordp) {
             pojoWriter.write(dosbeh + System.lineSeparator());
         }
-        //pojoWriter.write("Total antal ordinationer: " + totalOfOrdinationer + "\n");
+        pojoWriter.write("Total antal ordinationer: " + ordp.size() + "\n");
         pojoWriter.close();
     }
 
@@ -140,16 +136,15 @@ public class BehandlingOchDoseringsperiodBuilder {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         String listToJson = objectMapper.writeValueAsString(behandlingOchDoseringsperiods);
+        JSONArray jArr = new JSONArray(listToJson);
+
         // Convert List of person objects to JSON :");
         System.out.println(listToJson);
-
-        char search = '{';
-        countObjChars = listToJson.chars().filter(ch -> ch == search).count();
-        behandlingDoseringsperiodCount = behandlingOchDoseringsperiods.size();
+        System.out.println("Antal poster: "+ jArr.length());
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
         jsonWriter.write(listToJson);
-        jsonWriter.write("\nTotal antal Behandling och Doseringsposter: " + behandlingOchDoseringsperiods.size() + System.lineSeparator());
+        jsonWriter.write("\nTotal antal Behandling och Doseringsposter: " + jArr.length() + System.lineSeparator());
         jsonWriter.close();
     }
 

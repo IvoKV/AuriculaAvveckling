@@ -70,7 +70,7 @@ public class MyConnection {
         int forwardedPort =  session.setPortForwardingL(0, databaseHost, databasePort);
     }
 
-    public Connection getDbConnection() throws JSchException, IOException {
+    public Connection getSSHDbConnection() throws JSchException, IOException {
         int forwardedPort =  session.setPortForwardingL(0, databaseHost, databasePort);
 
         Path path = Path.of(connectionFilePath);
@@ -94,15 +94,6 @@ public class MyConnection {
     public Connection getConnection() throws SQLException, ClassNotFoundException {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
-    }
-
-    public void closeConnection() throws SQLException {
-        if(this.connection != null){
-            if(!connection.isClosed()) {
-                connection.close();
-            }
-            connection = null;
-        }
     }
 
     public void disconnectSession(){

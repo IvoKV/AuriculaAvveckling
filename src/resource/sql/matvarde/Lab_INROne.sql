@@ -17,13 +17,13 @@
             INR.SPECIMEN_COMMENT,                           # varchar
             INR.ANALYSIS_COMMENT                            # varchar
 
-    FROM centre as c
+    FROM centre AS c
              join centrepatient as cp on c.id = cp.CENTREID
              join regionpatient as rp on cp.RPID = rp.RPID
              join ordinationperiod as op on  cp.CPID = op.CPID
-             JOIN INR AS INR ON op.OID = INR.OID
+             JOIN inr AS INR ON op.OID = INR.OID
              join patient as p on rp.PID = p.PID
              join people AS pal on cp.PAL = pal.PEOPLEID
-    where C.ID = ?
-    AND p.PID = ?
+    WHERE c.ID = ?
+    AND p.SSN = ?
     order by p.PID;

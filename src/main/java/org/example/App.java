@@ -1,11 +1,12 @@
 package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
-import Person.PersonInChargeAllEmployeesBuilder;
-import Person.PersonInChargeException;
-import Person.PersonInitializationException;
+import Person.*;
 import auxilliary.MyConnection;
 import com.jcraft.jsch.JSchException;
+import ordination.Matvarde.LMHBuilder;
+import ordination.Matvarde.LabInrBuilder;
+import ordination.Matvarde.MatvardeBuilder;
 import ordination.Matvarde.MatvardeInitializationException;
 import ordination.Waran.*;
 
@@ -33,7 +34,7 @@ public class App
         if(datasourceHost == "cluster") {
             myConnection = new MyConnection(databaseUse);
             myConnection.createSshTunnel();
-            dbConnection = myConnection.getDbConnection();
+            dbConnection = myConnection.getSSHDbConnection();
         }
         else if (datasourceHost == "stationär"){
             Path path = Path.of(simpleConnectionFilePath);
@@ -51,40 +52,37 @@ public class App
         }
 
         String centreID = "11012AK";
-        //int regpatId = 0;   // <0>: all patients, <regpatid>: only chosen patient
         //int regpatId = 54241;
         //int regpatId = 489980;
         String regpatSSN = "19840729-0249";
-        //regpatSSN = "";
+        regpatSSN = "";
 
-        int regpatId = 0;
-
-//        var personPat = new PersonPatientBuilder(connectionFilePath);
-//        personPat.buildPersonPatient(true);         // boolean: write to file
+//        var personPat = new PersonPatientBuilder(dbConnection);
+//        personPat.buildPersonPatient(centreID, true);         // boolean: write to file
 
 //        var personChargeAllTitlesBuilder = new PersonInChargeAllTitlesBuilder(dbConnection);
-//        personChargeAllTitlesBuilder.buildPersonInCharge(false);     // boolean: write to file; GroupBy || All
+//        personChargeAllTitlesBuilder.buildPersonInCharge(true);
 
-        var personInChargeAllEmployeesBuilder = new PersonInChargeAllEmployeesBuilder(dbConnection);
-        personInChargeAllEmployeesBuilder.buildPersonInChargeEmployees(false);
+//        var personInChargeAllEmployeesBuilder = new PersonInChargeAllEmployeesBuilder(dbConnection);
+//        personInChargeAllEmployeesBuilder.buildPersonInChargeEmployees(true);
 
-//        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(connectionFilePath);
-//        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatId, false);   // true: write to file
+//        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(dbConnection);
+//        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatSSN, true);
 
 //        HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(dbConnection);
-//        hemorrhagesBuilder.buildHemorrhages(centreID, regpatSSN, false);
+//        hemorrhagesBuilder.buildHemorrhages(centreID, regpatSSN, true);
 
 //        BehandlingOchDoseringsperiodBuilder behandlingOchDoseringsperiodBuilder = new BehandlingOchDoseringsperiodBuilder(dbConnection);
-//        behandlingOchDoseringsperiodBuilder.buildBehandlingOchDosering(centreID, regpatSSN, false);
+//        behandlingOchDoseringsperiodBuilder.buildBehandlingOchDosering(centreID, regpatSSN, true);
 
-//          LabInrBuilder labInrBuilder = new LabInrBuilder(connectionFilePath);
-//          labInrBuilder.buildLabINR(centreID, regpatId, Boolean.TRUE);
+//          LabInrBuilder labInrBuilder = new LabInrBuilder(dbConnection);
+//          labInrBuilder.buildLabINR(centreID, regpatSSN, true);
 
-//        MatvardeBuilder matvardeBuilder = new MatvardeBuilder(connectionFilePath);
-//        matvardeBuilder.buildMatvarde(centreID, regpatId, true);
+//        MatvardeBuilder matvardeBuilder = new MatvardeBuilder(dbConnection);
+//        matvardeBuilder.buildMatvarde(centreID, regpatSSN, true);
 
-//          LMHBuilder lmhBuilder = new LMHBuilder(connectionFilePath);
-//          lmhBuilder.buildLMH(centreID, regpatId, false);
+          LMHBuilder lmhBuilder = new LMHBuilder(dbConnection);
+          lmhBuilder.buildLMH(centreID, regpatSSN, true);
 
             dbConnection.close();
             myConnection.disconnectSession();
