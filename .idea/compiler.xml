@@ -9,5 +9,8 @@
         <module name="Auricula-personobjekt" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Auricula-personobjekt" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
