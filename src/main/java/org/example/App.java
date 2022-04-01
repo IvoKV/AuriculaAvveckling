@@ -2,7 +2,6 @@ package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
 import Person.PersonInChargeAllEmployeesBuilder;
-import Person.PersonInChargeAllTitlesBuilder;
 import Person.PersonInChargeException;
 import Person.PersonInitializationException;
 import auxilliary.MyConnection;
@@ -67,6 +66,7 @@ public class App
 //        personChargeAllTitlesBuilder.buildPersonInCharge(false);     // boolean: write to file; GroupBy || All
 
         var personInChargeAllEmployeesBuilder = new PersonInChargeAllEmployeesBuilder(dbConnection);
+        personInChargeAllEmployeesBuilder.buildPersonInChargeEmployees(false);
 
 //        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(connectionFilePath);
 //        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatId, false);   // true: write to file
