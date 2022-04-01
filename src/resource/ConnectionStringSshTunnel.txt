@@ -1,0 +1,1 @@
+jdbc:mysql://sllmltprodapp01.dc.sll.se:30306/auricula_export_TIO_100

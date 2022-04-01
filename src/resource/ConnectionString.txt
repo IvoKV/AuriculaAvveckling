@@ -1,1 +1,1 @@
-jdbc:mysql://localhost:3306/auricula_export_tio_100;root;ivo64..
+jdbc:mysql://localhost:30306/auricula_export_TIO_100;cwz7;ivo64..;

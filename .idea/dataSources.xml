@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="MySQL - auricula_export_tio_100@localhost" uuid="1e927f90-4dce-430c-a98d-f3f46ba3e85b">
+    <data-source source="LOCAL" name="auricula_export_TIO_100@sllmltprodapp01.dc.sll.se" uuid="1b4910a5-fd18-4366-ad13-e626ede38b43">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
+      <remarks>DB in cluster</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/auricula_export_tio_100</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
+      <jdbc-url>jdbc:mysql://sllmltprodapp01.dc.sll.se:30306/auricula_export_TIO_100</jdbc-url>
     </data-source>
   </component>
 </project>
