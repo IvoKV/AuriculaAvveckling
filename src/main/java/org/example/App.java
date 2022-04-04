@@ -1,16 +1,19 @@
 package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
-import Person.PersonInChargeException;
-import Person.PersonInitializationException;
+import Person.*;
+import auxilliary.MyConnection;
+import com.jcraft.jsch.JSchException;
 import ordination.Matvarde.LMHBuilder;
-import ordination.Matvarde.LabInr;
+import ordination.Matvarde.LabInrBuilder;
 import ordination.Matvarde.MatvardeBuilder;
 import ordination.Matvarde.MatvardeInitializationException;
 import ordination.Waran.*;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -19,44 +22,69 @@ import java.sql.SQLException;
  */
 public class App 
 {
-    private static final String connectionFilePath = "src/resource/ConnectionString.txt";
+    private static final String simpleConnectionFilePath = "src/resource/ConnectionString.txt";     // Används endast för öppen kanal till db source/-host
+    private static final String databaseUse = "auricula_export_TIO_100";
+    private static MyConnection myConnection = null;
+    private static Connection dbConnection = null;
 
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException {
+    private static final String datasourceHost = "cluster";
 
-        Path filePath = Path.of(connectionFilePath);
+    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException {
 
-//        var personPat = new PersonPatientBuilder(connectionFilePath);
-//        personPat.buildPersonPatient(true);         // boolean: write to file
+        if(datasourceHost == "cluster") {
+            myConnection = new MyConnection(databaseUse);
+            myConnection.createSshTunnel();
+            dbConnection = myConnection.getSSHDbConnection();
+        }
+        else if (datasourceHost == "stationär"){
+            Path path = Path.of(simpleConnectionFilePath);
+            String connectionString = Files.readString(path);
 
-//        var personCharge = new PersonInChargeBuilder(connectionFilePath);
-//        personCharge.buildPersonInCharge(true, "GroupBy");     // boolean: write to file; Group || All
+            String host = connectionString.split(";")[0];
+            String uName = connectionString.split(";")[1];
+            String uPass = connectionString.split(";")[2];
 
+            myConnection = new MyConnection(host, uName, uPass);
+            dbConnection = myConnection.getConnection();
+        }
+        else {
+            System.exit(0);
+        }
 
         String centreID = "11012AK";
-        //int regpatId = 0;   // <0>: all patients, <regpatid>: only chosen patient
         //int regpatId = 54241;
         //int regpatId = 489980;
-        int regpatId = 0;
+        String regpatSSN = "19840729-0249";
+        regpatSSN = "";
 
-//        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(connectionFilePath);
-//        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatId, true);   // true: write to file
+//        var personPat = new PersonPatientBuilder(dbConnection);
+//        personPat.buildPersonPatient(centreID, true);         // boolean: write to file
 
-//        HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(connectionFilePath);
-//        hemorrhagesBuilder.buildHemorrhages(centreID, regpatId, true);
+//        var personChargeAllTitlesBuilder = new PersonInChargeAllTitlesBuilder(dbConnection);
+//        personChargeAllTitlesBuilder.buildPersonInCharge(true);
 
-//        BehandlingOchDoseringsperiodBuilder behandlingOchDoseringsperiodBuilder = new BehandlingOchDoseringsperiodBuilder(connectionFilePath);
-//        behandlingOchDoseringsperiodBuilder.buildBehandlingOchDosering(centreID, regpatId, true);
+//        var personInChargeAllEmployeesBuilder = new PersonInChargeAllEmployeesBuilder(dbConnection);
+//        personInChargeAllEmployeesBuilder.buildPersonInChargeEmployees(true);
 
-//        MatvardeBuilder matvardeBuilder = new MatvardeBuilder(connectionFilePath);
-//        matvardeBuilder.buildMatvarde(centreID, regpatId, true);
+//        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(dbConnection);
+//        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatSSN, true);
 
-//          LabInrBuilder labInrBuilder = new LabInrBuilder(connectionFilePath);
-//          labInrBuilder.buildLabINR(centreID, regpatId, Boolean.TRUE);
+//        HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(dbConnection);
+//        hemorrhagesBuilder.buildHemorrhages(centreID, regpatSSN, true);
 
-//        MatvardeBuilder matvardeBuilder = new MatvardeBuilder(connectionFilePath);
-//        matvardeBuilder.buildMatvarde(centreID, regpatId, true);
+//        BehandlingOchDoseringsperiodBuilder behandlingOchDoseringsperiodBuilder = new BehandlingOchDoseringsperiodBuilder(dbConnection);
+//        behandlingOchDoseringsperiodBuilder.buildBehandlingOchDosering(centreID, regpatSSN, true);
 
-          LMHBuilder lmhBuilder = new LMHBuilder(connectionFilePath);
-          lmhBuilder.buildLMH(centreID, regpatId, true);
+//          LabInrBuilder labInrBuilder = new LabInrBuilder(dbConnection);
+//          labInrBuilder.buildLabINR(centreID, regpatSSN, true);
+
+//        MatvardeBuilder matvardeBuilder = new MatvardeBuilder(dbConnection);
+//        matvardeBuilder.buildMatvarde(centreID, regpatSSN, true);
+
+          LMHBuilder lmhBuilder = new LMHBuilder(dbConnection);
+          lmhBuilder.buildLMH(centreID, regpatSSN, true);
+
+            dbConnection.close();
+            myConnection.disconnectSession();
     }
 }

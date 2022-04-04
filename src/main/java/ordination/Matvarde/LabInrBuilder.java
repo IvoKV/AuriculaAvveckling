@@ -1,11 +1,10 @@
 package ordination.Matvarde;
 
-import DBSource.DBConnection;
 import Person.PersonInitializationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import ordination.Waran.OrdinationsperiodIndikationer;
 import ordination.Waran.OrdinationsperiodInitializeException;
+import org.json.JSONArray;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,54 +18,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LabInrBuilder {
-    private String host = null;
-    private String uName = null;
-    private String uPass = null;
-
-    private String sqlScriptFilePath = null;
     private String POJOFileName = "temp/matvarde/lab_INR.txt";
     private String JSONFileName = "temp/matvarde/lab_INR.json";
 
     private Connection myConnection = null;
     private int totalOfLabInr = 0;
 
-    public LabInrBuilder(final String connectionFilePath) throws IOException {
-        extractConnectionAttributes(connectionFilePath);
+    public LabInrBuilder(final Connection con) {
+        this.myConnection = con;
     }
 
-    private void extractConnectionAttributes(String filePath) throws IOException {
-        Path path = Path.of(filePath);
-        String connectionString = Files.readString(path);
-        this.host = connectionString.split(";")[0];
-        this.uName = connectionString.split(";")[1];
-        this.uPass = connectionString.split(";")[2];
-    }
-
-    public void buildLabINR(String centreId, int regpatId, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException {
+    public void buildLabINR(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, IOException {
         ResultSet rsLabInr = null;
-        myConnection = getConnection();
+
         List<LabInr> labinrList = new ArrayList<>();
 
-        if(regpatId > 0) {
+        if(regpatSSN.length() > 0) {
             // ONE regpatId
-            sqlScriptFilePath = "src/resource/sql/matvarde/Lab_INROne.sql";
+            String sqlScriptFilePath = "src/resource/sql/matvarde/Lab_INROne.sql";
+            Path file = Path.of(sqlScriptFilePath);
+            String sqlStatement = Files.readString(file);
+
+            PreparedStatement selectLabInr = myConnection.prepareStatement(sqlStatement);
+            selectLabInr.setString(1, centreId);
+            selectLabInr.setString(2, regpatSSN);
+            rsLabInr = selectLabInr.executeQuery();
+        }
+        else if(regpatSSN.length() == 0){
+            // ALL regpatId
+            String sqlScriptFilePath = "src/resource/sql/matvarde/Lab_INRAll.sql";
             Path file = Path.of(sqlScriptFilePath);
             String sqlStatement = Files.readString(file);
 
             PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
             selectOrdinationWaran.setString(1, centreId);
-            selectOrdinationWaran.setInt(2, regpatId);
             rsLabInr = selectOrdinationWaran.executeQuery();
         }
-        else{
-            // ALL regpatId
-            sqlScriptFilePath = "src/resource/sql/matvarde/Lab_INRAll.sql";
-            Path file = Path.of(sqlScriptFilePath);
-            String sqlStatement = Files.readString(file);
-
-            PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
-            selectOrdinationWaran.setString(1, centreId);
-            rsLabInr = selectOrdinationWaran.executeQuery();
+        else {
+            System.out.println("Verification of SSN: Wrong format. Program abort.");
+            System.exit(0);
         }
 
         while (rsLabInr.next()) {
@@ -97,19 +87,20 @@ public class LabInrBuilder {
         System.out.println("Total antal lab-INR poster: " + listSize);
 
         if(writeToFile){
-            writePOJOToFile(labinrList, regpatId);
-            POJOListToJSONToFile(labinrList, regpatId);
+            POJOToFile(labinrList, regpatSSN);
+            POJOListToJSONToFile(labinrList);
         }
     }
-
+/*
     private Connection getConnection() throws SQLException, ClassNotFoundException {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
     }
 
-    private void writePOJOToFile(List<LabInr> ordp, int regpat) throws IOException {
+ */
 
-        if(regpat > 0) {
+    private void POJOToFile(List<LabInr> labInrs, String regpatSSN) throws IOException {
+        if(regpatSSN.length() > 0) {
             POJOFileName = insertString(POJOFileName, "One");
             JSONFileName = insertString(JSONFileName, "One");
         }
@@ -120,23 +111,26 @@ public class LabInrBuilder {
 
         FileWriter pojoWriter = new FileWriter(POJOFileName);
         pojoWriter.write("Lab INR för patient:\n");
-        for (LabInr labInr : ordp) {
+        for (LabInr labInr : labInrs) {
             pojoWriter.write(labInr + System.lineSeparator());
         }
-        //pojoWriter.write("Total antal ordinationer: " + totalOfOrdinationer + "\n");
+        pojoWriter.write("Total antal poster: " + labInrs.size() + "\n");
         pojoWriter.close();
     }
 
-    private void POJOListToJSONToFile(List<LabInr> ordp, int regpat) throws IOException {
+    private void POJOListToJSONToFile(List<LabInr> labInrs) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        String listToJson = objectMapper.writeValueAsString(ordp);
-        // Convert List of person objects to JSON :");
+        String listToJson = objectMapper.writeValueAsString(labInrs);
+        JSONArray jArr = new JSONArray(listToJson);
+
         System.out.println(listToJson);
+        System.out.println("Antal poster: " + jArr.length());
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
         jsonWriter.write(listToJson);
+        jsonWriter.write("\nAntal poster: " + jArr.length() + System.lineSeparator());
         jsonWriter.close();
     }
 
@@ -148,5 +142,4 @@ public class LabInrBuilder {
         else
             return outfile.insert(indexPos, "All-Patients").toString();
     }
-
 }

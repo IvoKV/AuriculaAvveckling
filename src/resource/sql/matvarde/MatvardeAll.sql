@@ -17,13 +17,13 @@
             lab.remissComment,                  # varchar
             lab.analysisComment                 # varchar
 
-    FROM centre as c
-             join centrepatient as cp on c.id = cp.CENTREID
-             join regionpatient as rp on cp.RPID = rp.RPID
-             join ordinationperiod as op on  cp.CPID = op.CPID
-             LEFT OUTER JOIN creatinin crea on op.OID = crea.OID
-             LEFT OUTER JOIN labresult lab on crea.LABRESULTID = lab.id
-             join patient as p on rp.PID = p.PID
-             join people AS pal on cp.PAL = pal.PEOPLEID
-    where C.ID = ?
-    order by p.PID;
+    FROM centre AS c
+             JOIN centrepatient AS cp ON c.id = cp.CENTREID
+             JOIN regionpatient AS rp ON cp.RPID = rp.RPID
+             JOIN ordinationperiod AS op ON  cp.CPID = op.CPID
+             LEFT OUTER JOIN creatinin crea ON op.OID = crea.OID
+             LEFT OUTER JOIN labresult lab ON crea.LABRESULTID = lab.id
+             JOIN patient AS p ON rp.PID = p.PID
+             JOIN people AS pal ON cp.PAL = pal.PEOPLEID
+    WHERE c.ID = ?
+    ORDER BY p.PID;

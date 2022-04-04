@@ -4,6 +4,7 @@ import DBSource.DBConnection;
 import Person.PersonInitializationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.json.JSONArray;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,11 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BehandlingOchDoseringsperiodBuilder {
-
-    private String host = null;
-    private String uName = null;
-    private String uPass = null;
-
     private String sqlScriptFilePath = null;
     private String POJOFileName = "temp/ordination/behandlingOchDoseringsperiod.txt";
     private String JSONFileName = "temp/ordination/behandlingOchDoseringsperiod.json";
@@ -30,43 +26,39 @@ public class BehandlingOchDoseringsperiodBuilder {
     private long countObjChars;
     private long behandlingDoseringsperiodCount;
 
-    public BehandlingOchDoseringsperiodBuilder(final String connectionFilePath) throws IOException {
-        extractConnectionAttributes(connectionFilePath);
+    public BehandlingOchDoseringsperiodBuilder(final Connection con) {
+        this.myConnection = con;
     }
 
-    private void extractConnectionAttributes(String filePath) throws IOException {
-        Path path = Path.of(filePath);
-        String connectionString = Files.readString(path);
-        this.host = connectionString.split(";")[0];
-        this.uName = connectionString.split(";")[1];
-        this.uPass = connectionString.split(";")[2];
-    }
-
-    public void buildBehandlingOchDosering(String centreId, int regpatId, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException {
+    public void buildBehandlingOchDosering(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, IOException {
         ResultSet rsDoseringsperiod = null;
-        myConnection = getConnection();
+
         List<BehandlingOchDoseringsperiod> behandlingOchDoseringsperiods = new ArrayList<>();
 
-        if(regpatId > 0) {
+        if(regpatSSN.length() > 0) {
             // ONE regpatId
             sqlScriptFilePath = "src/resource/sql/ordination/BehandlingOchDoseringsperiodOne.sql";
             Path file = Path.of(sqlScriptFilePath);
             String sqlStatement = Files.readString(file);
 
-            PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
-            selectOrdinationWaran.setString(1, centreId);
-            selectOrdinationWaran.setInt(2, regpatId);
-            rsDoseringsperiod = selectOrdinationWaran.executeQuery();
+            PreparedStatement selectDosBeh = myConnection.prepareStatement(sqlStatement);
+            selectDosBeh.setString(1, centreId);
+            selectDosBeh.setString(2, regpatSSN);
+            rsDoseringsperiod = selectDosBeh.executeQuery();
         }
-        else{
+        else if(regpatSSN.length() == 0){
             // ALL regpatId
             sqlScriptFilePath = "src/resource/sql/ordination/BehandlingOchDoseringsperiodAll.sql";
             Path file = Path.of(sqlScriptFilePath);
             String sqlStatement = Files.readString(file);
 
-            PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
-            selectOrdinationWaran.setString(1, centreId);
-            rsDoseringsperiod = selectOrdinationWaran.executeQuery();
+            PreparedStatement selectDosBeh = myConnection.prepareStatement(sqlStatement);
+            selectDosBeh.setString(1, centreId);
+            rsDoseringsperiod = selectDosBeh.executeQuery();
+        }
+        else{
+            System.out.println("Verification of SSN: Wrong format. Program abort.");
+            System.exit(0);
         }
 
         while (rsDoseringsperiod.next()) {
@@ -103,23 +95,25 @@ public class BehandlingOchDoseringsperiodBuilder {
 
         behandlingOchDoseringsperiods.stream()
                 .forEach(System.out::println);
-        System.out.println("Total antal hemorrhages popster: " + listSize);
+        System.out.println("Total antal doseringsperiodposter: " + listSize);
 
         if(writeToFile){
-            writePOJOToFile(behandlingOchDoseringsperiods, regpatId);
-            POJOListToJSONToFile(behandlingOchDoseringsperiods, regpatId);
+            writePOJOToFile(behandlingOchDoseringsperiods, regpatSSN);
+            POJOListToJSONToFile(behandlingOchDoseringsperiods);
         }
     }
 
+    /*
     // must be accessible for test class
-    public Connection getConnection() throws SQLException, ClassNotFoundException {
+    public Connection getMyConnection() throws SQLException, ClassNotFoundException {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
     }
 
-    private void writePOJOToFile(List<BehandlingOchDoseringsperiod> ordp, int regpat) throws IOException {
+     */
 
-        if(regpat > 0) {
+    private void writePOJOToFile(List<BehandlingOchDoseringsperiod> ordp, String regpat) throws IOException {
+        if(regpat.length() > 0) {
             POJOFileName = insertString(POJOFileName, "One");
             JSONFileName = insertString(JSONFileName, "One");
         }
@@ -129,29 +123,28 @@ public class BehandlingOchDoseringsperiodBuilder {
         }
 
         FileWriter pojoWriter = new FileWriter(POJOFileName);
-        pojoWriter.write("Behandlings- och doseringspost för patient:\n");
-        for (BehandlingOchDoseringsperiod hmhg : ordp) {
-            pojoWriter.write(hmhg + System.lineSeparator());
+        pojoWriter.write("Behandlings- och doseringsposter för patient:\n");
+        for (BehandlingOchDoseringsperiod dosbeh : ordp) {
+            pojoWriter.write(dosbeh + System.lineSeparator());
         }
-        //pojoWriter.write("Total antal ordinationer: " + totalOfOrdinationer + "\n");
+        pojoWriter.write("Total antal ordinationer: " + ordp.size() + "\n");
         pojoWriter.close();
     }
 
-    private void POJOListToJSONToFile(List<BehandlingOchDoseringsperiod> behandlingOchDoseringsperiods, int regpat) throws IOException {
+    private void POJOListToJSONToFile(List<BehandlingOchDoseringsperiod> behandlingOchDoseringsperiods) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         String listToJson = objectMapper.writeValueAsString(behandlingOchDoseringsperiods);
+        JSONArray jArr = new JSONArray(listToJson);
+
         // Convert List of person objects to JSON :");
         System.out.println(listToJson);
-
-        char search = '{';
-        countObjChars = listToJson.chars().filter(ch -> ch == search).count();
-        behandlingDoseringsperiodCount = behandlingOchDoseringsperiods.size();
+        System.out.println("Antal poster: "+ jArr.length());
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
         jsonWriter.write(listToJson);
-        jsonWriter.write("\nTotal antal Behandling och Doseringsposter: " + behandlingOchDoseringsperiods.size() + System.lineSeparator());
+        jsonWriter.write("\nTotal antal Behandling och Doseringsposter: " + jArr.length() + System.lineSeparator());
         jsonWriter.close();
     }
 

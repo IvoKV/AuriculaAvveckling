@@ -5,6 +5,7 @@ import Person.PersonInitializationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import ordination.Waran.OrdinationsperiodInitializeException;
+import org.json.JSONArray;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,10 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LMHBuilder {
-    private String host = null;
-    private String uName = null;
-    private String uPass = null;
-
     private String sqlScriptFilePath = null;
     private String POJOFileName = "temp/matvarde/LMH.txt";
     private String JSONFileName = "temp/matvarde/LMH.json";
@@ -32,36 +29,28 @@ public class LMHBuilder {
     private long countObjChars;
     private long lmhListCount;
 
-    public LMHBuilder(final String connectionFilePath) throws IOException {
-        extractConnectionAttributes(connectionFilePath);
+    public LMHBuilder(final Connection con) {
+        this.myConnection = con;
     }
 
-    private void extractConnectionAttributes(String filePath) throws IOException {
-        Path path = Path.of(filePath);
-        String connectionString = Files.readString(path);
-        this.host = connectionString.split(";")[0];
-        this.uName = connectionString.split(";")[1];
-        this.uPass = connectionString.split(";")[2];
-    }
-
-    public void buildLMH(String centreId, int regpatId, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException {
+    public void buildLMH(String centreId, String regpatIdSSN, Boolean writeToFile) throws SQLException, IOException {
         ResultSet rsLMH = null;
-        myConnection = getConnection();
+
         List<LMH> lmhList = new ArrayList<>();
 
-        if(regpatId > 0) {
-            // ONE regpatId
+        if(regpatIdSSN.length() > 0) {
+            // ONE regpatIdSSN
             sqlScriptFilePath = "src/resource/sql/matvarde/LMHOne.sql";
             Path file = Path.of(sqlScriptFilePath);
             String sqlStatement = Files.readString(file);
 
             PreparedStatement selectLMH = myConnection.prepareStatement(sqlStatement);
             selectLMH.setString(1, centreId);
-            selectLMH.setInt(2, regpatId);
+            selectLMH.setString(2, regpatIdSSN);
             rsLMH = selectLMH.executeQuery();
         }
-        else{
-            // ALL regpatId
+        else if(regpatIdSSN.length() == 0){
+            // ALL regpatIdSSN
             sqlScriptFilePath = "src/resource/sql/matvarde/LMHAll.sql";
             Path file = Path.of(sqlScriptFilePath);
             String sqlStatement = Files.readString(file);
@@ -69,6 +58,10 @@ public class LMHBuilder {
             PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
             selectOrdinationWaran.setString(1, centreId);
             rsLMH = selectOrdinationWaran.executeQuery();
+        }
+        else {
+            System.out.println("Verification of SSN: Wrong format. Program abort.");
+            System.exit(0);
         }
 
         while (rsLMH.next()) {
@@ -97,19 +90,22 @@ public class LMHBuilder {
         System.out.println("Total antal lmh poster: " + listSize);
 
         if(writeToFile){
-            writePOJOToFile(lmhList, regpatId);
-            POJOListToJSONToFile(lmhList, regpatId);
+            writePOJOToFile(lmhList, regpatIdSSN);
+            POJOListToJSONToFile(lmhList);
         }
     }
 
+    /*
     private Connection getConnection() throws SQLException, ClassNotFoundException {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
     }
 
-    private void writePOJOToFile(List<LMH> ordp, int regpat) throws IOException {
+     */
 
-        if(regpat > 0) {
+    private void writePOJOToFile(List<LMH> lmhs, String regpatSSN) throws IOException {
+
+        if(regpatSSN.length() > 0) {
             POJOFileName = insertString(POJOFileName, "One");
             JSONFileName = insertString(JSONFileName, "One");
         }
@@ -119,29 +115,27 @@ public class LMHBuilder {
         }
 
         FileWriter pojoWriter = new FileWriter(POJOFileName);
-        pojoWriter.write("Lab INR för patient:\n");
-        for (LMH lmh : ordp) {
+        pojoWriter.write("Lab LMH för patient:\n");
+        for (LMH lmh : lmhs) {
             pojoWriter.write(lmh + System.lineSeparator());
         }
-        //pojoWriter.write("Total antal ordinationer: " + totalOfOrdinationer + "\n");
+        pojoWriter.write("Total antal poster: " + lmhs.size() + "\n");
         pojoWriter.close();
     }
 
-    private void POJOListToJSONToFile(List<LMH> lmhlist, int regpat) throws IOException {
+    private void POJOListToJSONToFile(List<LMH> lmhlist) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         String listToJson = objectMapper.writeValueAsString(lmhlist);
-        // Convert List of person objects to JSON :");
-        System.out.println(listToJson);
+        JSONArray jArr = new JSONArray(listToJson);
 
-        char search = '{';
-        countObjChars = listToJson.chars().filter(ch -> ch == search).count();
-        lmhListCount = lmhlist.size();
+        System.out.println(listToJson);
+        System.out.println("Total antal poster: " + lmhlist.size());
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
         jsonWriter.write(listToJson);
-        jsonWriter.write("\nTotal antal hemorrhages poster: " + countObjChars + System.lineSeparator());
+        jsonWriter.write("\nTotal antal poster: " + jArr.length() + System.lineSeparator());
         jsonWriter.close();
     }
 

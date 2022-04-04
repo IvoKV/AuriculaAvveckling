@@ -4,8 +4,8 @@ import DBSource.DBConnection;
 import Person.PersonInitializationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.jcraft.jsch.JSchException;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,37 +20,26 @@ import java.util.List;
 
 
 public class HemorrhagesBuilder {
-    private String host = null;
-    private String uName = null;
-    private String uPass = null;
-
     private String sqlScriptFilePath = null;
     private String POJOFileName = "temp/ordination/hemorrhagesWaran.txt";
     private String JSONFileName = "temp/ordination/hemorrhagesWaran.json";
-    private Connection myConnection = null;
     private int totalHemorrhagesPoster = 0;
 
     private long countObjChars;
     private long hemorrhagesListCount;
 
-    public HemorrhagesBuilder(final String connectionFilePath) throws IOException {
-        extractConnectionAttributes(connectionFilePath);
+    private Connection myConnection = null;
+
+    public HemorrhagesBuilder(final Connection con) {
+        this.myConnection = con;
     }
 
-    private void extractConnectionAttributes(String filePath) throws IOException {
-        Path path = Path.of(filePath);
-        String connectionString = Files.readString(path);
-        this.host = connectionString.split(";")[0];
-        this.uName = connectionString.split(";")[1];
-        this.uPass = connectionString.split(";")[2];
-    }
-
-    public void buildHemorrhages(String centreId, int regpatId, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException {
+    public void buildHemorrhages(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException, JSchException {
         ResultSet rsHemorrhages = null;
-        myConnection = getConnection();
+
         List<Hemorrhages> hemorrhagesList = new ArrayList<>();
 
-        if(regpatId > 0) {
+        if(regpatSSN.length() > 0) {
             // ONE regpatId
             sqlScriptFilePath = "src/resource/sql/ordination/HemorrhagesWaranOne.sql";
             Path file = Path.of(sqlScriptFilePath);
@@ -58,10 +47,10 @@ public class HemorrhagesBuilder {
 
             PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
             selectOrdinationWaran.setString(1, centreId);
-            selectOrdinationWaran.setInt(2, regpatId);
+            selectOrdinationWaran.setString(2, regpatSSN);
             rsHemorrhages = selectOrdinationWaran.executeQuery();
         }
-        else{
+        else if (regpatSSN.length() == 0){
             // ALL regpatId
             sqlScriptFilePath = "src/resource/sql/ordination/HemorrhagesWaranAll.sql";
             Path file = Path.of(sqlScriptFilePath);
@@ -70,6 +59,10 @@ public class HemorrhagesBuilder {
             PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
             selectOrdinationWaran.setString(1, centreId);
             rsHemorrhages = selectOrdinationWaran.executeQuery();
+        }
+        else{
+            System.out.println("Verification of SSN: Wrong format. Program abort.");
+            System.exit(0);
         }
 
         while (rsHemorrhages.next()) {
@@ -101,23 +94,26 @@ public class HemorrhagesBuilder {
 
         hemorrhagesList.stream()
                 .forEach(System.out::println);
-        System.out.println("Total antal hemorrhages popster: " + listSize);
+        System.out.println("Total antal popster: " + listSize);
 
         if(writeToFile){
-            writePOJOToFile(hemorrhagesList, regpatId);
-            POJOListToJSONToFile(hemorrhagesList, regpatId);
+        writePOJOToFile(hemorrhagesList, regpatSSN);
+            POJOListToJSONToFile(hemorrhagesList);
         }
     }
 
+    /*
     // must be accessible for test class
-    public Connection getConnection() throws SQLException, ClassNotFoundException {
+    // todo: modify connection in test for  db in cluster
+    public Connection getMyconnection() throws SQLException, ClassNotFoundException {
         DBConnection dbConnection = new DBConnection(host, uName, uPass);
         return dbConnection.createConnection();
     }
 
-    private void writePOJOToFile(List<Hemorrhages> ordp, int regpat) throws IOException {
+     */
 
-        if(regpat > 0) {
+    private void writePOJOToFile(List<Hemorrhages> ordp, String regpat) throws IOException {
+        if(regpat.length() > 0) {
             POJOFileName = insertString(POJOFileName, "One");
             JSONFileName = insertString(JSONFileName, "One");
         }
@@ -127,29 +123,28 @@ public class HemorrhagesBuilder {
         }
 
         FileWriter pojoWriter = new FileWriter(POJOFileName);
-        pojoWriter.write("Ordinationstillfälle för patient:\n");
+        pojoWriter.write("Hemorrhages för patient:\n");
         for (Hemorrhages hmhg : ordp) {
             pojoWriter.write(hmhg + System.lineSeparator());
         }
-        //pojoWriter.write("Total antal ordinationer: " + totalOfOrdinationer + "\n");
+        pojoWriter.write("Total antal poster: " + ordp.size() + "\n");
         pojoWriter.close();
     }
 
-    private void POJOListToJSONToFile(List<Hemorrhages> hemorrhagesList, int regpat) throws IOException {
+    private void POJOListToJSONToFile(List<Hemorrhages> hemorrhagesList) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         String listToJson = objectMapper.writeValueAsString(hemorrhagesList);
+        JSONArray jArr = new JSONArray(listToJson);
+
         // Convert List of person objects to JSON :");
         System.out.println(listToJson);
-
-        char search = '{';
-        countObjChars = listToJson.chars().filter(ch -> ch == search).count();
-        hemorrhagesListCount = hemorrhagesList.size();
+        System.out.println("Antal poster: " + jArr.length());
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
         jsonWriter.write(listToJson);
-        jsonWriter.write("\nTotal antal hemorrhages poster: " + hemorrhagesList.size() + System.lineSeparator());
+        jsonWriter.write("\nTotal antal hemorrhages poster: " + jArr.length() + System.lineSeparator());
         jsonWriter.close();
     }
 

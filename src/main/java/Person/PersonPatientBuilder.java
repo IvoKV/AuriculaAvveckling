@@ -1,6 +1,5 @@
 package Person;
 
-import DBSource.DBConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.json.JSONArray;
@@ -15,77 +14,71 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonPatientBuilder {
-
-    private String host = null;
-    private String uName = null;
-    private String uPass = null;
-
     private final String sqlScriptFilePath = "src/resource/sql/person/PersonPatient.sql";
     private final String POJOFileName = "temp/personPatients.txt";
     private final String JSONFileName = "temp/personPatients.json";
-    private final String JSONFilePersonsId = "temp/personPatientsID.json";
+    private final String JSONFilePersonsId = "temp/personPatientSSN.json";
+
     private Connection myConnection = null;
     private int listCount = -99999;
     private int jsonCount = 0;
 
-    public PersonPatientBuilder(final String connectionFilePath) throws IOException {
-        extractConnectionAttributes(connectionFilePath);
+    public PersonPatientBuilder(final Connection con) throws IOException {
+        this.myConnection = con;
     }
 
-    private void extractConnectionAttributes(String filePath) throws IOException {
-        Path path = Path.of(filePath);
-        String connectionString = Files.readString(path);
-        this.host = connectionString.split(";")[0];
-        this.uName = connectionString.split(";")[1];
-        this.uPass = connectionString.split(";")[2];
-    }
+    public void buildPersonPatient(String centreId, Boolean writeToFile) throws SQLException, IOException, PersonInitializationException {
+        ResultSet rsPerson = null;
 
-    public void buildPersonPatient(Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException {
-
-        Path file = Path.of(sqlScriptFilePath);
-        myConnection = getConnection();
-
-        String sqlStatement = Files.readString(file);
-        Statement statement = myConnection.createStatement();
-        ResultSet rs = statement.executeQuery(sqlStatement);
-
-        //PreparedStatement preparedStatement = null;
         //preparedStatement = myConnection.prepareStatement(sqlStatement, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
         List<PersonPatient> personPatients = new ArrayList<>();
 
-        while (rs.next()) {
-            PersonPatient person = new PersonPatient(
-                    rs.getString("pid"),
-                    rs.getString("firstName"),
-                    rs.getString("lastName"));
-            personPatients.add(person);
+        Path file = Path.of(sqlScriptFilePath);
+        String sqlStatement = Files.readString(file);
+
+        PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
+        selectOrdinationWaran.setString(1, centreId);
+
+        rsPerson = selectOrdinationWaran.executeQuery();
+
+        while (rsPerson.next()) {
+//            try{
+                PersonPatient person = new PersonPatient(
+                    rsPerson.getInt("PID"),
+                    rsPerson.getString("SSN"),
+                    rsPerson.getString("FIRSTNAME"),
+                    rsPerson.getString("LASTNAME"));
+                    personPatients.add(person);
+//            }
+//            catch (Exception e){
+//                e.printStackTrace();
+//                continue;
+//            }
         }
         myConnection.close();
         listCount = personPatients.size();
 
         personPatients.stream()
                 .forEach(System.out::println);
+        System.out.println("Total antal poster: " + personPatients.size());
 
         if(writeToFile){
-            writePOJOToFile(personPatients);
+            POJOToFile(personPatients);
             POJOListToJSONToFile(personPatients);
 
             // write JSON
-            extractPersonID(personPatients);
+            extractPersonIDSSN(personPatients);
         }
         System.out.println("Antal poster: " + listCount);
     }
 
-    public Connection getConnection() throws SQLException, ClassNotFoundException {
-        DBConnection dbConnection = new DBConnection(host, uName, uPass);
-        return dbConnection.createConnection();
-    }
-
-    private void writePOJOToFile(List<PersonPatient> personPatients) throws IOException {
+    private void POJOToFile(List<PersonPatient> personPatients) throws IOException {
         FileWriter pojoWriter = new FileWriter(POJOFileName);
+        long count = personPatients.stream().count();
         for (PersonPatient person : personPatients) {
             pojoWriter.write(person + System.lineSeparator());
         }
+        pojoWriter.write("Total antal poster: " + count + System.lineSeparator());
         pojoWriter.close();
     }
 
@@ -93,16 +86,19 @@ public class PersonPatientBuilder {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        String listToJson = objectMapper.writeValueAsString(personPatients);
+        String arrayToJson = objectMapper.writeValueAsString(personPatients);
+        JSONArray jArr = new JSONArray(arrayToJson);
         // 1. Convert List of person objects to JSON :");
-        System.out.println(listToJson);
+        System.out.println(arrayToJson);
+        System.out.println("Total antal poster (json objekt): " + jArr.length());
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
-        jsonWriter.write(listToJson);
+        jsonWriter.write(arrayToJson);
+        jsonWriter.write("\nTotal antal poster (json objekt): " + jArr.length() + System.lineSeparator());
         jsonWriter.close();
     }
 
-    private void extractPersonID(List<PersonPatient> personPatients) throws IOException {
+    private void extractPersonIDSSN(List<PersonPatient> personPatients) throws IOException {
         JSONArray jsonArray = new JSONArray(personPatients);
         int len = jsonArray.length();
 
@@ -115,12 +111,14 @@ public class PersonPatientBuilder {
         {
             try {
                 persIdWriter.write(
-                new JSONObject(extractArray.toString()).getString("id") + "\n");
+                new JSONObject(extractArray.toString()).getString("SSN") + "\n"
+                );
                 jsonCount++;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+        persIdWriter.write("Antal poster: " +  jsonArray.length() + System.lineSeparator());
         persIdWriter.close();
     }
 

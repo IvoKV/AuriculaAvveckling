@@ -25,6 +25,6 @@
              LEFT OUTER JOIN labresult lab on crea.LABRESULTID = lab.id
              join patient as p on rp.PID = p.PID
              join people AS pal on cp.PAL = pal.PEOPLEID
-    where C.ID = ?
-    AND p.pid = ?
+    WHERE c.ID = ?
+    AND p.SSN = ?
     order by p.PID;

@@ -1,12 +1,9 @@
 package ordination.Waran;
 
-import DBSource.DBConnection;
 import Person.PersonInitializationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.mysql.cj.x.protobuf.MysqlxPrepare;
-import ordination.Waran.OrdinationsperiodInitializeException;
-import ordination.Waran.OrdinationsperiodIndikationer;
+import org.json.JSONArray;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,38 +12,24 @@ import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class OrdinationsperiodIndikationerBuilder {
-
-    private String host = null;
-    private String uName = null;
-    private String uPass = null;
-
     private String sqlScriptFilePath = null;
     private String POJOFileName = "temp/ordination/ordinationsperiodWaran.txt";
     private String JSONFileName = "temp/ordination/ordinationsperiodWaran.json";
     private Connection myConnection = null;
     private int totalOfOrdinationer = 0;
 
-    public OrdinationsperiodIndikationerBuilder(final String connectionFilePath) throws IOException {
-        extractConnectionAttributes(connectionFilePath);
+    public OrdinationsperiodIndikationerBuilder(final Connection con) {
+        this.myConnection = con;
     }
 
-    private void extractConnectionAttributes(String filePath) throws IOException {
-        Path path = Path.of(filePath);
-        String connectionString = Files.readString(path);
-        this.host = connectionString.split(";")[0];
-        this.uName = connectionString.split(";")[1];
-        this.uPass = connectionString.split(";")[2];
-    }
-
-    public void buildOrdinationPeriodIndikation(String centreId, int regpatId, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException {
+    public void buildOrdinationPeriodIndikation(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException {
         ResultSet rsOrdinationer = null;
-        myConnection = getConnection();
+
         List<OrdinationsperiodIndikationer> ordinationsperiodIndikationerList = new ArrayList<>();
 
-        if(regpatId > 0) {
+        if(regpatSSN.length() > 0) {
             // ONE regpatId
             sqlScriptFilePath = "src/resource/sql/ordination/OrdinationsperiodWaranOne.sql";
             Path file = Path.of(sqlScriptFilePath);
@@ -54,10 +37,10 @@ public class OrdinationsperiodIndikationerBuilder {
 
             PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
             selectOrdinationWaran.setString(1, centreId);
-            selectOrdinationWaran.setInt(2, regpatId);
+            selectOrdinationWaran.setString(2, regpatSSN);
             rsOrdinationer = selectOrdinationWaran.executeQuery();
         }
-        else{
+        else if(regpatSSN.length() == 0){
             // ALL regpatId
             sqlScriptFilePath = "src/resource/sql/ordination/OrdinationsperiodWaranAll.sql";
             Path file = Path.of(sqlScriptFilePath);
@@ -66,6 +49,10 @@ public class OrdinationsperiodIndikationerBuilder {
             PreparedStatement selectOrdinationWaran = myConnection.prepareStatement(sqlStatement);
             selectOrdinationWaran.setString(1, centreId);
             rsOrdinationer = selectOrdinationWaran.executeQuery();
+        }
+        else {
+            System.out.println("Verification of SSN: Wrong format. Program abort.");
+            System.exit(0);
         }
 
         while (rsOrdinationer.next()) {
@@ -98,22 +85,17 @@ public class OrdinationsperiodIndikationerBuilder {
 
         ordinationsperiodIndikationerList.stream()
                 .forEach(System.out::println);
-        System.out.println("Total antal ordinationer: " + totalOfOrdinationer);
+        System.out.println("Antal poster: " + ordinationsperiodIndikationerList.size());
 
         if(writeToFile){
-            writePOJOToFile(ordinationsperiodIndikationerList, regpatId);
-            POJOListToJSONToFile(ordinationsperiodIndikationerList, regpatId);
+            POJOToFile(ordinationsperiodIndikationerList, regpatSSN);
+            POJOListToJSONToFile(ordinationsperiodIndikationerList, regpatSSN);
         }
     }
 
-    private Connection getConnection() throws SQLException, ClassNotFoundException {
-        DBConnection dbConnection = new DBConnection(host, uName, uPass);
-        return dbConnection.createConnection();
-    }
+    private void POJOToFile(List<OrdinationsperiodIndikationer> ordp, String regpatSSN) throws IOException {
 
-    private void writePOJOToFile(List<OrdinationsperiodIndikationer> ordp, int regpat) throws IOException {
-
-        if(regpat > 0) {
+        if(regpatSSN.length() > 0) {
             POJOFileName = insertString(POJOFileName, "One");
             JSONFileName = insertString(JSONFileName, "One");
         }
@@ -127,20 +109,23 @@ public class OrdinationsperiodIndikationerBuilder {
         for (OrdinationsperiodIndikationer op : ordp) {
             pojoWriter.write(op + System.lineSeparator());
         }
-        //pojoWriter.write("Total antal ordinationer: " + totalOfOrdinationer + "\n");
+        pojoWriter.write("Total antal ordinationer: " + ordp.size() + "\n");
         pojoWriter.close();
     }
 
-    private void POJOListToJSONToFile(List<OrdinationsperiodIndikationer> ordp, int regpat) throws IOException {
+    private void POJOListToJSONToFile(List<OrdinationsperiodIndikationer> ordp, String regpatSSN) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        String listToJson = objectMapper.writeValueAsString(ordp);
-        // Convert List of person objects to JSON :");
-        System.out.println(listToJson);
+        String arrayToJson = objectMapper.writeValueAsString(ordp);
+        JSONArray jArr = new JSONArray(arrayToJson);
+
+        System.out.println(arrayToJson);
+        System.out.println("Antal poster: " + jArr.length());
 
         FileWriter jsonWriter = new FileWriter(JSONFileName);
-        jsonWriter.write(listToJson);
+        jsonWriter.write(arrayToJson);
+        jsonWriter.write("\nAntal poster: " + jArr.length());
         jsonWriter.close();
     }
 
