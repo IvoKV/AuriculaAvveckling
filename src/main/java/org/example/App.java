@@ -60,8 +60,8 @@ public class App
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file
 
-//        var personChargeAllTitlesBuilder = new PersonInChargeAllTitlesBuilder(dbConnection);
-//        personChargeAllTitlesBuilder.buildPersonInCharge(true);
+        var personChargeAllTitlesBuilder = new PersonInChargeAllTitlesBuilder(dbConnection);
+        personChargeAllTitlesBuilder.buildPersonInCharge(true);
 
 //        var personInChargeAllEmployeesBuilder = new PersonInChargeAllEmployeesBuilder(dbConnection);
 //        personInChargeAllEmployeesBuilder.buildPersonInChargeEmployees(true);
