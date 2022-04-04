@@ -48,7 +48,7 @@ public class MyConnection {
         this.uPass = uPass;
     }
 
-    public void createSshTunnel() throws SQLException, ClassNotFoundException, IOException, JSchException {
+    public Session createSshTunnel() throws SQLException, ClassNotFoundException, IOException, JSchException {
         JSch jSch = new JSch();
         jSch.addIdentity("c:\\Users\\cwz7\\.ssh\\id_rsa");
 
@@ -61,6 +61,7 @@ public class MyConnection {
         try{
             session.connect();
             System.out.println("Connection lyckades!");
+            return session;
         }
         catch (Exception e){
             System.out.println("Tunnel kunde inte skapas.");
@@ -68,6 +69,8 @@ public class MyConnection {
             System.exit(0);
         }
         int forwardedPort =  session.setPortForwardingL(0, databaseHost, databasePort);
+        // the session is returned only for the need of the test case
+        return session;
     }
 
     public Connection getSSHDbConnection() throws JSchException, IOException {
