@@ -1,7 +1,9 @@
 package ordination.Waran;
 
 import Person.PersonInitializationException;
+import auxilliary.MyConnection;
 import com.jcraft.jsch.JSchException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,16 +14,31 @@ import java.sql.SQLException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HemorrhagesBuilderTest {
-
+    private static final String simpleConnectionFilePath = "src/resource/ConnectionString.txt";     // Används endast för öppen kanal till db source/-host
     private final String connectionString = "src/resource/ConnectionString.txt";
-    private Connection connection = null;
+    private Connection dbConnection = null;
 
-    /*
-    HemorrhagesBuilder underTest = new HemorrhagesBuilder(connectionString);
+    private final String databaseUse = "auricula_export_TIO_100";
 
-    HemorrhagesBuilderTest() throws IOException {
+    // given
+    HemorrhagesBuilderTest() throws ClassNotFoundException, SQLException, JSchException, IOException {
+            MyConnection myConnection = new MyConnection(databaseUse);
+            myConnection.createSshTunnel();                                     // todo: borde testas innan nästa steg, har skapat testcase för class: MyConnection
+            dbConnection = myConnection.getSSHDbConnection();
     }
 
+    // when
+    HemorrhagesBuilder underTest = new HemorrhagesBuilder(dbConnection);
+
+    @Test
+    @DisplayName("HemorrhagesBuilderTest::Valid Connection")
+    void itShouldReturnConnection() {
+
+        //then
+        assertThat(dbConnection).isNotNull();
+    }
+
+    /*
     @Test
     @DisplayName("it Should return valid connection")
     void itShouldReturnConnection() throws SQLException, ClassNotFoundException {
