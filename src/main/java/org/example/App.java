@@ -60,8 +60,8 @@ public class App
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file
 
-//        var personChargeAllTitlesBuilder = new PersonInChargeAllTitlesBuilder(dbConnection);
-//        personChargeAllTitlesBuilder.buildPersonInCharge(true);
+        var personChargeAllTitlesBuilder = new PersonInChargeAllTitlesBuilder(dbConnection);
+        personChargeAllTitlesBuilder.buildPersonInCharge(true);
 
 //        var personInChargeAllEmployeesBuilder = new PersonInChargeAllEmployeesBuilder(dbConnection);
 //        personInChargeAllEmployeesBuilder.buildPersonInChargeEmployees(true);
@@ -81,8 +81,8 @@ public class App
 //        MatvardeBuilder matvardeBuilder = new MatvardeBuilder(dbConnection);
 //        matvardeBuilder.buildMatvarde(centreID, regpatSSN, true);
 
-          LMHBuilder lmhBuilder = new LMHBuilder(dbConnection);
-          lmhBuilder.buildLMH(centreID, regpatSSN, true);
+//          LMHBuilder lmhBuilder = new LMHBuilder(dbConnection);
+//          lmhBuilder.buildLMH(centreID, regpatSSN, true);
 
             dbConnection.close();
             myConnection.disconnectSession();
