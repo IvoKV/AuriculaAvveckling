@@ -20,6 +20,7 @@ import java.util.List;
 
 public class PersonInChargeAllEmployeesBuilder {
     private final String sqlScriptFilePathAllTitles = "src/resource/sql/person/PersonInChargeAllEmployees.sql";      // All titles, creating a total of employees in charge
+    private final String sqlScriptFilePathAllTitlesTioHundra = "src/resource/sql/person/PersonInChargeAllEmployeesTioHundra.sql";
     private Connection myConnection = null;
 
     private final String POJOFileName = "temp/personInChargeAllEmps.txt";
@@ -30,7 +31,8 @@ public class PersonInChargeAllEmployeesBuilder {
     }
 
     public void buildPersonInChargeEmployees(Boolean writeToFile) throws SQLException, IOException, PersonInChargeException {
-        Path file = Path.of(sqlScriptFilePathAllTitles);
+        //Path file = Path.of(sqlScriptFilePathAllTitles);
+        Path file = Path.of(sqlScriptFilePathAllTitlesTioHundra);
 
         String sqlStatement = Files.readString(file);
         Statement statement = myConnection.createStatement();
