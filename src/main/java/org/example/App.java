@@ -55,19 +55,20 @@ public class App
         //int regpatId = 54241;
         //int regpatId = 489980;
         String regpatSSN = "19840729-0249";
-        regpatSSN = "";
+        //String regpatSSN = "19121212-1212";
+        //regpatSSN = "";
 
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file
 
-        var personChargeAllTitlesBuilder = new PersonInChargeAllTitlesBuilder(dbConnection);
-        personChargeAllTitlesBuilder.buildPersonInCharge(false);
+//        var personChargeAllTitlesBuilder = new PersonInChargeAllTitlesBuilder(dbConnection);
+//        personChargeAllTitlesBuilder.buildPersonInCharge(false);
 
-//        var personInChargeAllEmployeesBuilder = new PersonInChargeAllEmployeesBuilder(dbConnection);
-//        personInChargeAllEmployeesBuilder.buildPersonInChargeEmployees(true);
+        var personInChargeAllEmployeesBuilder = new PersonInChargeAllEmployeesBuilder(dbConnection);
+        personInChargeAllEmployeesBuilder.buildPersonInChargeEmployees(false);
 
 //        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(dbConnection);
-//        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatSSN, true);
+//        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatSSN, false);
 
 //        HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(dbConnection);
 //        hemorrhagesBuilder.buildHemorrhages(centreID, regpatSSN, true);
