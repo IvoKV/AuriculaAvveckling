@@ -2,7 +2,7 @@ package Person;
 
 import java.util.Objects;
 
-public class PersonInChargeAllEmployees {
+public class PersonInCharge {
     private String id;
     private String title;
     private String groupId;
@@ -10,7 +10,7 @@ public class PersonInChargeAllEmployees {
     private String lastName;
     private String befattningskod;
 
-    public PersonInChargeAllEmployees(String id, String title, String groupId, String firstName, String lastName, String befattning) throws PersonInChargeException {
+    public PersonInCharge(String id, String title, String groupId, String firstName, String lastName, String befattning) throws PersonInChargeException {
         this.id = id;
         this.title = title;
         this.groupId = groupId;
@@ -31,48 +31,44 @@ public class PersonInChargeAllEmployees {
         }
     }
 
-    public PersonInChargeAllEmployees(String title) {
-        this.title = title;
+    public String getId() {
+        return id;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getId() {
-        return id;
-    }
-
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getGroupId() {
         return groupId;
     }
 
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
     public String getFirstName() {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getLastName() {
         return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getBefattningskod() {
@@ -91,6 +87,7 @@ public class PersonInChargeAllEmployees {
                 ", groupId='" + groupId + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", befattningskod='" + befattningskod + '\'' +
                 '}';
     }
 }

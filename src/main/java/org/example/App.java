@@ -65,7 +65,7 @@ public class App
 //        personChargeAllTitlesBuilder.buildPersonInCharge(false);
 
         var personInChargeAllEmployeesBuilder = new PersonInChargeAllEmployeesBuilder(dbConnection);
-        personInChargeAllEmployeesBuilder.buildPersonInChargeEmployees(false);
+        personInChargeAllEmployeesBuilder.buildPersonInChargeEmployees(true);
 
 //        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(dbConnection);
 //        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatSSN, false);

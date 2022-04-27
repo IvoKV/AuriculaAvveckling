@@ -1,5 +1,6 @@
 package Person;
 
+import PDF.PDFPersonInChargeTioHundra;
 import auxilliary.MappingPositions;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,10 @@ public class PersonInChargeAllEmployeesBuilder {
     private final String POJOFileName = "temp/personInChargeAllEmps.txt";
     private final String JSONFileName = "temp/personInChargeAllEmps.json";
 
+    List<PersonInCharge> personsInCharge;
+
     public PersonInChargeAllEmployeesBuilder(final Connection con) {
+        this.personsInCharge = new ArrayList<>();
         this.myConnection = con;
     }
 
@@ -39,13 +43,14 @@ public class PersonInChargeAllEmployeesBuilder {
 
         ResultSet rs = statement.executeQuery(sqlStatement);
 
-        List<PersonInChargeAllEmployees> personsInChargeEmployees = new ArrayList<>();
+        //List<PersonInChargeAllEmployees> personsInChargeEmployees = new ArrayList<>();
         MappingPositions map = new MappingPositions();
+
         while (rs.next()) {
             if(rs.getString("titel") == null)
                 continue;
             String befattningskod = map.getBefattning(rs.getString("titel"));
-            PersonInChargeAllEmployees pEmployee = new PersonInChargeAllEmployees(
+            PersonInCharge pEmployee = new PersonInCharge(
                     rs.getString("id"),
                     rs.getString("titel"),
                     rs.getString("groupid"),
@@ -53,30 +58,34 @@ public class PersonInChargeAllEmployeesBuilder {
                     rs.getString("lastname"),
                     befattningskod
             );
-            personsInChargeEmployees.add(pEmployee);
+            personsInCharge.add(pEmployee);
         }
 
-        personsInChargeEmployees.stream()
+        /***  Här skapas PDF dokumentet ***/
+        PDFPersonInChargeTioHundra pdfPersonInChargeTioHundra = new PDFPersonInChargeTioHundra(personsInCharge);
+        pdfPersonInChargeTioHundra.createPersonInChargePDFDetails();
+
+        personsInCharge.stream()
                 .forEach(System.out::println);
-        System.out.println("Total antal poster: " + personsInChargeEmployees.size());
+        System.out.println("Total antal poster: " + personsInCharge.size());
 
         if(writeToFile){
-            POJOToFile(personsInChargeEmployees);
-            POJOListToJSONToFile(personsInChargeEmployees);
+            POJOToFile(personsInCharge);
+            POJOListToJSONToFile(personsInCharge);
         }
     }
 
-    private void POJOToFile(List<PersonInChargeAllEmployees> pEmps) throws IOException {
+    private void POJOToFile(List<PersonInCharge> pEmps) throws IOException {
         FileWriter writer = new FileWriter(POJOFileName);
         long count = pEmps.stream().count();
-        for (PersonInChargeAllEmployees person : pEmps) {
+        for (PersonInCharge person : pEmps) {
             writer.write(person + System.lineSeparator());
         }
         writer.write("Total antal poster: " + count + System.lineSeparator());
         writer.close();
     }
 
-    private void POJOListToJSONToFile(List<PersonInChargeAllEmployees> pEmps) throws IOException {
+    private void POJOListToJSONToFile(List<PersonInCharge> pEmps) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
