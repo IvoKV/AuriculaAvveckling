@@ -1,12 +1,10 @@
 package Person;
 
-import PDF.PDFPersonInChargeTioHundra;
+import PDFPersonInCharge.PDFPersonInChargeTioHundra;
 import auxilliary.MappingPositions;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;

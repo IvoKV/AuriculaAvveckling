@@ -1,4 +1,4 @@
-package PDF;
+package PDFPersonInCharge;
 
 import Person.PersonInCharge;
 import org.apache.pdfbox.pdmodel.PDDocument;
