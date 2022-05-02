@@ -1,80 +1,137 @@
 package ordination.KontrollerProvtagningDoseringar;
 
-import Person.PersonInChargeException;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.ZonedDateTime;
+import java.sql.Date;
 import java.util.Objects;
 
+
 public class KontrollerProvtagningDoseringar {
+    @JsonProperty(index = 1)
     private String id;
+    @JsonProperty(index = 2)
     private String ssn;
+    @JsonProperty(index = 3)
     private Short ssnType;
+    @JsonProperty(index = 4)
     private String firstName;
+    @JsonProperty(index = 5)
     private String lastName;
+    @JsonProperty(index = 6)
     private String city;
 
     /* ansvarig läkare */
-    private String patText;
+    @JsonProperty(index = 7)
+    private String palText;
 
     /* Nästa kontroll om X månader eller ett datum */
-    private ZonedDateTime dateNextVisit;
+    @JsonProperty(index = 8)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date dateNextVisit;
+    @JsonProperty(index = 9)
     private int inrIntervalId;
-    private ZonedDateTime ordinationDate;
+    @JsonProperty(index = 10)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date ordinationDate;
 
     /* veckodoser */
+    @JsonProperty(index = 11)
     private float mondayDose;
+    @JsonProperty(index = 12)
     private float tuesdayDose;
+    @JsonProperty(index = 13)
     private float wednesdayDose;
+    @JsonProperty(index = 14)
     private float thursdayDose;
+    @JsonProperty(index = 15)
     private float fridayDose;
+    @JsonProperty(index = 16)
     private float saturdayDose;
+    @JsonProperty(index = 17)
     private float sundayDose;
+    @JsonProperty(index = 18)
     private String commentDose;
 
     /* medicin text (ordinationperiod) */
+    @JsonProperty(index = 19)
     private String medicinText;
+    @JsonProperty(index = 20)
     private Short doseMode;
 
 
     /* waran dose reduced */
+    @JsonProperty(index = 21)
     private String reducedTypeTXT;
+    @JsonProperty(index = 22)
     private float mondayDoseReduced;
+    @JsonProperty(index = 23)
     private float tuesdayDoseReduced;
+    @JsonProperty(index = 24)
     private float wednesdayDoseReduced;
+    @JsonProperty(index = 25)
     private float thursdayDoseReduced;
+    @JsonProperty(index = 26)
     private float fridayDoseReduced;
+    @JsonProperty(index = 27)
     private float saturdayDoseReduced;
+    @JsonProperty(index = 28)
     private float sundayDoseReduced;
+    @JsonProperty(index = 29)
     private String reducedComment;
 
     /* inr */
+    @JsonProperty(index = 30)
     private float inrValue;
-    private ZonedDateTime inrDate;
+    @JsonProperty(index = 31)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date inrDate;
+    @JsonProperty(index = 32)
     private String laboratoryId;
+    @JsonProperty(index = 33)
     private String medicineTypeText;
 
     /* Coagucheck, datum för kalibrering */
+    @JsonProperty(index = 34)
     private String inrMethod;
 
     /* Kreatinin (eller pk(INR) */
+    @JsonProperty(index = 35)
     private int labresultId;
-    private ZonedDateTime planedDateCreatinin;
-    private ZonedDateTime testDateCreatinin;
+    @JsonProperty(index = 36)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date planedDateCreatinin;
+    @JsonProperty(index = 37)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date testDateCreatinin;
+    @JsonProperty(index = 38)
     private Short creatinin;
+    @JsonProperty(index = 39)
     private Short egfr;
-    private ZonedDateTime followupDate;
+    @JsonProperty(index = 40)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date followupDate;
+    @JsonProperty(index = 41)
     private String commentCreatinin;
 
     /* labresult */
+    @JsonProperty(index = 42)
     private String analysisCodeLab;
+    @JsonProperty(index = 43)
     private float sampleValueLab;
+    @JsonProperty(index = 44)
     private String sampleValueText;
+    @JsonProperty(index = 45)
     private String analysisCommentLab;
 
     /* Change */
+    @JsonProperty(index = 46)
     private float systemsOrdinationSugg;
+    @JsonProperty(index = 47)
     private int systemsIntervalSugg;
+    @JsonProperty(index = 49)
     private float userOrdination;
+    @JsonProperty(index = 50)
     private int userInterval;
 
     public KontrollerProvtagningDoseringar(String id,
@@ -83,10 +140,11 @@ public class KontrollerProvtagningDoseringar {
                                            String firstName,
                                            String lastName,
                                            String city,
-                                           String patText,
-                                           ZonedDateTime dateNextVisit,
+                                           String palText,
+                                           Date dateNextVisit,
                                            int inrIntervalId,
-                                           ZonedDateTime ordinationDate,    /* 10 */
+                                           Date ordinationDate,    /* 10 */
+
                                            float mondayDose,
                                            float tuesdayDose,
                                            float wednesdayDose,
@@ -97,6 +155,7 @@ public class KontrollerProvtagningDoseringar {
                                            String commentDose,
                                            String medicinText,
                                            Short doseMode,                  /* 20 */
+
                                            String reducedTypeTXT,
                                            float mondayDoseReduced,
                                            float tuesdayDoseReduced,
@@ -107,16 +166,18 @@ public class KontrollerProvtagningDoseringar {
                                            float sundayDoseReduced,
                                            String reducedComment,
                                            float inrValue,                  /* 30 */
-                                           ZonedDateTime inrDate,
+
+                                           Date inrDate,
                                            String laboratoryId,
                                            String medicineTypeText,
                                            String inrMethod,
                                            int labresultId,
-                                           ZonedDateTime planedDateCreatinin,
-                                           ZonedDateTime testDateCreatinin,
+                                           Date planedDateCreatinin,
+                                           Date testDateCreatinin,
                                            Short creatinin,
                                            Short egfr,
-                                           ZonedDateTime followupDate,      /* 40 */
+                                           Date followupDate,      /* 40 */
+
                                            String commentCreatinin,
                                            String analysisCodeLab,
                                            float sampleValueLab,
@@ -133,7 +194,7 @@ public class KontrollerProvtagningDoseringar {
             Objects.requireNonNullElse(firstName, "fistName is null");
             Objects.requireNonNullElse(lastName, "lastName is null");
             Objects.requireNonNullElse(city, "city is null");
-            Objects.requireNonNullElse(patText, "patText is null");
+            Objects.requireNonNullElse(palText, "patText is null");
             Objects.requireNonNullElse(dateNextVisit, "dateNextVisit is null");
             Objects.requireNonNullElse(inrIntervalId, "inrIntervalId is null");
             Objects.requireNonNullElse(ordinationDate, "ordinationDate is null");
@@ -191,7 +252,7 @@ public class KontrollerProvtagningDoseringar {
         this.firstName = firstName;
         this.lastName = lastName;
         this.city = city;
-        this.patText = patText;
+        this.palText = palText;
         this.dateNextVisit = dateNextVisit;
         this.inrIntervalId = inrIntervalId;
         this.ordinationDate = ordinationDate;
@@ -285,18 +346,18 @@ public class KontrollerProvtagningDoseringar {
     }
 
     public String getPatText() {
-        return patText;
+        return palText;
     }
 
     public void setPatText(String patText) {
-        this.patText = patText;
+        this.palText = patText;
     }
 
-    public ZonedDateTime getDateNextVisit() {
+    public Date getDateNextVisit() {
         return dateNextVisit;
     }
 
-    public void setDateNextVisit(ZonedDateTime dateNextVisit) {
+    public void setDateNextVisit(Date dateNextVisit) {
         this.dateNextVisit = dateNextVisit;
     }
 
@@ -308,11 +369,11 @@ public class KontrollerProvtagningDoseringar {
         this.inrIntervalId = inrIntervalId;
     }
 
-    public ZonedDateTime getOrdinationDate() {
+    public Date getOrdinationDate() {
         return ordinationDate;
     }
 
-    public void setOrdinationDate(ZonedDateTime ordinationDate) {
+    public void setOrdinationDate(Date ordinationDate) {
         this.ordinationDate = ordinationDate;
     }
 
@@ -476,11 +537,11 @@ public class KontrollerProvtagningDoseringar {
         this.inrValue = inrValue;
     }
 
-    public ZonedDateTime getInrDate() {
+    public Date getInrDate() {
         return inrDate;
     }
 
-    public void setInrDate(ZonedDateTime inrDate) {
+    public void setInrDate(Date inrDate) {
         this.inrDate = inrDate;
     }
 
@@ -516,19 +577,19 @@ public class KontrollerProvtagningDoseringar {
         this.labresultId = labresultId;
     }
 
-    public ZonedDateTime getPlanedDateCreatinin() {
+    public Date getPlanedDateCreatinin() {
         return planedDateCreatinin;
     }
 
-    public void setPlanedDateCreatinin(ZonedDateTime planedDateCreatinin) {
+    public void setPlanedDateCreatinin(Date planedDateCreatinin) {
         this.planedDateCreatinin = planedDateCreatinin;
     }
 
-    public ZonedDateTime getTestDateCreatinin() {
+    public Date getTestDateCreatinin() {
         return testDateCreatinin;
     }
 
-    public void setTestDateCreatinin(ZonedDateTime testDateCreatinin) {
+    public void setTestDateCreatinin(Date testDateCreatinin) {
         this.testDateCreatinin = testDateCreatinin;
     }
 
@@ -548,11 +609,11 @@ public class KontrollerProvtagningDoseringar {
         this.egfr = egfr;
     }
 
-    public ZonedDateTime getFollowupDate() {
+    public Date getFollowupDate() {
         return followupDate;
     }
 
-    public void setFollowupDate(ZonedDateTime followupDate) {
+    public void setFollowupDate(Date followupDate) {
         this.followupDate = followupDate;
     }
 
@@ -637,7 +698,7 @@ public class KontrollerProvtagningDoseringar {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", city='" + city + '\'' +
-                ", patText='" + patText + '\'' +
+                ", patText='" + palText + '\'' +
                 ", dateNextVisit=" + dateNextVisit +
                 ", inrIntervalId=" + inrIntervalId +
                 ", ordinationDate=" + ordinationDate +
