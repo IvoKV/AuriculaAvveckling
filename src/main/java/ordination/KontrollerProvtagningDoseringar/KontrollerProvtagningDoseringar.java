@@ -194,7 +194,7 @@ public class KontrollerProvtagningDoseringar {
             Objects.requireNonNullElse(firstName, "fistName is null");
             Objects.requireNonNullElse(lastName, "lastName is null");
             Objects.requireNonNullElse(city, "city is null");
-            Objects.requireNonNullElse(palText, "patText is null");
+            Objects.requireNonNullElse(palText, "palText is null");
             Objects.requireNonNullElse(dateNextVisit, "dateNextVisit is null");
             Objects.requireNonNullElse(inrIntervalId, "inrIntervalId is null");
             Objects.requireNonNullElse(ordinationDate, "ordinationDate is null");
@@ -345,12 +345,12 @@ public class KontrollerProvtagningDoseringar {
         this.city = city;
     }
 
-    public String getPatText() {
+    public String getPalText() {
         return palText;
     }
 
-    public void setPatText(String patText) {
-        this.palText = patText;
+    public void setPalText(String palText) {
+        this.palText = palText;
     }
 
     public Date getDateNextVisit() {
@@ -698,7 +698,7 @@ public class KontrollerProvtagningDoseringar {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", city='" + city + '\'' +
-                ", patText='" + palText + '\'' +
+                ", palText='" + palText + '\'' +
                 ", dateNextVisit=" + dateNextVisit +
                 ", inrIntervalId=" + inrIntervalId +
                 ", ordinationDate=" + ordinationDate +

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class PDFPersonInChargeTioHundra {
-    List<PersonInCharge> personsInCharge;
+    List<PersonInCharge> personsInChargeList;
     private final String pdfPathFileName = "PDFPersonInChargeTioHundra.pdf";
 
     private float x = 0;
@@ -31,8 +31,8 @@ public class PDFPersonInChargeTioHundra {
     private PDPageContentStream contentStream = null;
     private int sidaNo = 0;
 
-    public PDFPersonInChargeTioHundra(List<PersonInCharge> personsInCharge) throws IOException {
-        this.personsInCharge = personsInCharge;
+    public PDFPersonInChargeTioHundra(List<PersonInCharge> personsInChargeList) throws IOException {
+        this.personsInChargeList = personsInChargeList;
 
         /** Initialize document and first page **/
         this.document = new PDDocument();
@@ -73,7 +73,7 @@ public class PDFPersonInChargeTioHundra {
             writeHeader();
 
             /** SKRIV UT BEFATTNINGAR (LISTA) **/
-            personsInCharge.stream().forEach(item -> {
+            personsInChargeList.stream().forEach(item -> {
                 try {
                     /* FÖRNAMN */
                     contentStream.beginText();

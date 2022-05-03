@@ -1,6 +1,6 @@
 package ordination.KontrollerProvtagningDoseringar;
 
-
+import PDFPersonInCharge.PDFKontrollerProvtagningDoseringar;
 import Person.PersonInChargeException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -28,7 +28,7 @@ public class KontrollerProvtagningDoseringarBuilder {
         this.myConnection = con;
     }
 
-    public void buildPersonInChargeEmployees(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, IOException, PersonInChargeException, KontrollerProvtagningDoseringarException {
+    public void buildKontrollerProvtagningDoseringar(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, IOException, PersonInChargeException, KontrollerProvtagningDoseringarException {
         Path file = Path.of(sqlScriptFilePathKontrollerProvtagningDoseringar);
 
         String sqlStatement = Files.readString(file);
@@ -102,11 +102,8 @@ public class KontrollerProvtagningDoseringarBuilder {
         }
 
         /***  Här skapas PDF dokumentet ***/
-        /*
-        PDFPersonInChargeTioHundra pdfPersonInChargeTioHundra = new PDFPersonInChargeTioHundra(personsInCharge);
-        pdfPersonInChargeTioHundra.createPersonInChargePDFDetails();
-        */
-
+        PDFKontrollerProvtagningDoseringar pdfKontrollerProvtagningDoseringar = new PDFKontrollerProvtagningDoseringar(kontrollerProvtagningDoseringarList);
+        pdfKontrollerProvtagningDoseringar.createDosePDFDetails();
 
         kontrollerProvtagningDoseringarList.stream()
                 .forEach(System.out::println);

@@ -6,9 +6,6 @@ import auxilliary.MyConnection;
 import com.jcraft.jsch.JSchException;
 import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringarBuilder;
 import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringarException;
-import ordination.Matvarde.LMHBuilder;
-import ordination.Matvarde.LabInrBuilder;
-import ordination.Matvarde.MatvardeBuilder;
 import ordination.Matvarde.MatvardeInitializationException;
 import ordination.Waran.*;
 
@@ -61,7 +58,7 @@ public class App
         //regpatSSN = "";
 
         var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
-        kontrollerProvtagningDoseringarBuilder.buildPersonInChargeEmployees(centreID, regpatSSN, true);
+        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
 
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file
