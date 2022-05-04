@@ -357,14 +357,15 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.showText("PK(INR):");
                 contentStream.endText();
                 y -= leading;
+                yHold = y;
 
                 contentStream.moveTo(startX, y + fontHeight );
-                contentStream.lineTo(startX + 60, y + fontHeight );
+                contentStream.lineTo(startX + 55, y + fontHeight );
                 contentStream.stroke();
 
                 /* INR labels and values */
                 contentStream.beginText();
-                yHold = y;
+                //yHold = y;
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("INR value:");
@@ -379,6 +380,8 @@ public class PDFKontrollerProvtagningDoseringar {
                 TextShower.showString(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getLaboratoryId());
                 contentStream.endText();
                 y -= leading;
+
+                /* inr method */
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("INR method:");
@@ -387,6 +390,7 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.endText();
                 y -= leading;
 
+                /* inr date */
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX2, yHold);
                 contentStream.showText("INR Date:");
@@ -396,6 +400,8 @@ public class PDFKontrollerProvtagningDoseringar {
                 TextShower.showDate(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getInrDate());
                 contentStream.endText();
                 yHold -= leading;
+
+                /* medicine tyhpe */
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX2, yHold);
                 contentStream.showText("medicine Type:");
@@ -404,6 +410,18 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.newLineAtOffset(xTab2, yHold);
                 contentStream.showText(kontrollerProvtagningDoseringarList.get(arrayItem).getMedicineTypeText());
                 contentStream.endText();
+                yHold -= leading;
+
+                /* analysis pathol */
+                contentStream.beginText();
+                contentStream.newLineAtOffset(startX2, yHold);
+                contentStream.showText("analysis pathol:");
+                contentStream.endText();
+                contentStream.beginText();
+                contentStream.newLineAtOffset(xTab2, yHold);
+                TextShower.showString(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getAnalysisPathol());
+                contentStream.endText();
+
                 yHold -= leading;
                 y = Math.min(y, yHold);
 
@@ -603,13 +621,12 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.close();
 
 
-               if (arrayItem < arraySize) {
+               if (arrayItem < arraySize - 1) {
                    this.page = new PDPage();
                    document.addPage(page);
                    contentStream = new PDPageContentStream(document, page);
                    contentStream.setLeading(leading);
                    writeHeader();
-                   //break;
                }
 
             }

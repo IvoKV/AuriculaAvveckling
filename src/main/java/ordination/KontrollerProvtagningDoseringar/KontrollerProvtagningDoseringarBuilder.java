@@ -51,7 +51,7 @@ public class KontrollerProvtagningDoseringarBuilder {
                     rs.getString("LASTNAME"),
                     rs.getString("CITY"),
                     rs.getString("PAL_TEXT"),
-                    rs.getDate(7),
+                    rs.getDate("DATE_NEXT_VISIT"),
                     rs.getInt("INR_INTERVAL_ID"),
                     rs.getDate("ORDINATIONDATE"),
 
@@ -81,13 +81,14 @@ public class KontrollerProvtagningDoseringarBuilder {
                     rs.getString("LABORATORY_ID"),
                     rs.getString("MEDICINETYPE_TXT"),
                     rs.getString("INRMETHOD_TXT"),
+                    rs.getString("ANALYSIS_PATHOL"),
                     rs.getInt("LABRESULTID_CREATININ"),
                     rs.getDate("PLANEDDATE_CREATININ"),
                     rs.getDate("TESTDATE_CREATININ"),
                     rs.getShort("CREATININ"),
                     rs.getShort("EGFR"),
-                    rs.getDate("FOLLOWUPDATE_CREATININ"),
 
+                    rs.getDate("FOLLOWUPDATE_CREATININ"),
                     rs.getString("COMMENT_CREATININ"),
                     rs.getString("ANALYSISCODE_LAB"),
                     rs.getFloat("SAMPLEVALUE_LAB"),
@@ -102,8 +103,10 @@ public class KontrollerProvtagningDoseringarBuilder {
         }
 
         /***  Här skapas PDF dokumentet ***/
-        PDFKontrollerProvtagningDoseringar pdfKontrollerProvtagningDoseringar = new PDFKontrollerProvtagningDoseringar(kontrollerProvtagningDoseringarList);
-        pdfKontrollerProvtagningDoseringar.createDosePDFDetails();
+        if(kontrollerProvtagningDoseringarList.size() > 0) {
+            PDFKontrollerProvtagningDoseringar pdfKontrollerProvtagningDoseringar = new PDFKontrollerProvtagningDoseringar(kontrollerProvtagningDoseringarList);
+            pdfKontrollerProvtagningDoseringar.createDosePDFDetails();
+        }
 
         kontrollerProvtagningDoseringarList.stream()
                 .forEach(System.out::println);

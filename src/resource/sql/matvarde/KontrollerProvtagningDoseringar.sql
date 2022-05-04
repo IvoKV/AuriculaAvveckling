@@ -28,7 +28,7 @@ select c.ID,
 
 /*-- Nästa omprövning alternativt behandlingsslut - datum (?)*/
 /*-- Nästa kontroll om X veckor, om X månader eller ett datum*/
-	   w.DATE_NEXT_VISIT AS "Datum för nästa planerade besök/doseringens längd",
+	   w.DATE_NEXT_VISIT,
 	   w.INR_INTERVAL_ID,
 	   w.ORDINATIONDATE,
        w.MONDAY_DOSE,
@@ -87,6 +87,7 @@ select c.ID,
 	   inr1.INRVALUE,
 	   inr1.INRDATE,
 	   inr1.LABORATORY_ID,
+	   inr1.ANALYSIS_PATHOL,
 
 	   CASE op.MEDICINETYPE
 	   	WHEN 1 THEN 'Traditionella'

@@ -90,44 +90,46 @@ public class KontrollerProvtagningDoseringar {
     private String laboratoryId;
     @JsonProperty(index = 33)
     private String medicineTypeText;
+    @JsonProperty(index = 34)
+    private String analysisPathol;
 
     /* Coagucheck, datum för kalibrering */
-    @JsonProperty(index = 34)
+    @JsonProperty(index = 35)
     private String inrMethod;
 
     /* Kreatinin (eller pk(INR) */
-    @JsonProperty(index = 35)
-    private int labresultId;
     @JsonProperty(index = 36)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date planedDateCreatinin;
+    private int labresultId;
     @JsonProperty(index = 37)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date testDateCreatinin;
+    private Date planedDateCreatinin;
     @JsonProperty(index = 38)
-    private Short creatinin;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date testDateCreatinin;
     @JsonProperty(index = 39)
-    private Short egfr;
+    private Short creatinin;
     @JsonProperty(index = 40)
+    private Short egfr;
+    @JsonProperty(index = 41)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date followupDate;
-    @JsonProperty(index = 41)
+    @JsonProperty(index = 42)
     private String commentCreatinin;
 
     /* labresult */
-    @JsonProperty(index = 42)
-    private String analysisCodeLab;
     @JsonProperty(index = 43)
-    private float sampleValueLab;
+    private String analysisCodeLab;
     @JsonProperty(index = 44)
-    private String sampleValueText;
+    private float sampleValueLab;
     @JsonProperty(index = 45)
+    private String sampleValueText;
+    @JsonProperty(index = 46)
     private String analysisCommentLab;
 
     /* Change */
-    @JsonProperty(index = 46)
-    private float systemsOrdinationSugg;
     @JsonProperty(index = 47)
+    private float systemsOrdinationSugg;
+    @JsonProperty(index = 48)
     private int systemsIntervalSugg;
     @JsonProperty(index = 49)
     private float userOrdination;
@@ -165,19 +167,20 @@ public class KontrollerProvtagningDoseringar {
                                            float saturdayDoseReduced,
                                            float sundayDoseReduced,
                                            String reducedComment,
-                                           float inrValue,                  /* 30 */
+                                           float inrValue,                      /* 30 */
 
                                            Date inrDate,
                                            String laboratoryId,
                                            String medicineTypeText,
                                            String inrMethod,
+                                           String analysisPathol,
                                            int labresultId,
                                            Date planedDateCreatinin,
                                            Date testDateCreatinin,
                                            Short creatinin,
-                                           Short egfr,
-                                           Date followupDate,      /* 40 */
+                                           Short egfr,                           /* 40 */
 
+                                           Date followupDate,
                                            String commentCreatinin,
                                            String analysisCodeLab,
                                            float sampleValueLab,
@@ -225,6 +228,7 @@ public class KontrollerProvtagningDoseringar {
             Objects.requireNonNullElse(laboratoryId, "laboratoryId is null");
             Objects.requireNonNullElse(medicineTypeText, "medicineTypeText is null");
             Objects.requireNonNullElse(inrMethod, "inrMethod is null");
+            Objects.requireNonNullElse(analysisPathol, "anaylsisPathol is null");
             Objects.requireNonNullElse(labresultId, "labresultId is null");
             Objects.requireNonNullElse(planedDateCreatinin, "planedDateCreatinin is null");
             Objects.requireNonNullElse(testDateCreatinin, "testDateCreatinin is null");
@@ -280,6 +284,7 @@ public class KontrollerProvtagningDoseringar {
         this.laboratoryId = laboratoryId;
         this.medicineTypeText = medicineTypeText;
         this.inrMethod = inrMethod;
+        this.analysisPathol = analysisPathol;
         this.labresultId = labresultId;
         this.planedDateCreatinin = planedDateCreatinin;
         this.testDateCreatinin = testDateCreatinin;
@@ -689,6 +694,14 @@ public class KontrollerProvtagningDoseringar {
         this.userInterval = userInterval;
     }
 
+    public String getAnalysisPathol() {
+        return analysisPathol;
+    }
+
+    public void setAnalysisPathol(String analysisPathol) {
+        this.analysisPathol = analysisPathol;
+    }
+
     @Override
     public String toString() {
         return "KontrollerProvtagningDoseringar{" +
@@ -725,6 +738,7 @@ public class KontrollerProvtagningDoseringar {
                 ", inrDate=" + inrDate +
                 ", laboratoryId='" + laboratoryId + '\'' +
                 ", medicineTypeText='" + medicineTypeText + '\'' +
+                ", analysisPathol='" + analysisPathol + '\'' +
                 ", inrMethod='" + inrMethod + '\'' +
                 ", labresultId=" + labresultId +
                 ", planedDateCreatinin=" + planedDateCreatinin +

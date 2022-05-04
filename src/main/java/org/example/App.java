@@ -53,7 +53,8 @@ public class App
         String centreID = "11012AK";
         //int regpatId = 54241;
         //int regpatId = 489980;
-        String regpatSSN = "19840729-0249";
+        //String regpatSSN = "19840729-0249";     // Linda Madeleine
+        String regpatSSN = "19420807-0815";
         //String regpatSSN = "19121212-1212";
         //regpatSSN = "";
 
