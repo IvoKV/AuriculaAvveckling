@@ -9,6 +9,8 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class PDFKontrollerProvtagningDoseringar {
@@ -337,7 +339,11 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Comment dose:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showComment(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getCommentDose());
+                String commentText = kontrollerProvtagningDoseringarList.get(arrayItem).getCommentDose();
+                if(commentText != null){
+                    commentText = URLDecoder.decode(commentText, StandardCharsets.ISO_8859_1);
+                }
+                TextShower.showComment(contentStream, commentText);
                 contentStream.endText();
                 y -= leading;
 
@@ -365,7 +371,6 @@ public class PDFKontrollerProvtagningDoseringar {
 
                 /* INR labels and values */
                 contentStream.beginText();
-                //yHold = y;
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("INR value:");
