@@ -54,4 +54,8 @@ temp/
 ### TortoiseGit
 /TortoiseGit*
 
+### PDF ###
+*.pdf
+
+
 
