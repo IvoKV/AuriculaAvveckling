@@ -125,7 +125,7 @@ select c.ID,
 FROM centre AS c
          JOIN centrepatient AS cp ON c.ID = cp.CENTREID
          JOIN regionpatient AS rp ON cp.RPID = rp.RPID
-         JOIN patient AS pat ON rp.PID = pat.PID
+     #    JOIN patient AS pat ON rp.PID = pat.PID
          JOIN ordpatient as opat on opat.RPID = rp.RPID
          JOIN patient as p on rp.PID = p.PID
          JOIN ordinationperiod as op on op.CPID = cp.CPID
@@ -138,6 +138,6 @@ FROM centre AS c
 		LEFT JOIN changed_inr_interval AS change1 ON change1.INRID = inr1.INRID
 
 WHERE c.ID = ?
-AND pat.SSN = ?
+AND p.SSN = ?
 #ORDER BY pat.SSN, w.ordinationdate
 ;
