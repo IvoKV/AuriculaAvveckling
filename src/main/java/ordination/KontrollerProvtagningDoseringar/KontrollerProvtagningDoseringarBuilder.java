@@ -45,6 +45,7 @@ public class KontrollerProvtagningDoseringarBuilder {
         while (rs.next()) {
             KontrollerProvtagningDoseringar kontrollerProvtagningDoseringar = new KontrollerProvtagningDoseringar(
                     rs.getString("ID"),
+                    rs.getInt("OID"),
                     rs.getString("SSN"),
                     rs.getShort("SSN_TYPE"),
                     rs.getString("FIRSTNAME"),

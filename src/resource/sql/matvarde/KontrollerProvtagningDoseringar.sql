@@ -1,4 +1,5 @@
 select c.ID,
+       op.OID,              /* extra fält, anv. i Listoperations.java */
 	   p.SSN,
 	   p.SSN_TYPE,
        rp.FIRSTNAME,
@@ -139,5 +140,5 @@ FROM centre AS c
 
 WHERE c.ID = ?
 AND p.SSN = ?
-#ORDER BY pat.SSN, w.ordinationdate
+ORDER BY op.oid
 ;

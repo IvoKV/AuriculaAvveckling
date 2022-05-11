@@ -1,5 +1,6 @@
 package PDFPersonInCharge;
 
+import auxilliary.Listoperations;
 import auxilliary.TextShower;
 import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringar;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -15,6 +16,8 @@ import java.util.List;
 
 public class PDFKontrollerProvtagningDoseringar {
     List<KontrollerProvtagningDoseringar> kontrollerProvtagningDoseringarList;
+
+    private Listoperations listoperations;
     private final String pdfPathFileName = "PDFKontrollerProvtagningDoseringar.pdf";
 
     private float x = 0;
@@ -33,6 +36,7 @@ public class PDFKontrollerProvtagningDoseringar {
 
     public PDFKontrollerProvtagningDoseringar(List<KontrollerProvtagningDoseringar> kontrollerProvtagningDoseringars) throws IOException {
         this.kontrollerProvtagningDoseringarList = kontrollerProvtagningDoseringars;
+        this.listoperations = new Listoperations(kontrollerProvtagningDoseringars);
 
         /** Initialize document and first page **/
         this.document = new PDDocument();
@@ -130,6 +134,8 @@ public class PDFKontrollerProvtagningDoseringar {
             writePatientInfo();     // written only once, on page 1
 
             int arraySize = kontrollerProvtagningDoseringarList.size();
+            int currentOID = 0;
+            int oidCounter = 0;
 
             for(int arrayItem = 0; arrayItem < arraySize; arrayItem++ ) {
                 /* PAL TEXT */
@@ -191,6 +197,26 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.moveTo(startX, y - fontHeight / 2);
                 contentStream.lineTo(startX + 120, y - fontHeight / 2);
                 contentStream.stroke();
+
+                /* sätter OID */
+                int oid = kontrollerProvtagningDoseringarList.get(arrayItem).getOid();
+                if(currentOID != oid){
+                    currentOID = oid;
+                    String oidtext = "oId: " + currentOID + " (" + ++oidCounter + " av " + listoperations.getCountTotOfSpecialItems() + ")";
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
+                    contentStream.newLineAtOffset(xTab1, y);
+                    contentStream.showText(oidtext);
+                    contentStream.endText();
+                }
+                else{
+                    String oidtext = "oId: " + currentOID + " (" + oidCounter + " av " + listoperations.getCountTotOfSpecialItems() + ")";
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.COURIER, 12f);
+                    contentStream.newLineAtOffset(xTab1, y);
+                    contentStream.showText(oidtext);
+                    contentStream.endText();
+                }
                 y -= leading;
 
                 /* medicin text */
@@ -198,7 +224,6 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("medicin text:");
-                //contentStream.endText();
                 contentStream.newLineAtOffset(xTab1 - 40, 0);
                 contentStream.showText(kontrollerProvtagningDoseringarList.get(arrayItem).getMedicinText());
                 contentStream.endText();
@@ -207,8 +232,6 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX2, y);
                 contentStream.showText("dose mode:");
-                //contentStream.endText();
-                //contentStream.beginText();
                 contentStream.newLineAtOffset(xTab1, 0);
                 TextShower.showIntToText(contentStream,  kontrollerProvtagningDoseringarList.get(arrayItem).getDoseMode());
                 contentStream.endText();
@@ -252,7 +275,6 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.endText();
 
                 /* Monday - Sunday Dose VALUES */
-                //xTab1 += 25f;
                 yHold -= leading;
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX + xTab1, yHold);

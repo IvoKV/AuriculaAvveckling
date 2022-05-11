@@ -54,13 +54,13 @@ public class App
         //int regpatId = 54241;
         //int regpatId = 489980;
         //String regpatSSN = "19840729-0249";     // Linda Madeleine
-        //String regpatSSN = "19420807-0815";
-        String regpatSSN = "19470707-1157";
+        String regpatSSN = "19420807-0815";
+        //String regpatSSN = "19470707-1157";
         //String regpatSSN = "19121212-1212";
         //regpatSSN = "";
 
         var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
-        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, true);
+        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
 
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file

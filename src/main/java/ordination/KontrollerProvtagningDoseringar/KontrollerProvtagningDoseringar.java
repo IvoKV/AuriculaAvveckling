@@ -10,6 +10,7 @@ import java.util.Objects;
 public class KontrollerProvtagningDoseringar {
     @JsonProperty(index = 1)
     private String id;
+    private int oid;
     @JsonProperty(index = 2)
     private String ssn;
     @JsonProperty(index = 3)
@@ -137,6 +138,7 @@ public class KontrollerProvtagningDoseringar {
     private int userInterval;
 
     public KontrollerProvtagningDoseringar(String id,
+                                           int oid,
                                            String ssn,
                                            Short ssnType,
                                            String firstName,
@@ -145,7 +147,7 @@ public class KontrollerProvtagningDoseringar {
                                            String palText,
                                            Date dateNextVisit,
                                            int inrIntervalId,
-                                           Date ordinationDate,    /* 10 */
+                                           Date ordinationDate,    /* 11 */
 
                                            float mondayDose,
                                            float tuesdayDose,
@@ -156,7 +158,7 @@ public class KontrollerProvtagningDoseringar {
                                            float sundayDose,
                                            String commentDose,
                                            String medicinText,
-                                           Short doseMode,                  /* 20 */
+                                           Short doseMode,                  /* 21 */
 
                                            String reducedTypeTXT,
                                            float mondayDoseReduced,
@@ -167,7 +169,7 @@ public class KontrollerProvtagningDoseringar {
                                            float saturdayDoseReduced,
                                            float sundayDoseReduced,
                                            String reducedComment,
-                                           float inrValue,                      /* 30 */
+                                           float inrValue,                      /* 31 */
 
                                            Date inrDate,
                                            String laboratoryId,
@@ -178,7 +180,7 @@ public class KontrollerProvtagningDoseringar {
                                            Date planedDateCreatinin,
                                            Date testDateCreatinin,
                                            Short creatinin,
-                                           Short egfr,                           /* 40 */
+                                           Short egfr,                           /* 41 */
 
                                            Date followupDate,
                                            String commentCreatinin,
@@ -251,6 +253,7 @@ public class KontrollerProvtagningDoseringar {
         }
 
         this.id = id;
+        this.oid = oid;
         this.ssn = ssn;
         this.ssnType = ssnType;
         this.firstName = firstName;
@@ -300,6 +303,14 @@ public class KontrollerProvtagningDoseringar {
         this.systemsIntervalSugg = systemsIntervalSugg;
         this.userOrdination = userOrdination;
         this.userInterval = userInterval;
+    }
+
+    public int getOid() {
+        return oid;
+    }
+
+    public void setOid(int oid) {
+        this.oid = oid;
     }
 
     public String getId() {
@@ -706,6 +717,7 @@ public class KontrollerProvtagningDoseringar {
     public String toString() {
         return "KontrollerProvtagningDoseringar{" +
                 "id='" + id + '\'' +
+                ", oid=" + oid +
                 ", ssn='" + ssn + '\'' +
                 ", ssnType=" + ssnType +
                 ", firstName='" + firstName + '\'' +
