@@ -1,4 +1,5 @@
 select c.ID,
+        op.OID,
     /*-- person id --*/
 	   p.SSN,
 	   p.SSN_TYPE,
@@ -22,7 +23,7 @@ select c.ID,
     END AS ATRIALFIB_TXT,
 
     /*-- op.VALVE_MALFUNCTION */
-    CASE op.VALVE_MALFUNCTION
+    CASE COALESCE (op.VALVE_MALFUNCTION, 'NULLVALUE')
             WHEN 1 THEN 'Mekanisk mitralisklaff (I059+Z952)'
             WHEN 2 THEN 'Mekanisk aortaklaff (I359+Z952)'
             WHEN 3 THEN 'Mekanisk mitralis + aortaklaff (I059+I359+Z952)'
@@ -30,11 +31,12 @@ select c.ID,
             WHEN 5 THEN 'Klaffplastik (Z954)'
             WHEN 6 THEN 'Mitralisstenos (I050)'
             WHEN 7 THEN 'Tricuspidalis klaff (I079+Z952)'
+            WHEN 'NULLVALUE' THEN 'is null'
             ELSE 'okänt nyckelvärde'
     END AS VALVEMALFUNCTION_TXT,
 
     /*-- op.VENOUS_TROMB */
-    CASE op.VENOUS_TROMB
+    CASE COALESCE(op.VENOUS_TROMB, 'NULLVALUE')
             WHEN 1 THEN 'Bentrombos (I803)'
             WHEN 2 THEN 'Bentrombos recidiv (I803)'
             WHEN 3 THEN 'Lungemboli (I269)'
@@ -47,11 +49,12 @@ select c.ID,
             WHEN 11 THEN 'Trombos v. jugularis (I828)'
             WHEN 12 THEN 'Subclavia trombos (I828)'
             WHEN 13 THEN 'Vena Cava trombos (I822)'
+            WHEN 'NULLVALUE' THEN 'is null'
             ELSE 'okänt nyckelvärde'
     END AS VENOUSTROMB_TXT,
 
     /*-- op.OTHER*/
-    CASE op.OTHER
+    CASE COALESCE(op.OTHER, 'NULLVALUE')
             WHEN 1 THEN 'Vänsterkammardysfunktion (Q234)'
             WHEN 2 THEN 'Vänsterkammartromb (I513)'
             WHEN 3 THEN 'Kardiomyopati (I429)'
@@ -67,27 +70,30 @@ select c.ID,
             WHEN 14 THEN 'Artärtrombos (I749)'
             WHEN 15 THEN 'Kardiell emboliprofylax (T455)'
             WHEN 101 THEN 'Övrig Barnspecifik indikation'
+            WHEN 'NULLVALUE' THEN 'is null'
             ELSE 'okänt nyckelvärde'
     END AS OTHER_TXT,
 
     /*-- op.OTHERCHILDINDICATION */
-    CASE op.OTHERCHILDINDICATION
+    CASE COALESCE(op.OTHERCHILDINDICATION, 'NULLVALUE')
         WHEN 1 THEN 'Medfödd hjärtanomali'
         WHEN 2 THEN 'Fallots tetrad'
+        WHEN 'NULLVALUE' THEN 'is null'
         ELSE 'okänt nyckelvärde'
     END AS OTHERCHILDINDICATION_TXT,
 
     /*-- op.DCCONVERSION */
-    CASE op.DCCONVERSION
+    CASE COALESCE (op.DCCONVERSION, 'NULLVALUE')
         WHEN 1 THEN 'Nej'
         WHEN 2 THEN 'Ja'
+        WHEN 'NULLVALUE' THEN 'is null'
         ELSE 'okänt nyckelvärde'
     END AS DCCONVERSION_TXT,
 
     op.DCTHERAPYDROPOUT,
 
         /*-- op.PERIOD_LENGTH */
-   CASE op.PERIOD_LENGTH
+   CASE COALESCE (op.PERIOD_LENGTH, 'NULLVALUE')
        WHEN 0 THEN 'En månad'
        WHEN 1 THEN 'Två månader'
        WHEN 2 THEN 'Tre månader'
@@ -95,11 +101,12 @@ select c.ID,
        WHEN 4 THEN 'Tolv månader'
        WHEN 5 THEN 'Tillsvidare'
        WHEN 6 THEN 'Annan behandlingslängd'
+       WHEN 'NULLVALUE' THEN 'is null'
        ELSE 'okänt nyckelvärde'
    END AS PERIODLENGTH_TXT,
 
         /*-- Läkemedel Namn på handelsvara*/
-   CASE op.MEDICIN
+   CASE COALESCE (op.MEDICIN, 'NULLVALUE')
        WHEN 1 THEN 'Waran 2,5 mg tabl'
        WHEN 2 THEN 'Vit Waran 2,5 mg tabl'
        WHEN 5 THEN 'Warfarin Orion 2,5 mg tabl'
@@ -117,32 +124,36 @@ select c.ID,
        WHEN 32 THEN 'Lixiana 60 mg tabl 1 gång dagligen'
        WHEN 21 THEN 'Warankapsel 0,3 mg kapsel'
        WHEN 22 THEN 'Warankapsel 0,9 mg kapsel'
+       WHEN 'NULLVALUE' THEN 'is null'
        ELSE 'okänt nyckelvärde'
-    END as      MEDICIN_TXT,
+    END as MEDICIN_TXT,
 
-	CASE op.DOSE_MODE
+	CASE COALESCE (op.DOSE_MODE, 'NULLVALUE')
 	    WHEN 1 THEN 'Alltid hela tabletter'
 	    WHEN 2 THEN 'Alltid halva tabletter'
 	    WHEN 3 THEN 'Brytpunkt vid 14 tabletter/v'
 	    WHEN 4 THEN 'Brytpunkt vid 7 tabletter/v'
 	    WHEN 5 THEN 'Kan doseras i kvartstabletter'
+	    WHEN 'NULLVALUE' THEN 'is null'
 	    ELSE 'okänt nyckelvärde'
 	END AS DOSEMODE_TXT,
 
-    /*-- op.CREATINTERVALFIRSTYEAR */
-    CASE op.CREATINTERVALFIRSTYEAR
+    /*-- op.CREAINTERVALFIRSTYEAR */
+    CASE COALESCE (op.CREAINTERVALFIRSTYEAR, 'NULLVALUE')
         WHEN 1 THEN '3, 6, 12:e månad (3 ggr)'
         WHEN 2 THEN 'Var 3:e månad (4 ggr)'
         WHEN 3 THEN 'Var 6:e månad (2 ggr)'
         WHEN 4 THEN 'Var 12:e månad (1 ggr)'
+        WHEN 'NULLVALUE' THEN 'is null'
         ELSE 'okänt nyckelvärde'
-    END AS CREATINTERVALFIRSTYEAR_TXT
+    END AS CREAINTERVALFIRSTYEAR_TXT,
 
     /*-- op.CREAINTERVAL */
-    CASE op.CREAINTERVAL
+    CASE COALESCE (op.CREAINTERVAL, 'NULLVALUE')
         WHEN 3 THEN 'Tre månader'
         WHEN 6 THEN 'Sex månader'
         WHEN 12 THEN 'Tolv månader'
+        WHEN 'NULLVALUE' THEN 'is null'
         ELSE 'okänt nyckelvärde'
     END AS CREAINTERVAL_TXT,
 
@@ -150,17 +161,17 @@ select c.ID,
     op.ENDDATE,
     op.CREACOMPLATESTCREATED,
     op.CREACOMPLFOLYEAR,
-    op.CREACOMPLFOLYEAR,
 
-    CASE op.CREACOMPLFIRSTYEAR
+    CASE COALESCE (op.CREACOMPLFIRSTYEAR, 'NULLVALUE')
         WHEN 3 THEN 'Tre månader'
         WHEN 6 THEN 'Sex månader'
         WHEN 12 THEN 'Tolv månader'
+        WHEN 'NULLVALUE' THEN 'is null'
         ELSE 'okänt nyckelvärde'
-    END AS CREACOMPLFIRSTYEAR_TXT
+    END AS CREACOMPLFIRSTYEAR_TXT,
 
     /*-- op.REASON_STOPPED */
-    CASE op.REASON_STOPPED
+    CASE COALESCE (op.REASON_STOPPED, 'NULLVALUE')
         WHEN 1 THEN 'Planenligt'
         WHEN 2 THEN 'På grund av blödning'
         WHEN 3 THEN 'På grund av andra sjukdomar'
@@ -178,11 +189,11 @@ select c.ID,
         WHEN 15 THEN 'På grund av GI-biverkan'
         WHEN 16 THEN 'Byte till annan antikoagulantia'
         WHEN 99 THEN 'Ny period importerad'
+        WHEN 'NULLVALUE' THEN 'is null'
         ELSE 'okänt nyckelvärde'
     END AS REASONSTOPPED_TXT,
 
     op.CONTINUELATECHECK,
-    op.CREATEDBY,
     op.CREATEDBY,
     op.UPDATEDBY,
     op.LENGTHCOMMENT,
@@ -192,7 +203,7 @@ select c.ID,
 	   	WHEN 1 THEN 'Venöst'
 		WHEN 2 THEN 'Kapillärt'
 		WHEN 3 THEN 'Coaguchek'
-	END as INRMETHOD_TXT,
+	END as INRMETHOD_TXT
 
 FROM centre AS c
          JOIN centrepatient AS cp ON c.ID = cp.CENTREID
@@ -200,6 +211,6 @@ FROM centre AS c
          JOIN patient as p on rp.PID = p.PID
          JOIN ordinationperiod as op on op.CPID = cp.CPID
 WHERE c.ID = ?
-AND pat.SSN = ?
-#ORDER BY pat.SSN, w.ordinationdate
+AND p.SSN = ?
+ORDER BY op.OID
 ;

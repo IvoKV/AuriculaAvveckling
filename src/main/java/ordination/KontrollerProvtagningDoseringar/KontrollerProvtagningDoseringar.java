@@ -146,9 +146,9 @@ public class KontrollerProvtagningDoseringar {
                                            String city,
                                            String palText,
                                            Date dateNextVisit,
-                                           int inrIntervalId,
-                                           Date ordinationDate,    /* 11 */
+                                           int inrIntervalId,           /* 10 */
 
+                                           Date ordinationDate,
                                            float mondayDose,
                                            float tuesdayDose,
                                            float wednesdayDose,
@@ -157,9 +157,9 @@ public class KontrollerProvtagningDoseringar {
                                            float saturdayDose,
                                            float sundayDose,
                                            String commentDose,
-                                           String medicinText,
-                                           Short doseMode,                  /* 21 */
+                                           String medicinText,              /* 20 */
 
+                                           Short doseMode,
                                            String reducedTypeTXT,
                                            float mondayDoseReduced,
                                            float tuesdayDoseReduced,
@@ -168,9 +168,9 @@ public class KontrollerProvtagningDoseringar {
                                            float fridayDoseReduced,
                                            float saturdayDoseReduced,
                                            float sundayDoseReduced,
-                                           String reducedComment,
-                                           float inrValue,                      /* 31 */
+                                           String reducedComment,           /* 30 */
 
+                                           float inrValue,
                                            Date inrDate,
                                            String laboratoryId,
                                            String medicineTypeText,
@@ -179,9 +179,9 @@ public class KontrollerProvtagningDoseringar {
                                            int labresultId,
                                            Date planedDateCreatinin,
                                            Date testDateCreatinin,
-                                           Short creatinin,
-                                           Short egfr,                           /* 41 */
+                                           Short creatinin,                 /* 40 */
 
+                                           Short egfr,
                                            Date followupDate,
                                            String commentCreatinin,
                                            String analysisCodeLab,

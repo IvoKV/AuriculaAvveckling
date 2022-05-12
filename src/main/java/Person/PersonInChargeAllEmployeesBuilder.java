@@ -1,6 +1,6 @@
 package Person;
 
-import PDFPersonInCharge.PDFPersonInChargeTioHundra;
+import PDF.PersonInCharge.PDFPersonInChargeTioHundra;
 import auxilliary.MappingPositions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -33,7 +33,6 @@ public class PersonInChargeAllEmployeesBuilder {
     }
 
     public void buildPersonInChargeEmployees(Boolean writeToFile) throws SQLException, IOException, PersonInChargeException {
-        //Path file = Path.of(sqlScriptFilePathAllTitles);
         Path file = Path.of(sqlScriptFilePathAllTitlesTioHundra);
 
         String sqlStatement = Files.readString(file);
@@ -41,7 +40,6 @@ public class PersonInChargeAllEmployeesBuilder {
 
         ResultSet rs = statement.executeQuery(sqlStatement);
 
-        //List<PersonInChargeAllEmployees> personsInChargeEmployees = new ArrayList<>();
         MappingPositions map = new MappingPositions();
 
         while (rs.next()) {

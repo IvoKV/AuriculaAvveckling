@@ -1,4 +1,4 @@
-package PDFPersonInCharge;
+package PDF.Ordination;
 
 import auxilliary.Listoperations;
 import auxilliary.TextShower;

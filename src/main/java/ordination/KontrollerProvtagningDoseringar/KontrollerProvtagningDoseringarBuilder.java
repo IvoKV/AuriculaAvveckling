@@ -1,6 +1,6 @@
 package ordination.KontrollerProvtagningDoseringar;
 
-import PDFPersonInCharge.PDFKontrollerProvtagningDoseringar;
+import PDF.Ordination.PDFKontrollerProvtagningDoseringar;
 import Person.PersonInChargeException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -32,15 +32,12 @@ public class KontrollerProvtagningDoseringarBuilder {
         Path file = Path.of(sqlScriptFilePathKontrollerProvtagningDoseringar);
 
         String sqlStatement = Files.readString(file);
-        Statement statement = myConnection.createStatement();
 
         PreparedStatement selKontrProvtDos = myConnection.prepareStatement(sqlStatement);
         selKontrProvtDos.setString(1, centreId);
         selKontrProvtDos.setString(2, regpatSSN);
 
         ResultSet rs = selKontrProvtDos.executeQuery();
-
-        //MappingPositions map = new MappingPositions();
 
         while (rs.next()) {
             KontrollerProvtagningDoseringar kontrollerProvtagningDoseringar = new KontrollerProvtagningDoseringar(
