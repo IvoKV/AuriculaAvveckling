@@ -1,19 +1,13 @@
 package PDF.Ordination;
 
-import auxilliary.Listoperations;
-import auxilliary.TextShower;
-import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringar;
 import ordination.KontrollerProvtagningDoseringar.Ordinationperiod;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class PDFOrdinationperiod {

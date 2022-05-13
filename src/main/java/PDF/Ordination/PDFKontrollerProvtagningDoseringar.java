@@ -1,6 +1,6 @@
 package PDF.Ordination;
 
-import auxilliary.Listoperations;
+import auxilliary.ListGenerics;
 import auxilliary.TextShower;
 import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringar;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -12,12 +12,14 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 
-public class PDFKontrollerProvtagningDoseringar {
+public class PDFKontrollerProvtagningDoseringar{
     List<KontrollerProvtagningDoseringar> kontrollerProvtagningDoseringarList;
 
-    private Listoperations listoperations;
+    //private Listoperations listoperations;
+    private ListGenerics listGenerics;
     private final String pdfPathFileName = "PDFKontrollerProvtagningDoseringar.pdf";
 
     private float x = 0;
@@ -36,7 +38,8 @@ public class PDFKontrollerProvtagningDoseringar {
 
     public PDFKontrollerProvtagningDoseringar(List<KontrollerProvtagningDoseringar> kontrollerProvtagningDoseringars) throws IOException {
         this.kontrollerProvtagningDoseringarList = kontrollerProvtagningDoseringars;
-        this.listoperations = new Listoperations(kontrollerProvtagningDoseringars);
+        //this.listoperations = new Listoperations(kontrollerProvtagningDoseringars);
+        this.listGenerics = new ListGenerics(Collections.unmodifiableList(kontrollerProvtagningDoseringars));
 
         /** Initialize document and first page **/
         this.document = new PDDocument();
@@ -202,7 +205,8 @@ public class PDFKontrollerProvtagningDoseringar {
                 int oid = kontrollerProvtagningDoseringarList.get(arrayItem).getOid();
                 if(currentOID != oid){
                     currentOID = oid;
-                    String oidtext = "oId: " + currentOID + " (" + ++oidCounter + " av " + listoperations.getCountTotOfSpecialItems() + ")";
+                    //String oidtext = "oId: " + currentOID + " (" + ++oidCounter + " av " + listoperations.getCountTotOfSpecialItems() + ")";
+                    String oidtext = "oId: " + currentOID + " (" + ++oidCounter + " av " + listGenerics.getCountTotOfOids() + ")";
                     contentStream.beginText();
                     contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                     contentStream.newLineAtOffset(xTab1, y);
@@ -210,7 +214,8 @@ public class PDFKontrollerProvtagningDoseringar {
                     contentStream.endText();
                 }
                 else{
-                    String oidtext = "oId: " + currentOID + " (" + oidCounter + " av " + listoperations.getCountTotOfSpecialItems() + ")";
+                    //String oidtext = "oId: " + currentOID + " (" + oidCounter + " av " + listoperations.getCountTotOfSpecialItems() + ")";
+                    String oidtext = "oId: " + currentOID + " (" + ++oidCounter + " av " + listGenerics.getCountTotOfOids() + ")";
                     contentStream.beginText();
                     contentStream.setFont(PDType1Font.COURIER, 12f);
                     contentStream.newLineAtOffset(xTab1, y);

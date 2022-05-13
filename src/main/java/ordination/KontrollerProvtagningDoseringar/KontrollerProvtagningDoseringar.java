@@ -7,7 +7,7 @@ import java.sql.Date;
 import java.util.Objects;
 
 
-public class KontrollerProvtagningDoseringar {
+public class KontrollerProvtagningDoseringar implements OrdinationID{
     @JsonProperty(index = 1)
     private String id;
     private int oid;
