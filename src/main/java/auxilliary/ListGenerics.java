@@ -5,7 +5,7 @@ import ordination.KontrollerProvtagningDoseringar.OrdinationID;
 import java.util.HashSet;
 import java.util.List;
 
-public class ListGenerics <T> {
+public class ListGenerics <T extends OrdinationID> {
 
     List<OrdinationID> listGen;
     private HashSet<Integer> extractedOIDs;
@@ -21,7 +21,6 @@ public class ListGenerics <T> {
         int currentOID = 0;
         for(int i = 0; i < listGen.size(); i++){
             if(currentOID != listGen.get(i).getOid()){
-                extractedOIDs.add(listGen.get(i).getOid());
                 extractedOIDs.add(listGen.get(i).getOid());
             }
         }
