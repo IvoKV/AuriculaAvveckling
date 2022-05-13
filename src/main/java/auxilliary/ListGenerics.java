@@ -7,11 +7,11 @@ import java.util.List;
 
 public class ListGenerics <T extends OrdinationID> {
 
-    List<OrdinationID> listGen;
+    List<T> listGen;
     private HashSet<Integer> extractedOIDs;
     private int countTotOidItems;
 
-    public ListGenerics(List<OrdinationID> listGeneric){
+    public ListGenerics(List<T> listGeneric){
         this.listGen = listGeneric;
         this.extractedOIDs = new HashSet<>();
         extractOid();
