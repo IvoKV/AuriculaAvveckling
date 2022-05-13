@@ -7,20 +7,14 @@ import java.util.List;
 
 public class ListGenerics <T> {
 
-    //List<OrdinationID> listGen;
     List<OrdinationID> listGen;
     private HashSet<Integer> extractedOIDs;
     private int countTotOidItems;
 
-    //public ListGenerics(List<OrdinationID> listGeneric){
     public ListGenerics(List<OrdinationID> listGeneric){
         this.listGen = listGeneric;
         this.extractedOIDs = new HashSet<>();
         extractOid();
-    }
-
-    public String getCountTotOfOids(){
-        return Integer.toString(countTotOidItems);
     }
 
     private void extractOid(){
@@ -34,7 +28,7 @@ public class ListGenerics <T> {
         countTotOidItems = extractedOIDs.size();
     }
 
-    public int getOid(){
-        return countTotOidItems;
+    public String getTotOidItems(){
+        return Integer.toString(countTotOidItems);
     }
 }

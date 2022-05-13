@@ -205,8 +205,7 @@ public class PDFKontrollerProvtagningDoseringar{
                 int oid = kontrollerProvtagningDoseringarList.get(arrayItem).getOid();
                 if(currentOID != oid){
                     currentOID = oid;
-                    //String oidtext = "oId: " + currentOID + " (" + ++oidCounter + " av " + listoperations.getCountTotOfSpecialItems() + ")";
-                    String oidtext = "oId: " + currentOID + " (" + ++oidCounter + " av " + listGenerics.getCountTotOfOids() + ")";
+                    String oidtext = "oId: " + currentOID + " (" + ++oidCounter + " av " + listGenerics.getTotOidItems() + ")";
                     contentStream.beginText();
                     contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                     contentStream.newLineAtOffset(xTab1, y);
@@ -214,8 +213,7 @@ public class PDFKontrollerProvtagningDoseringar{
                     contentStream.endText();
                 }
                 else{
-                    //String oidtext = "oId: " + currentOID + " (" + oidCounter + " av " + listoperations.getCountTotOfSpecialItems() + ")";
-                    String oidtext = "oId: " + currentOID + " (" + ++oidCounter + " av " + listGenerics.getCountTotOfOids() + ")";
+                    String oidtext = "oId: " + currentOID + " (" + oidCounter + " av " + listGenerics.getTotOidItems() + ")";
                     contentStream.beginText();
                     contentStream.setFont(PDType1Font.COURIER, 12f);
                     contentStream.newLineAtOffset(xTab1, y);
