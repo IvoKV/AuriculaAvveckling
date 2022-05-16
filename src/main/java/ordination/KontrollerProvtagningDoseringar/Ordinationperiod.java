@@ -123,8 +123,8 @@ public class Ordinationperiod {
             Objects.requireNonNullElse(atrialFib, "atrialFib is null");
             Objects.requireNonNullElse(valveMalfunction, "valveMalfunction is null");
             Objects.requireNonNullElse(venousTromb, "venousTromb is null");
-            Objects.requireNonNullElse(other, "other is null");
 
+            Objects.requireNonNullElse(other, "other is null");
             Objects.requireNonNullElse(otherChildIndication, "otherChildIndication is null");
             Objects.requireNonNullElse(dcconversion, "dcconversion is null");
             Objects.requireNonNullElse(dctherapydropout, "dctherapydropout is null");
@@ -134,8 +134,8 @@ public class Ordinationperiod {
             Objects.requireNonNullElse(creainterval, "creainterval is null");
             Objects.requireNonNullElse(creaintervalFirstyear, "creaintervalFirstyear is null");
             Objects.requireNonNullElse(startDate, "startDate is null");
-            Objects.requireNonNullElse(endDate, "startDate is null");
 
+            Objects.requireNonNullElse(endDate, "startDate is null");
             Objects.requireNonNullElse(creaComplaTestcreated, "creaComplaTestcreated is null");
             Objects.requireNonNullElse(creaComplFolYear, "creaComplFolYear is null");
             Objects.requireNonNullElse(creaComplFirstYear, "creaComplFirstYear is null");

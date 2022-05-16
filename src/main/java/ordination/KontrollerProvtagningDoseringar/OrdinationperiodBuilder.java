@@ -82,7 +82,7 @@ public class OrdinationperiodBuilder {
             PDFOrdinationperiod pdfOrdinationperiod = new PDFOrdinationperiod(ordinationperiodList);
             pdfOrdinationperiod.createOrdinationperiodDetails();
         }
-        /*
+
         ordinationperiodList.stream()
                 .forEach(System.out::println);
         System.out.println("Total antal poster: " + ordinationperiodList.size());
@@ -91,8 +91,6 @@ public class OrdinationperiodBuilder {
             POJOToFile(ordinationperiodList);
             POJOListToJSONToFile(ordinationperiodList);
         }
-
-         */
     }
 
     private void POJOToFile(List<Ordinationperiod> kpd) throws IOException {
