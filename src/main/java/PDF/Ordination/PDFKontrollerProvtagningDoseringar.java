@@ -361,27 +361,58 @@ public class PDFKontrollerProvtagningDoseringar{
                 contentStream.endText();
                 y -= leading;
 
-                // todo: search if there are "long" comments. They must be handled with line separation processing
                 /* Comment Waran */
-                yHold = y;
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Comment dose:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                String commentText = kontrollerProvtagningDoseringarList.get(arrayItem).getCommentDose();
-                if(commentText != null){
-                    commentText = URLDecoder.decode(commentText, StandardCharsets.ISO_8859_1);
-                }
-                //StringWriter1 stringWriter = new StringWriter1();
-                //String teststring = stringWriter.getDefaultTextSlice(50);
-
-                //TextShower.showComment(contentStream, commentText);
-                //TextShower.showComment(contentStream, teststring);
                 contentStream.endText();
+                String commentText = kontrollerProvtagningDoseringarList.get(arrayItem).getCommentDose();
+                if(commentText != null) {
+                    commentText = URLDecoder.decode(commentText, StandardCharsets.ISO_8859_1);
+
+                    StringWriter1 stringWriter = new StringWriter1(commentText, 55, false);
+                    List<String> polishedStringArray = stringWriter.getPolishedStringArray();
+                    int commentLeading = 15;
+                    boolean isFirstText = true;
+                    boolean firstTextSliceInRow = true;
+
+                    for (var item : polishedStringArray) {
+                        if(isFirstText) {
+                            contentStream.beginText();
+                            contentStream.newLineAtOffset(xTab1, y);
+                            contentStream.setFont(PDType1Font.COURIER_BOLD, 9f);
+                            contentStream.setLeading(15f);
+
+                            contentStream.showText(item);
+                            contentStream.endText();
+                            isFirstText = false;
+                        }
+                        else {
+                            if(firstTextSliceInRow){
+                                y -= commentLeading;
+                                contentStream.beginText();
+                                contentStream.newLineAtOffset(startX, y);
+                                contentStream.showText(item);
+                                contentStream.endText();
+                                firstTextSliceInRow = false;
+                            }
+                            else {
+                                contentStream.beginText();
+                                contentStream.newLineAtOffset(startX2 + 10, y);
+                                contentStream.showText(item);
+                                contentStream.endText();
+                                firstTextSliceInRow = true;
+
+                            }
+                        }
+                    }
+                }
                 y -= leading;
 
                 /* Comment Waran reduced */
                 contentStream.beginText();
+                contentStream.setFont(PDType1Font.COURIER, 12f);
+                contentStream.setLeading(leading);
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Comment Reduced dose:");
                 contentStream.newLineAtOffset(xTab1, 0);
