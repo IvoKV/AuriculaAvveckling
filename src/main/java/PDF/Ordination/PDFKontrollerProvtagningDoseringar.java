@@ -1,6 +1,7 @@
 package PDF.Ordination;
 
 import auxilliary.ListGenerics;
+import auxilliary.StringWriter1;
 import auxilliary.TextShower;
 import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringar;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -95,17 +96,17 @@ public class PDFKontrollerProvtagningDoseringar{
         y -= leading;
 
         contentStream.beginText();
-        contentStream.newLineAtOffset(startX2, yHold);
+        contentStream.newLineAtOffset(startX2 + 30, yHold);
         contentStream.showText("SSN:");
-        contentStream.newLineAtOffset(xTab1 - 20, 0);
+        contentStream.newLineAtOffset(xTab1, 0);
         contentStream.showText(kontrollerProvtagningDoseringarList.get(0).getSsn());
         contentStream.endText();
         yHold -= leading;
 
         contentStream.beginText();
-        contentStream.newLineAtOffset(startX2, yHold);
+        contentStream.newLineAtOffset(startX2 + 30, yHold);
         contentStream.showText("SSN Type:");
-        contentStream.newLineAtOffset(xTab1 - 20, 0);
+        contentStream.newLineAtOffset(xTab1, 0);
         contentStream.showText(kontrollerProvtagningDoseringarList.get(0).getSsnType().toString());
         contentStream.endText();
         yHold -= leading;
@@ -175,9 +176,12 @@ public class PDFKontrollerProvtagningDoseringar{
 
                 /* ordination date */
                 contentStream.beginText();
-                contentStream.newLineAtOffset(startX2, yHold);
+                contentStream.newLineAtOffset(startX2 + 15, yHold);
                 contentStream.showText("ordination date:");
-                contentStream.newLineAtOffset(xTab1, 0);
+                contentStream.endText();
+
+                contentStream.beginText();
+                contentStream.newLineAtOffset(xTab2, yHold);
                 TextShower.showDate(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getOrdinationDate());
                 contentStream.endText();
                 y -= leading;
@@ -233,7 +237,7 @@ public class PDFKontrollerProvtagningDoseringar{
 
                 /* dose mode */
                 contentStream.beginText();
-                contentStream.newLineAtOffset(startX2, y);
+                contentStream.newLineAtOffset(startX2 + 60, y);
                 contentStream.showText("dose mode:");
                 contentStream.newLineAtOffset(xTab1, 0);
                 TextShower.showIntToText(contentStream,  kontrollerProvtagningDoseringarList.get(arrayItem).getDoseMode());
@@ -368,7 +372,11 @@ public class PDFKontrollerProvtagningDoseringar{
                 if(commentText != null){
                     commentText = URLDecoder.decode(commentText, StandardCharsets.ISO_8859_1);
                 }
-                TextShower.showComment(contentStream, commentText);
+                //StringWriter1 stringWriter = new StringWriter1();
+                //String teststring = stringWriter.getDefaultTextSlice(50);
+
+                //TextShower.showComment(contentStream, commentText);
+                //TextShower.showComment(contentStream, teststring);
                 contentStream.endText();
                 y -= leading;
 

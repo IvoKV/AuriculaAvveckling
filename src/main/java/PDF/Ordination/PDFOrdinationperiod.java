@@ -90,17 +90,17 @@ public class PDFOrdinationperiod {
         y -= leading;
 
         contentStream.beginText();
-        contentStream.newLineAtOffset(startX2, yHold);
+        contentStream.newLineAtOffset(startX2 + 30, yHold);
         contentStream.showText("SSN:");
-        contentStream.newLineAtOffset(xTab1 - 20, 0);
+        contentStream.newLineAtOffset(xTab1, 0);
         contentStream.showText(ordinationperiodList.get(0).getSsn());
         contentStream.endText();
         yHold -= leading;
 
         contentStream.beginText();
-        contentStream.newLineAtOffset(startX2, yHold);
+        contentStream.newLineAtOffset(startX2 + 30, yHold);
         contentStream.showText("SSN Type:");
-        contentStream.newLineAtOffset(xTab1 - 20, 0);
+        contentStream.newLineAtOffset(xTab1 , 0);
         contentStream.showText(ordinationperiodList.get(0).getSsntype().toString());
         contentStream.endText();
         yHold -= leading;
