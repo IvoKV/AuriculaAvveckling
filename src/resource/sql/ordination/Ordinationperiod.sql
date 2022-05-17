@@ -203,7 +203,9 @@ select c.ID,
 	   	WHEN 1 THEN 'Venöst'
 		WHEN 2 THEN 'Kapillärt'
 		WHEN 3 THEN 'Coaguchek'
-	END as INRMETHOD_TXT
+	END as INRMETHOD_TXT,
+
+	op.COMPLFOLYEAR
 
 FROM centre AS c
          JOIN centrepatient AS cp ON c.ID = cp.CENTREID

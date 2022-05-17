@@ -72,7 +72,9 @@ public class OrdinationperiodBuilder {
                     rs.getString("CREATEDBY"),
                     rs.getString("UPDATEDBY"),
                     rs.getString("LENGTHCOMMENT"),
-                    rs.getString("INRMETHOD_TXT")
+                    rs.getString("INRMETHOD_TXT"),
+
+                    rs.getShort("COMPLFOLYEAR")
             );
             ordinationperiodList.add(ordinationperiod);
         }

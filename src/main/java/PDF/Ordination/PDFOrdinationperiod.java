@@ -381,6 +381,15 @@ public class PDFOrdinationperiod {
                 contentStream.newLineAtOffset(xTab1, 0);
                 TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getLengthcomment());
                 contentStream.endText();
+
+                /* -> COMPLFOLYEAR */
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.COURIER, 12f);
+                contentStream.newLineAtOffset(startX2, y);
+                contentStream.showText("Compl Folyear:");
+                contentStream.newLineAtOffset(x2Offset + 10f, 0);
+                TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getComplfolYear());
+                contentStream.endText();
                 y -= leading;
 
                 /* CREATED BY */

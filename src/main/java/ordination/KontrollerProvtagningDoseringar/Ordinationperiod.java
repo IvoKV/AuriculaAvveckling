@@ -44,6 +44,8 @@ public class Ordinationperiod {
     private String lengthcomment;
     private String inrmethod;
 
+    private Short complfolYear;
+
     public Ordinationperiod(
                             int oid,
                             String ssn,
@@ -80,7 +82,10 @@ public class Ordinationperiod {
                             String createdBy,
                             String updatedBy,
                             String lengthcomment,
-                            String inrmethod) throws OrdinationperiodException {
+                            String inrmethod,
+
+                            Short complfolyear
+    ) throws OrdinationperiodException {
         this.oid = oid;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -111,6 +116,7 @@ public class Ordinationperiod {
         this.updatedBy = updatedBy;
         this.lengthcomment = lengthcomment;
         this.inrmethod = inrmethod;
+        this.complfolYear = complfolyear;
 
         try {
             Objects.requireNonNullElse(oid, "inget oid");
@@ -145,6 +151,8 @@ public class Ordinationperiod {
             Objects.requireNonNullElse(updatedBy, "updatedBy is null");
             Objects.requireNonNullElse(lengthcomment, "lengthcomment is null");
             Objects.requireNonNullElse(inrmethod, "inrmethod is null");
+
+            Objects.requireNonNullElse(complfolyear, "complfolyear is null");
         } catch (Exception exp) {
             throw new OrdinationperiodException(exp.getMessage());
         }
@@ -156,6 +164,14 @@ public class Ordinationperiod {
 
     public void setOid(int oid) {
         this.oid = oid;
+    }
+
+    public Short getComplfolYear() {
+        return complfolYear;
+    }
+
+    public void setComplfolYear(Short complfolYear) {
+        this.complfolYear = complfolYear;
     }
 
     public String getFirstName() {
@@ -394,35 +410,36 @@ public class Ordinationperiod {
     public String toString() {
         return "Ordinationperiod{" +
                 "oid=" + oid +
-                ", fornamn='" + firstName + '\'' +
-                ", efternamn='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", ssn='" + ssn + '\'' +
                 ", ssntype=" + ssntype +
                 ", paltext='" + paltext + '\'' +
-                ", medicinetype=" + medicinetype +
-                ", atrialFib=" + atrialFib +
-                ", valveMalfunction=" + valveMalfunction +
-                ", venousTromb=" + venousTromb +
-                ", other=" + other +
-                ", otherChildIndication=" + otherChildIndication +
-                ", dcconversion=" + dcconversion +
+                ", medicinetype='" + medicinetype + '\'' +
+                ", atrialFib='" + atrialFib + '\'' +
+                ", valveMalfunction='" + valveMalfunction + '\'' +
+                ", venousTromb='" + venousTromb + '\'' +
+                ", other='" + other + '\'' +
+                ", otherChildIndication='" + otherChildIndication + '\'' +
+                ", dcconversion='" + dcconversion + '\'' +
                 ", dctherapydropout=" + dctherapydropout +
-                ", periodLength=" + periodLength +
-                ", medicin=" + medicin +
-                ", doseMode=" + doseMode +
-                ", creainterval=" + creainterval +
-                ", creaintervalFirstyear=" + creaintervalFirstyear +
+                ", periodLength='" + periodLength + '\'' +
+                ", medicin='" + medicin + '\'' +
+                ", doseMode='" + doseMode + '\'' +
+                ", creainterval='" + creainterval + '\'' +
+                ", creaintervalFirstyear='" + creaintervalFirstyear + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", creaComplaTestcreated=" + creaComplaTestcreated +
                 ", creaComplFolYear=" + creaComplFolYear +
-                ", creaComplFirstYear=" + creaComplFirstYear +
-                ", reasonStopped=" + reasonStopped +
+                ", creaComplFirstYear='" + creaComplFirstYear + '\'' +
+                ", reasonStopped='" + reasonStopped + '\'' +
                 ", continueLateCheck=" + continueLateCheck +
                 ", createdBy='" + createdBy + '\'' +
                 ", updatedBy='" + updatedBy + '\'' +
                 ", lengthcomment='" + lengthcomment + '\'' +
-                ", inrmethod=" + inrmethod +
+                ", inrmethod='" + inrmethod + '\'' +
+                ", complfolYear=" + complfolYear +
                 '}';
     }
 }

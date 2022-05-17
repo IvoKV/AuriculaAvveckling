@@ -14,7 +14,6 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
@@ -123,7 +122,7 @@ public class PDFKontrollerProvtagningDoseringar{
 
     public void createDosePDFDetails() throws IOException {
         final float startX = page.getCropBox().getLowerLeftX() + 30;
-        float endX = page.getCropBox().getUpperRightX() - 30;
+        //float endX = page.getCropBox().getUpperRightX() - 30;
         final float startX2 = startX + 280f;
         final float xTab1 = startX + 140f;
         final float xTab2 = startX2 + 160f;
@@ -133,7 +132,6 @@ public class PDFKontrollerProvtagningDoseringar{
             /** First page **/
             document.addPage(page);
             contentStream = new PDPageContentStream(document, page);
-            contentStream.setFont(fontBold, fontSize + 2);
             contentStream.setLeading(leading);
             writeHeader();
             writePatientInfo();     // written only once, on page 1
@@ -200,7 +198,7 @@ public class PDFKontrollerProvtagningDoseringar{
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Ordinationperiod:");
+                contentStream.showText("Ordinationperiod");
                 contentStream.endText();
                 contentStream.moveTo(startX, y - fontHeight / 2);
                 contentStream.lineTo(startX + 120, y - fontHeight / 2);
@@ -425,13 +423,13 @@ public class PDFKontrollerProvtagningDoseringar{
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("PK(INR):");
+                contentStream.showText("PK(INR)");
                 contentStream.endText();
                 y -= leading;
                 yHold = y;
 
                 contentStream.moveTo(startX, y + fontHeight );
-                contentStream.lineTo(startX + 55, y + fontHeight );
+                contentStream.lineTo(startX + 50, y + fontHeight );
                 contentStream.stroke();
 
                 /* INR labels and values */
@@ -499,10 +497,10 @@ public class PDFKontrollerProvtagningDoseringar{
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Creatinin:");
+                contentStream.showText("Creatinin");
                 contentStream.endText();
                 contentStream.moveTo(startX, y - fontHeight / 2);
-                contentStream.lineTo(startX + 71, y - fontHeight / 2);
+                contentStream.lineTo(startX + 67, y - fontHeight / 2);
                 contentStream.stroke();
                 y -= leading;
                 yHold = y;
@@ -553,7 +551,7 @@ public class PDFKontrollerProvtagningDoseringar{
                 contentStream.endText();
                 yHold -= leading;
 
-                /*egfr */
+                /* egfr */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX2, yHold);
@@ -589,10 +587,10 @@ public class PDFKontrollerProvtagningDoseringar{
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Labresult:");
+                contentStream.showText("Labresult");
                 contentStream.endText();
                 contentStream.moveTo(startX, y - fontHeight / 2);
-                contentStream.lineTo(startX + 70, y - fontHeight / 2);
+                contentStream.lineTo(startX + 65, y - fontHeight / 2);
                 contentStream.stroke();
                 y -= leading;
                 yHold = y;
@@ -635,14 +633,14 @@ public class PDFKontrollerProvtagningDoseringar{
                 contentStream.endText();
                 y -= leading;
 
-                /* CHANGE ORDINATION */
+                /* CHANGED INR INTERVAL */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Change:");
+                contentStream.showText("Changed Inr interval");
                 contentStream.endText();
                 contentStream.moveTo(startX, y - fontHeight / 2);
-                contentStream.lineTo(startX + 50, y - fontHeight / 2);
+                contentStream.lineTo(startX + 145, y - fontHeight / 2);
                 contentStream.stroke();
                 y -= leading;
                 yHold = y;
@@ -690,7 +688,6 @@ public class PDFKontrollerProvtagningDoseringar{
                 /** end of page **/
                 contentStream.close();
 
-
                if (arrayItem < arraySize - 1) {
                    this.page = new PDPage();
                    document.addPage(page);
@@ -698,7 +695,6 @@ public class PDFKontrollerProvtagningDoseringar{
                    contentStream.setLeading(leading);
                    writeHeader();
                }
-
             }
             contentStream.close();
             writePageNumbers();
