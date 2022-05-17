@@ -42,16 +42,18 @@ public class OrdinationperiodBuilder {
         while (rs.next()) {
             Ordinationperiod ordinationperiod = new Ordinationperiod(
                     rs.getInt("OID"),
-                    rs.getString("SSN"),
-                    rs.getShort("SSN_TYPE"),
                     rs.getString("FIRSTNAME"),
                     rs.getString("LASTNAME"),
-                    rs.getString("PAL_TEXT"),
+                    rs.getString("SSN"),
+                    rs.getShort("SSN_TYPE"),
+                    rs.getString("PALFIRSTNAME"),
+                    rs.getString("PALLASTNAME"),
+                    rs.getString("PALTITLE"),
                     rs.getString("MEDICINETYPE_TXT"),
                     rs.getString("ATRIALFIB_TXT"),
+
                     rs.getString("VALVEMALFUNCTION_TXT"),
                     rs.getString("VENOUSTROMB_TXT"),
-
                     rs.getString("OTHER_TXT"),
                     rs.getString("OTHERCHILDINDICATION_TXT"),
                     rs.getString("DCCONVERSION_TXT"),
@@ -60,9 +62,9 @@ public class OrdinationperiodBuilder {
                     rs.getString("MEDICIN_TXT"),
                     rs.getString("DOSEMODE_TXT"),
                     rs.getString("CREAINTERVALFIRSTYEAR_TXT"),
+
                     rs.getString("CREAINTERVAL_TXT"),
                     rs.getDate("STARTDATE"),
-
                     rs.getDate("ENDDATE"),
                     rs.getDate("CREACOMPLATESTCREATED"),
                     rs.getInt("CREACOMPLFOLYEAR"),
@@ -71,9 +73,9 @@ public class OrdinationperiodBuilder {
                     rs.getDate("CONTINUELATECHECK"),
                     rs.getString("CREATEDBY"),
                     rs.getString("UPDATEDBY"),
+
                     rs.getString("LENGTHCOMMENT"),
                     rs.getString("INRMETHOD_TXT"),
-
                     rs.getShort("COMPLFOLYEAR")
             );
             ordinationperiodList.add(ordinationperiod);
