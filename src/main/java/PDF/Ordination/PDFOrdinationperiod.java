@@ -1,5 +1,6 @@
 package PDF.Ordination;
 
+import auxilliary.FileOperations;
 import auxilliary.ListGenerics;
 import auxilliary.TextShower;
 import ordination.KontrollerProvtagningDoseringar.Ordinationperiod;
@@ -416,7 +417,11 @@ public class PDFOrdinationperiod {
             contentStream.close();
             writePageNumbers();
         }
-        document.save(pdfPathFileName);
+        FileOperations fop = new FileOperations(pdfPathFileName);
+        String fileWithoutExtension =  fop.getFilenameWithoutExtension(); // kontrollerProvtagningDoseringarList.get(0).getSsn();
+        fop = null;
+        String filenameWithSSN = fileWithoutExtension + "_" + ordinationperiodList.get(0).getSsn() + ".pdf";
+        document.save(filenameWithSSN);
         document.close();
     }
 

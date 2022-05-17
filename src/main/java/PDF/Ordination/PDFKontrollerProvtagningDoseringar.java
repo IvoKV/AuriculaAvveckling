@@ -1,5 +1,6 @@
 package PDF.Ordination;
 
+import auxilliary.FileOperations;
 import auxilliary.ListGenerics;
 import auxilliary.StringWriter1;
 import auxilliary.TextShower;
@@ -13,15 +14,16 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
 public class PDFKontrollerProvtagningDoseringar{
     List<KontrollerProvtagningDoseringar> kontrollerProvtagningDoseringarList;
 
-    //private Listoperations listoperations;
     private ListGenerics listGenerics;
     private final String pdfPathFileName = "PDFKontrollerProvtagningDoseringar.pdf";
+
 
     private float x = 0;
     private float y = 750;
@@ -39,7 +41,6 @@ public class PDFKontrollerProvtagningDoseringar{
 
     public PDFKontrollerProvtagningDoseringar(List<KontrollerProvtagningDoseringar> kontrollerProvtagningDoseringars) throws IOException {
         this.kontrollerProvtagningDoseringarList = kontrollerProvtagningDoseringars;
-        //this.listoperations = new Listoperations(kontrollerProvtagningDoseringars);
         this.listGenerics = new ListGenerics(Collections.unmodifiableList(kontrollerProvtagningDoseringars));
 
         /** Initialize document and first page **/
@@ -702,7 +703,11 @@ public class PDFKontrollerProvtagningDoseringar{
             contentStream.close();
             writePageNumbers();
         }
-        document.save(pdfPathFileName);
+        FileOperations fop = new FileOperations(pdfPathFileName);
+        String fileWithoutExtension =  fop.getFilenameWithoutExtension(); // kontrollerProvtagningDoseringarList.get(0).getSsn();
+        fop = null;
+        String filenameWithSSN = fileWithoutExtension + "_" + kontrollerProvtagningDoseringarList.get(0).getSsn() + ".pdf";
+        document.save(filenameWithSSN);
         document.close();
     }
 
