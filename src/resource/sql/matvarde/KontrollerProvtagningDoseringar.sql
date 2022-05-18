@@ -1,30 +1,16 @@
 select c.ID,
-	   p.SSN,
-	   p.SSN_TYPE,
+       op.OID,              /* extra fält, anv. i Listoperations.java */
+       /*-- person id --*/
        rp.FIRSTNAME,
 	   rp.LASTNAME,
-#       rp.ADDRESS,
-#       rp.ZIPCODE,
-       rp.CITY,
-#       opat.OTHER_ADDRESS,
-#       opat.OTHER_ZIPCODE,
-#       opat.OTHER_CITY,
-#       opat.DATE_FROM_OTHER_ADDRESS,
-#	   opat.DATE_TO_OTHER_ADDRESS,
-
-/*-- giltighetstid annan adress*/
-#       opat.HOME_PHONE,
-#	   opat.MOBILE_PHONE,
-#	   opat.OTHER_PHONE,
-#       opat.OTHER_PHONE2,
-/*-- telefonnr*/
-#       opat.RELATIVE_NAME,
-#	   opat.RELATIVE_PHONE,
-#	   opat.RELATIVE_PHONE2,
-/*-- anhörig*/
+	   p.SSN,
+	   p.SSN_TYPE,
 
 /*-- Patientansvarig läkare/enhet, adress, telefon*/
-       cp.PAL_TEXT,
+       cp.PAL_TEXT AS CPPAL_TXT,
+       pal.FIRSTNAME AS PAL_FIRSTNAME,
+       pal.LASTNAME AS PAL_LASTNAME,
+       pal.TITLE AS PAL_TITLE,
 
 /*-- Nästa omprövning alternativt behandlingsslut - datum (?)*/
 /*-- Nästa kontroll om X veckor, om X månader eller ett datum*/
@@ -125,8 +111,7 @@ select c.ID,
 FROM centre AS c
          JOIN centrepatient AS cp ON c.ID = cp.CENTREID
          JOIN regionpatient AS rp ON cp.RPID = rp.RPID
-         JOIN patient AS pat ON rp.PID = pat.PID
-         JOIN ordpatient as opat on opat.RPID = rp.RPID
+         LEFT JOIN people AS pal ON cp.PAL = pal.PEOPLEID
          JOIN patient as p on rp.PID = p.PID
          JOIN ordinationperiod as op on op.CPID = cp.CPID
 
@@ -138,6 +123,6 @@ FROM centre AS c
 		LEFT JOIN changed_inr_interval AS change1 ON change1.INRID = inr1.INRID
 
 WHERE c.ID = ?
-AND pat.SSN = ?
-#ORDER BY pat.SSN, w.ordinationdate
+AND p.SSN = ?
+ORDER BY op.oid, w.ORDINATIONDATE
 ;

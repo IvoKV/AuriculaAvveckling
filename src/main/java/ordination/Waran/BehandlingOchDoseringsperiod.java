@@ -81,7 +81,7 @@ public class BehandlingOchDoseringsperiod {
         this.weight = weight;
         this.weightdate = weightdate;
         this.dose = dose;
-        this.fromDate = fromDate;  //new Date(fromDate); // todo: samråd med Mårten, varför det måste vara en 'long'
+        this.fromDate = fromDate;  //new Date(fromDate);
         this.toDate = toDate;
         this.currentOpStartDate = currentOpStartDate;
         this.periodLength = periodLength;

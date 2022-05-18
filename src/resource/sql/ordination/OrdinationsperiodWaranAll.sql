@@ -128,6 +128,6 @@ FROM centre as c
          join ordpatient as opat on opat.RPID = rp.RPID
          join patient as p on rp.PID = p.PID
          join ordinationperiod as op on op.CPID = cp.CPID
-        join people AS pal on cp.PAL = pal.PEOPLEID
+         join people AS pal on cp.PAL = pal.PEOPLEID
 WHERE c.ID = ?
 ORDER BY rp.pid;
