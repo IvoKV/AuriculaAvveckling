@@ -3,6 +3,7 @@ package PDF.Ordination;
 import auxilliary.FileOperations;
 import auxilliary.ListGenerics;
 import auxilliary.TextShower;
+import com.mysql.cj.exceptions.CJOperationNotSupportedException;
 import ordination.KontrollerProvtagningDoseringar.Ordinationperiod;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -156,21 +157,45 @@ public class PDFOrdinationperiod {
                 sb = null;
 
                 /* PAL TEXT */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12);
-                contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Pal First N, last N:");
-                contentStream.newLineAtOffset(xTab1 - 50, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getPalFirstName());
-                //contentStream.endText();
-                contentStream.newLineAtOffset(50 , 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getPalLastName());
-                contentStream.newLineAtOffset(100, 0);
-                contentStream.showText("Title:");
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getPalTitle());
-                y -= leading;
+                /*-- kontrollera om T people innehåller PAL */
+
+                // todo: få fram title från user ... eller annan tabell
+                if(TextShower.stringIsNotNull(ordinationperiodList.get(arrayItem).getPalFirstName())){
+                    StringBuilder namebuilder = new StringBuilder();
+                    namebuilder.append(ordinationperiodList.get(arrayItem).getPalFirstName());
+                    namebuilder.append(" ");
+                    namebuilder.append(ordinationperiodList.get(arrayItem).getPalLastName());
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.COURIER, 12);
+                    contentStream.newLineAtOffset(startX, y);
+                    contentStream.showText("Ansvarig läk./sjuksk.:");
+                    contentStream.newLineAtOffset(xTab1 + 50, 0);
+                    contentStream.showText(namebuilder.toString());
+                    contentStream.endText();
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(xTab2, y);
+                    contentStream.showText("Title:");
+                    contentStream.newLineAtOffset(80, 0);
+                    TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getPalTitle());
+                    contentStream.endText();
+                }
+                else {
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.COURIER, 12);
+                    contentStream.newLineAtOffset(startX, y);
+                    contentStream.showText("Ansvarig läk./sjuksk.:");
+                    contentStream.newLineAtOffset(xTab1 + 50, 0);
+                    TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getCppalText());
+                    contentStream.endText();
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(xTab2, y);
+                    contentStream.showText("Title:");
+                    contentStream.newLineAtOffset(80, 0);
+                    TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getPalTitle());
+                    contentStream.endText();
+                }
                 yHold = y;
-                yHold += fontHeight / 2;
+                yHold -= fontHeight / 2;
 
                 /*  --- line ---   */
                 contentStream.setLineWidth(0.5f);

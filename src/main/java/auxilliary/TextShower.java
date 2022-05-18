@@ -65,7 +65,7 @@ public class TextShower {
         }
     }
 
-    public static boolean preCheckIfNull(String text) {
-        return (text != null && text.length() != 0);
+    public static boolean stringIsNotNull(String text) {
+        return (text != null && text.length() > 0);
     }
 }

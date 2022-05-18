@@ -57,16 +57,16 @@ public class App
         //int regpatId = 489980;
         //String regpatSSN = "19840729-0249";     // Linda Madeleine
         //String regpatSSN = "19420807-0815";
-        //String regpatSSN = "19470707-1157";
+        String regpatSSN = "19470707-1157";
         //String regpatSSN = "19121212-1212";
-        String regpatSSN = "19510403-5125";         // har waranordination comment 451 tecken (längst)
+        //String regpatSSN = "19510403-5125";         // har waranordination comment 451 tecken (längst)
         //regpatSSN = "";
 
-//        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
-//        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
+        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
+        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
 ////
-        var ordprov = new OrdinationperiodBuilder(dbConnection);
-        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
+//        var ordprov = new OrdinationperiodBuilder(dbConnection);
+//        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file

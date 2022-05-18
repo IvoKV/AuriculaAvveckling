@@ -12,12 +12,14 @@ public class Ordinationperiod {
     private String ssn;                     // patient
     private Short ssntype;                  // patient
     /* PAL */
+    private String cppalText;
     private String palFirstName;
     private String palLastName;
-    private String palTitle;
+    private Short palTitle;
+    /* INFORMATIONSTYP anpassat */
     private String medicinetype;             // (sql)
-    private String atrialFib;                // se xml!
 
+    private String atrialFib;                // se xml!
     private String valveMalfunction;         // se xml!
     private String venousTromb;              // se xml!
     private String other;                    // se xml!
@@ -27,8 +29,8 @@ public class Ordinationperiod {
     private String periodLength;             // -
     private String medicin;                  // se xml!
     private String doseMode;                 // se xml!
-    private String creainterval;
 
+    private String creainterval;
     private String creaintervalFirstyear;    // se xml!
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date startDate;
@@ -42,8 +44,8 @@ public class Ordinationperiod {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date continueLateCheck;
     private String createdBy;
-    private String updatedBy;
 
+    private String updatedBy;
     private String lengthcomment;
     private String inrmethod;
     private Short complfolYear;
@@ -53,12 +55,13 @@ public class Ordinationperiod {
                             String lastName,
                             String ssn,
                             Short ssntype,
+                            String cppalText,
                             String palFirstName,
                             String palLastName,
-                            String palTitle,
+                            short palTitle,
                             String medicinetype,
-                            String atrialFib,
 
+                            String atrialFib,
                             String valveMalfunction,
                             String venousTromb,
                             String other,
@@ -89,6 +92,7 @@ public class Ordinationperiod {
         this.lastName = lastName;
         this.ssn = ssn;
         this.ssntype = ssntype;
+        this.cppalText = cppalText;
         this.palFirstName = palFirstName;
         this.palLastName = palLastName;
         this.palTitle = palTitle;
@@ -126,12 +130,13 @@ public class Ordinationperiod {
             Objects.requireNonNullElse(lastName, "inget lastName");
             Objects.requireNonNullElse(ssn, "inget personnummer");
             Objects.requireNonNullElse(ssntype, "ingen typ för personnummer");
+            Objects.requireNonNullElse(cppalText, "cppaltext is null");
             Objects.requireNonNullElse(palFirstName, "ingen typ för palFirstName");
             Objects.requireNonNullElse(palLastName, "ingen typ för palLastName");
             Objects.requireNonNullElse(palTitle, "ingen typ för palTitle");
             Objects.requireNonNullElse(medicinetype, "medicinetype is null");
-            Objects.requireNonNullElse(atrialFib, "atrialFib is null");
 
+            Objects.requireNonNullElse(atrialFib, "atrialFib is null");
             Objects.requireNonNullElse(valveMalfunction, "valveMalfunction is null");
             Objects.requireNonNullElse(venousTromb, "venousTromb is null");
             Objects.requireNonNullElse(other, "other is null");
@@ -141,8 +146,8 @@ public class Ordinationperiod {
             Objects.requireNonNullElse(periodLength, "periodLength is null");
             Objects.requireNonNullElse(medicin, "medicin is null");
             Objects.requireNonNullElse(doseMode, "doseMode is null");
-            Objects.requireNonNullElse(creainterval, "creainterval is null");
 
+            Objects.requireNonNullElse(creainterval, "creainterval is null");
             Objects.requireNonNullElse(creaintervalFirstyear, "creaintervalFirstyear is null");
             Objects.requireNonNullElse(startDate, "startDate is null");
             Objects.requireNonNullElse(endDate, "startDate is null");
@@ -152,14 +157,22 @@ public class Ordinationperiod {
             Objects.requireNonNullElse(reasonStopped, "reasonStopped is null");
             Objects.requireNonNullElse(continueLateCheck, "continueLateCheck is null");
             Objects.requireNonNullElse(createdBy, "createdBy is null");
-            Objects.requireNonNullElse(updatedBy, "updatedBy is null");
 
+            Objects.requireNonNullElse(updatedBy, "updatedBy is null");
             Objects.requireNonNullElse(lengthcomment, "lengthcomment is null");
             Objects.requireNonNullElse(inrmethod, "inrmethod is null");
             Objects.requireNonNullElse(complfolYear, "complfolYear is null");
         } catch (Exception exp) {
             throw new OrdinationperiodException(exp.getMessage());
         }
+    }
+
+    public String getCppalText() {
+        return cppalText;
+    }
+
+    public void setCppalText(String cppalText) {
+        this.cppalText = cppalText;
     }
 
     public int getOid() {
@@ -190,7 +203,7 @@ public class Ordinationperiod {
         return palLastName;
     }
 
-    public String getPalTitle() {
+    public short getPalTitle() {
         return palTitle;
     }
 
@@ -302,6 +315,7 @@ public class Ordinationperiod {
                 ", lastName='" + lastName + '\'' +
                 ", ssn='" + ssn + '\'' +
                 ", ssntype=" + ssntype +
+                ", cppalText='" + cppalText + '\'' +
                 ", palFirstName='" + palFirstName + '\'' +
                 ", palLastName='" + palLastName + '\'' +
                 ", palTitle='" + palTitle + '\'' +

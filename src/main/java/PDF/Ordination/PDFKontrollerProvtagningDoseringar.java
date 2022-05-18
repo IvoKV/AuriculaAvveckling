@@ -109,7 +109,7 @@ public class PDFKontrollerProvtagningDoseringar{
         contentStream.newLineAtOffset(xTab1, 0);
         contentStream.showText(kontrollerProvtagningDoseringarList.get(0).getSsnType().toString());
         contentStream.endText();
-        yHold -= leading;
+        yHold -= fontSize / 2;
 
         contentStream.setLineWidth(0.5f);
         contentStream.moveTo(startX, yHold);
@@ -122,7 +122,7 @@ public class PDFKontrollerProvtagningDoseringar{
 
     public void createDosePDFDetails() throws IOException {
         final float startX = page.getCropBox().getLowerLeftX() + 30;
-        //float endX = page.getCropBox().getUpperRightX() - 30;
+        float endX = page.getCropBox().getUpperRightX() - 30;
         final float startX2 = startX + 280f;
         final float xTab1 = startX + 140f;
         final float xTab2 = startX2 + 160f;
@@ -142,15 +142,50 @@ public class PDFKontrollerProvtagningDoseringar{
 
             for(int arrayItem = 0; arrayItem < arraySize; arrayItem++ ) {
                 /* PAL TEXT */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12);
-                contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Pal Text:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getPalText());
-                contentStream.endText();
+                if(TextShower.stringIsNotNull(kontrollerProvtagningDoseringarList.get(arrayItem).getPalFirstName())){
+                    StringBuilder namebuilder = new StringBuilder();
+                    namebuilder.append(kontrollerProvtagningDoseringarList.get(arrayItem).getPalFirstName());
+                    namebuilder.append(" ");
+                    namebuilder.append(kontrollerProvtagningDoseringarList.get(arrayItem).getPalLastName());
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.COURIER, 12);
+                    contentStream.newLineAtOffset(startX, y);
+                    contentStream.showText("Ansvarig läk./sjuksk.:");
+                    contentStream.newLineAtOffset(xTab1 + 50, 0);
+                    contentStream.showText(namebuilder.toString());
+                    contentStream.endText();
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(xTab2, y);
+                    contentStream.showText("Title:");
+                    contentStream.newLineAtOffset(80, 0);
+                    TextShower.showIntToText(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getPalTitle());
+                    contentStream.endText();
+                    namebuilder = null;
+                }
+                else {
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.COURIER, 12);
+                    contentStream.newLineAtOffset(startX, y);
+                    contentStream.showText("Ansvarig läk./sjuksk.:");
+                    contentStream.newLineAtOffset(xTab1 + 50, 0);
+                    TextShower.showString(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getCppalText());
+                    contentStream.endText();
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(xTab2, y);
+                    contentStream.showText("Title:");
+                    contentStream.newLineAtOffset(80, 0);
+                    TextShower.showIntToText(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getPalTitle());
+                    contentStream.endText();
+                }
                 yHold = y;
-                y -= leading;
+                yHold -= fontSize / 2;
+
+                /*  --- line ---   */
+                contentStream.setLineWidth(0.5f);
+                contentStream.moveTo(startX, yHold);
+                contentStream.lineTo(endX, yHold);
+                contentStream.stroke();
+                y = yHold - leading;
 
                 /* NÄSTA KONTROLL */
                 contentStream.beginText();

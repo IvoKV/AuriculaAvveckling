@@ -7,6 +7,7 @@ select c.ID,
 	   p.SSN_TYPE,
 
 /*-- Patientansvarig läkare/enhet, adress, telefon*/
+        cp.PAL_TEXT AS CPPAL_TXT,
         pal.FIRSTNAME AS PAL_FIRSTNAME,
         pal.LASTNAME AS PAL_LASTNAME,
         pal.TITLE AS PAL_TITLE,
@@ -214,7 +215,7 @@ FROM centre AS c
          JOIN regionpatient AS rp ON cp.RPID = rp.RPID
          JOIN patient as p on rp.PID = p.PID
          JOIN ordinationperiod as op on op.CPID = cp.CPID
-         JOIN people AS pal ON cp.PAL = pal.PEOPLEID
+         LEFT JOIN people AS pal ON cp.PAL = pal.PEOPLEID
 WHERE c.ID = ?
 AND p.SSN = ?
 ORDER BY op.OID

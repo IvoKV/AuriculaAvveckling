@@ -46,12 +46,13 @@ public class OrdinationperiodBuilder {
                     rs.getString("LASTNAME"),
                     rs.getString("SSN"),
                     rs.getShort("SSN_TYPE"),
-                    rs.getString("PALFIRSTNAME"),
-                    rs.getString("PALLASTNAME"),
-                    rs.getString("PALTITLE"),
+                    rs.getString("CPPAL_TXT"),
+                    rs.getString("PAL_FIRSTNAME"),
+                    rs.getString("PAL_LASTNAME"),
+                    rs.getShort("PAL_TITLE"),
                     rs.getString("MEDICINETYPE_TXT"),
-                    rs.getString("ATRIALFIB_TXT"),
 
+                    rs.getString("ATRIALFIB_TXT"),
                     rs.getString("VALVEMALFUNCTION_TXT"),
                     rs.getString("VENOUSTROMB_TXT"),
                     rs.getString("OTHER_TXT"),
@@ -61,8 +62,8 @@ public class OrdinationperiodBuilder {
                     rs.getString("PERIODLENGTH_TXT"),
                     rs.getString("MEDICIN_TXT"),
                     rs.getString("DOSEMODE_TXT"),
-                    rs.getString("CREAINTERVALFIRSTYEAR_TXT"),
 
+                    rs.getString("CREAINTERVALFIRSTYEAR_TXT"),
                     rs.getString("CREAINTERVAL_TXT"),
                     rs.getDate("STARTDATE"),
                     rs.getDate("ENDDATE"),
@@ -72,8 +73,8 @@ public class OrdinationperiodBuilder {
                     rs.getString("REASONSTOPPED_TXT"),
                     rs.getDate("CONTINUELATECHECK"),
                     rs.getString("CREATEDBY"),
-                    rs.getString("UPDATEDBY"),
 
+                    rs.getString("UPDATEDBY"),
                     rs.getString("LENGTHCOMMENT"),
                     rs.getString("INRMETHOD_TXT"),
                     rs.getShort("COMPLFOLYEAR")
