@@ -1,6 +1,6 @@
 package ordination.KontrollerProvtagningDoseringar;
 
-import PDFPersonInCharge.PDFKontrollerProvtagningDoseringar;
+import PDF.Ordination.PDFKontrollerProvtagningDoseringar;
 import Person.PersonInChargeException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -32,7 +32,6 @@ public class KontrollerProvtagningDoseringarBuilder {
         Path file = Path.of(sqlScriptFilePathKontrollerProvtagningDoseringar);
 
         String sqlStatement = Files.readString(file);
-        Statement statement = myConnection.createStatement();
 
         PreparedStatement selKontrProvtDos = myConnection.prepareStatement(sqlStatement);
         selKontrProvtDos.setString(1, centreId);
@@ -40,21 +39,21 @@ public class KontrollerProvtagningDoseringarBuilder {
 
         ResultSet rs = selKontrProvtDos.executeQuery();
 
-        //MappingPositions map = new MappingPositions();
-
         while (rs.next()) {
             KontrollerProvtagningDoseringar kontrollerProvtagningDoseringar = new KontrollerProvtagningDoseringar(
-                    rs.getString("ID"),
-                    rs.getString("SSN"),
-                    rs.getShort("SSN_TYPE"),
+                    rs.getInt("OID"),
                     rs.getString("FIRSTNAME"),
                     rs.getString("LASTNAME"),
-                    rs.getString("CITY"),
-                    rs.getString("PAL_TEXT"),
+                    rs.getString("SSN"),
+                    rs.getShort("SSN_TYPE"),
+                    rs.getString("CPPAL_TXT"),
+                    rs.getString("PAL_FIRSTNAME"),
+                    rs.getString("PAL_LASTNAME"),
+                    rs.getShort("PAL_TITLE"),
                     rs.getDate("DATE_NEXT_VISIT"),
+
                     rs.getInt("INR_INTERVAL_ID"),
                     rs.getDate("ORDINATIONDATE"),
-
                     rs.getFloat("MONDAY_DOSE"),
                     rs.getFloat("TUESDAY_DOSE"),
                     rs.getFloat("WEDNSDAY_DOSE"),
@@ -63,6 +62,7 @@ public class KontrollerProvtagningDoseringarBuilder {
                     rs.getFloat("SATURDAY_DOSE"),
                     rs.getFloat("SUNDAY_DOSE"),
                     rs.getString("COMMENT_DOSE"),
+
                     rs.getString("MEDICIN_TXT"),
                     rs.getShort("DOSE_MODE"),
 
@@ -74,9 +74,9 @@ public class KontrollerProvtagningDoseringarBuilder {
                     rs.getFloat("FRIDAY_DOSE_REDUCED"),
                     rs.getFloat("SATURDAY_DOSE_REDUCED"),
                     rs.getFloat("SUNDAY_DOSE_REDUCED"),
+
                     rs.getString("REDUCED_COMMENT"),
                     rs.getFloat("INRVALUE"),
-
                     rs.getDate("INRDATE"),
                     rs.getString("LABORATORY_ID"),
                     rs.getString("MEDICINETYPE_TXT"),
@@ -85,9 +85,9 @@ public class KontrollerProvtagningDoseringarBuilder {
                     rs.getInt("LABRESULTID_CREATININ"),
                     rs.getDate("PLANEDDATE_CREATININ"),
                     rs.getDate("TESTDATE_CREATININ"),
+
                     rs.getShort("CREATININ"),
                     rs.getShort("EGFR"),
-
                     rs.getDate("FOLLOWUPDATE_CREATININ"),
                     rs.getString("COMMENT_CREATININ"),
                     rs.getString("ANALYSISCODE_LAB"),
@@ -96,6 +96,7 @@ public class KontrollerProvtagningDoseringarBuilder {
                     rs.getString("ANALYSISCOMMENT_LAB"),
                     rs.getFloat("SYSTEMS_ORDINATION_SUGG"),
                     rs.getInt("SYSTEMS_INTERVAL_SUGG"),
+
                     rs.getFloat("USER_ORDINATION"),
                     rs.getInt("USER_INTERVAL")
             );

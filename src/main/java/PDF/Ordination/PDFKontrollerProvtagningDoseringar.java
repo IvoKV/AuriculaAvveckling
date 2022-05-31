@@ -1,5 +1,8 @@
-package PDFPersonInCharge;
+package PDF.Ordination;
 
+import auxilliary.FileOperations;
+import auxilliary.ListGenerics;
+import auxilliary.StringWriter1;
 import auxilliary.TextShower;
 import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringar;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -11,11 +14,15 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 
-public class PDFKontrollerProvtagningDoseringar {
+public class PDFKontrollerProvtagningDoseringar{
     List<KontrollerProvtagningDoseringar> kontrollerProvtagningDoseringarList;
+
+    private ListGenerics listGenerics;
     private final String pdfPathFileName = "PDFKontrollerProvtagningDoseringar.pdf";
+
 
     private float x = 0;
     private float y = 750;
@@ -33,6 +40,7 @@ public class PDFKontrollerProvtagningDoseringar {
 
     public PDFKontrollerProvtagningDoseringar(List<KontrollerProvtagningDoseringar> kontrollerProvtagningDoseringars) throws IOException {
         this.kontrollerProvtagningDoseringarList = kontrollerProvtagningDoseringars;
+        this.listGenerics = new ListGenerics(Collections.unmodifiableList(kontrollerProvtagningDoseringars));
 
         /** Initialize document and first page **/
         this.document = new PDDocument();
@@ -88,20 +96,20 @@ public class PDFKontrollerProvtagningDoseringar {
         y -= leading;
 
         contentStream.beginText();
-        contentStream.newLineAtOffset(startX2, yHold);
+        contentStream.newLineAtOffset(startX2 + 30, yHold);
         contentStream.showText("SSN:");
-        contentStream.newLineAtOffset(xTab1 - 20, 0);
+        contentStream.newLineAtOffset(xTab1, 0);
         contentStream.showText(kontrollerProvtagningDoseringarList.get(0).getSsn());
         contentStream.endText();
         yHold -= leading;
 
         contentStream.beginText();
-        contentStream.newLineAtOffset(startX2, yHold);
+        contentStream.newLineAtOffset(startX2 + 30, yHold);
         contentStream.showText("SSN Type:");
-        contentStream.newLineAtOffset(xTab1 - 20, 0);
+        contentStream.newLineAtOffset(xTab1, 0);
         contentStream.showText(kontrollerProvtagningDoseringarList.get(0).getSsnType().toString());
         contentStream.endText();
-        yHold -= leading;
+        yHold -= fontSize / 2;
 
         contentStream.setLineWidth(0.5f);
         contentStream.moveTo(startX, yHold);
@@ -124,24 +132,60 @@ public class PDFKontrollerProvtagningDoseringar {
             /** First page **/
             document.addPage(page);
             contentStream = new PDPageContentStream(document, page);
-            contentStream.setFont(fontBold, fontSize + 2);
             contentStream.setLeading(leading);
             writeHeader();
             writePatientInfo();     // written only once, on page 1
 
             int arraySize = kontrollerProvtagningDoseringarList.size();
+            int currentOID = 0;
+            int oidCounter = 0;
 
             for(int arrayItem = 0; arrayItem < arraySize; arrayItem++ ) {
                 /* PAL TEXT */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12);
-                contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Pal Text:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getPalText());
-                contentStream.endText();
+                if(TextShower.stringIsNotNull(kontrollerProvtagningDoseringarList.get(arrayItem).getPalFirstName())){
+                    StringBuilder namebuilder = new StringBuilder();
+                    namebuilder.append(kontrollerProvtagningDoseringarList.get(arrayItem).getPalFirstName());
+                    namebuilder.append(" ");
+                    namebuilder.append(kontrollerProvtagningDoseringarList.get(arrayItem).getPalLastName());
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.COURIER, 12);
+                    contentStream.newLineAtOffset(startX, y);
+                    contentStream.showText("Ansvarig läk./sjuksk.:");
+                    contentStream.newLineAtOffset(xTab1 + 50, 0);
+                    contentStream.showText(namebuilder.toString());
+                    contentStream.endText();
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(xTab2, y);
+                    contentStream.showText("Title:");
+                    contentStream.newLineAtOffset(80, 0);
+                    TextShower.showIntToText(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getPalTitle());
+                    contentStream.endText();
+                    namebuilder = null;
+                }
+                else {
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.COURIER, 12);
+                    contentStream.newLineAtOffset(startX, y);
+                    contentStream.showText("Ansvarig läk./sjuksk.:");
+                    contentStream.newLineAtOffset(xTab1 + 50, 0);
+                    TextShower.showString(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getCppalText());
+                    contentStream.endText();
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(xTab2, y);
+                    contentStream.showText("Title:");
+                    contentStream.newLineAtOffset(80, 0);
+                    TextShower.showIntToText(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getPalTitle());
+                    contentStream.endText();
+                }
                 yHold = y;
-                y -= leading;
+                yHold -= fontSize / 2;
+
+                /*  --- line ---   */
+                contentStream.setLineWidth(0.5f);
+                contentStream.moveTo(startX, yHold);
+                contentStream.lineTo(endX, yHold);
+                contentStream.stroke();
+                y = yHold - leading;
 
                 /* NÄSTA KONTROLL */
                 contentStream.beginText();
@@ -166,9 +210,12 @@ public class PDFKontrollerProvtagningDoseringar {
 
                 /* ordination date */
                 contentStream.beginText();
-                contentStream.newLineAtOffset(startX2, yHold);
+                contentStream.newLineAtOffset(startX2 + 15, yHold);
                 contentStream.showText("ordination date:");
-                contentStream.newLineAtOffset(xTab1, 0);
+                contentStream.endText();
+
+                contentStream.beginText();
+                contentStream.newLineAtOffset(xTab2, yHold);
                 TextShower.showDate(contentStream, kontrollerProvtagningDoseringarList.get(arrayItem).getOrdinationDate());
                 contentStream.endText();
                 y -= leading;
@@ -186,11 +233,31 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Ordinationperiod:");
+                contentStream.showText("Ordinationperiod");
                 contentStream.endText();
                 contentStream.moveTo(startX, y - fontHeight / 2);
                 contentStream.lineTo(startX + 120, y - fontHeight / 2);
                 contentStream.stroke();
+
+                /* sätter OID */
+                int oid = kontrollerProvtagningDoseringarList.get(arrayItem).getOid();
+                if(currentOID != oid){
+                    currentOID = oid;
+                    String oidtext = "oId: " + currentOID + " (" + ++oidCounter + " av " + listGenerics.getTotOidItems() + ")";
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
+                    contentStream.newLineAtOffset(xTab1, y);
+                    contentStream.showText(oidtext);
+                    contentStream.endText();
+                }
+                else{
+                    String oidtext = "oId: " + currentOID + " (" + oidCounter + " av " + listGenerics.getTotOidItems() + ")";
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.COURIER, 12f);
+                    contentStream.newLineAtOffset(xTab1, y);
+                    contentStream.showText(oidtext);
+                    contentStream.endText();
+                }
                 y -= leading;
 
                 /* medicin text */
@@ -198,17 +265,14 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("medicin text:");
-                //contentStream.endText();
                 contentStream.newLineAtOffset(xTab1 - 40, 0);
                 contentStream.showText(kontrollerProvtagningDoseringarList.get(arrayItem).getMedicinText());
                 contentStream.endText();
 
                 /* dose mode */
                 contentStream.beginText();
-                contentStream.newLineAtOffset(startX2, y);
+                contentStream.newLineAtOffset(startX2 + 60, y);
                 contentStream.showText("dose mode:");
-                //contentStream.endText();
-                //contentStream.beginText();
                 contentStream.newLineAtOffset(xTab1, 0);
                 TextShower.showIntToText(contentStream,  kontrollerProvtagningDoseringarList.get(arrayItem).getDoseMode());
                 contentStream.endText();
@@ -252,7 +316,6 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.endText();
 
                 /* Monday - Sunday Dose VALUES */
-                //xTab1 += 25f;
                 yHold -= leading;
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX + xTab1, yHold);
@@ -332,23 +395,58 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.endText();
                 y -= leading;
 
-                // todo: search if there are "long" comments. They must be handled with line separation processing
                 /* Comment Waran */
-                yHold = y;
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Comment dose:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                String commentText = kontrollerProvtagningDoseringarList.get(arrayItem).getCommentDose();
-                if(commentText != null){
-                    commentText = URLDecoder.decode(commentText, StandardCharsets.ISO_8859_1);
-                }
-                TextShower.showComment(contentStream, commentText);
                 contentStream.endText();
+                String commentText = kontrollerProvtagningDoseringarList.get(arrayItem).getCommentDose();
+                if(commentText != null) {
+                    commentText = URLDecoder.decode(commentText, StandardCharsets.ISO_8859_1);
+
+                    StringWriter1 stringWriter = new StringWriter1(commentText, 55, false);
+                    List<String> polishedStringArray = stringWriter.getPolishedStringArray();
+                    int commentLeading = 15;
+                    boolean isFirstText = true;
+                    boolean firstTextSliceInRow = true;
+
+                    for (var item : polishedStringArray) {
+                        if(isFirstText) {
+                            contentStream.beginText();
+                            contentStream.newLineAtOffset(xTab1, y);
+                            contentStream.setFont(PDType1Font.COURIER_BOLD, 9f);
+                            contentStream.setLeading(15f);
+
+                            contentStream.showText(item);
+                            contentStream.endText();
+                            isFirstText = false;
+                        }
+                        else {
+                            if(firstTextSliceInRow){
+                                y -= commentLeading;
+                                contentStream.beginText();
+                                contentStream.newLineAtOffset(startX, y);
+                                contentStream.showText(item);
+                                contentStream.endText();
+                                firstTextSliceInRow = false;
+                            }
+                            else {
+                                contentStream.beginText();
+                                contentStream.newLineAtOffset(startX2 + 10, y);
+                                contentStream.showText(item);
+                                contentStream.endText();
+                                firstTextSliceInRow = true;
+
+                            }
+                        }
+                    }
+                }
                 y -= leading;
 
                 /* Comment Waran reduced */
                 contentStream.beginText();
+                contentStream.setFont(PDType1Font.COURIER, 12f);
+                contentStream.setLeading(leading);
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Comment Reduced dose:");
                 contentStream.newLineAtOffset(xTab1, 0);
@@ -360,13 +458,13 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("PK(INR):");
+                contentStream.showText("PK(INR)");
                 contentStream.endText();
                 y -= leading;
                 yHold = y;
 
                 contentStream.moveTo(startX, y + fontHeight );
-                contentStream.lineTo(startX + 55, y + fontHeight );
+                contentStream.lineTo(startX + 50, y + fontHeight );
                 contentStream.stroke();
 
                 /* INR labels and values */
@@ -434,10 +532,10 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Creatinin:");
+                contentStream.showText("Creatinin");
                 contentStream.endText();
                 contentStream.moveTo(startX, y - fontHeight / 2);
-                contentStream.lineTo(startX + 71, y - fontHeight / 2);
+                contentStream.lineTo(startX + 67, y - fontHeight / 2);
                 contentStream.stroke();
                 y -= leading;
                 yHold = y;
@@ -488,7 +586,7 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.endText();
                 yHold -= leading;
 
-                /*egfr */
+                /* egfr */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX2, yHold);
@@ -524,10 +622,10 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Labresult:");
+                contentStream.showText("Labresult");
                 contentStream.endText();
                 contentStream.moveTo(startX, y - fontHeight / 2);
-                contentStream.lineTo(startX + 70, y - fontHeight / 2);
+                contentStream.lineTo(startX + 65, y - fontHeight / 2);
                 contentStream.stroke();
                 y -= leading;
                 yHold = y;
@@ -570,14 +668,14 @@ public class PDFKontrollerProvtagningDoseringar {
                 contentStream.endText();
                 y -= leading;
 
-                /* CHANGE ORDINATION */
+                /* CHANGED INR INTERVAL */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Change:");
+                contentStream.showText("Changed Inr interval");
                 contentStream.endText();
                 contentStream.moveTo(startX, y - fontHeight / 2);
-                contentStream.lineTo(startX + 50, y - fontHeight / 2);
+                contentStream.lineTo(startX + 145, y - fontHeight / 2);
                 contentStream.stroke();
                 y -= leading;
                 yHold = y;
@@ -625,7 +723,6 @@ public class PDFKontrollerProvtagningDoseringar {
                 /** end of page **/
                 contentStream.close();
 
-
                if (arrayItem < arraySize - 1) {
                    this.page = new PDPage();
                    document.addPage(page);
@@ -633,12 +730,15 @@ public class PDFKontrollerProvtagningDoseringar {
                    contentStream.setLeading(leading);
                    writeHeader();
                }
-
             }
             contentStream.close();
             writePageNumbers();
         }
-        document.save(pdfPathFileName);
+        FileOperations fop = new FileOperations(pdfPathFileName);
+        String fileWithoutExtension =  fop.getFilenameWithoutExtension(); // kontrollerProvtagningDoseringarList.get(0).getSsn();
+        fop = null;
+        String filenameWithSSN = fileWithoutExtension + "_" + kontrollerProvtagningDoseringarList.get(0).getSsn() + ".pdf";
+        document.save(filenameWithSSN);
         document.close();
     }
 
