@@ -1,16 +1,11 @@
 select c.ID,
         op.OID,
+        pat.PID,
     /*-- person id --*/
        rp.FIRSTNAME,
 	   rp.LASTNAME,
-	   p.SSN,
-	   p.SSN_TYPE,
-
-/*-- Patientansvarig läkare/enhet, adress, telefon*/
-        cp.PAL_TEXT AS CPPAL_TXT,
-        pal.FIRSTNAME AS PAL_FIRSTNAME,
-        pal.LASTNAME AS PAL_LASTNAME,
-        pal.TITLE AS PAL_TITLE,
+	   pat.SSN,
+	   pat.SSN_TYPE,
 
        /*-- op.MEDICINTYPE */
     CASE op.MEDICINETYPE
@@ -213,10 +208,9 @@ select c.ID,
 FROM centre AS c
          JOIN centrepatient AS cp ON c.ID = cp.CENTREID
          JOIN regionpatient AS rp ON cp.RPID = rp.RPID
-         JOIN patient as p on rp.PID = p.PID
+         JOIN patient as pat on rp.PID = pat.PID
          JOIN ordinationperiod as op on op.CPID = cp.CPID
-         LEFT JOIN people AS pal ON cp.PAL = pal.PEOPLEID
 WHERE c.ID = ?
-AND p.SSN = ?
+AND pat.SSN = ?
 ORDER BY op.OID
 ;

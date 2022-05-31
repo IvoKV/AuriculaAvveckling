@@ -79,7 +79,7 @@ public class PDFOrdinationperiod {
         contentStream.newLineAtOffset(startX, y);
         contentStream.showText("Förnamn:");
         contentStream.newLineAtOffset(xTab1, 0);
-        contentStream.showText(ordinationperiodList.get(0).getFirstName());
+        contentStream.showText(ordinationperiodList.get(0).getPatFirstName());
         contentStream.endText();
         y -= leading;
 
@@ -87,7 +87,7 @@ public class PDFOrdinationperiod {
         contentStream.newLineAtOffset(startX, y);
         contentStream.showText("Efternamn:");
         contentStream.newLineAtOffset(xTab1, 0);
-        contentStream.showText(ordinationperiodList.get(0).getLastName());
+        contentStream.showText(ordinationperiodList.get(0).getPatLastName());
         contentStream.endText();
         y -= leading;
 
@@ -103,7 +103,7 @@ public class PDFOrdinationperiod {
         contentStream.newLineAtOffset(startX2 + 30, yHold);
         contentStream.showText("SSN Type:");
         contentStream.newLineAtOffset(xTab1 , 0);
-        contentStream.showText(ordinationperiodList.get(0).getSsntype().toString());
+        contentStream.showText(ordinationperiodList.get(0).getSsnType().toString());
         contentStream.endText();
         yHold -= leading;
 
@@ -145,7 +145,7 @@ public class PDFOrdinationperiod {
                 contentStream.newLineAtOffset(startX + 160f, yHoldOID);
 
                 StringBuilder sb = new StringBuilder();
-                sb.append(ordinationperiodList.get(arrayItem).getOid());
+                sb.append(ordinationperiodList.get(arrayItem).getOid());             // GET OID
                 sb.append(" (");
                 sb.append(arrayItem + 1);
                 sb.append( " av ");
@@ -160,40 +160,40 @@ public class PDFOrdinationperiod {
                 /*-- kontrollera om T people innehåller PAL */
 
                 // todo: få fram title från user ... eller annan tabell
-                if(TextShower.stringIsNotNull(ordinationperiodList.get(arrayItem).getPalFirstName())){
-                    StringBuilder namebuilder = new StringBuilder();
-                    namebuilder.append(ordinationperiodList.get(arrayItem).getPalFirstName());
-                    namebuilder.append(" ");
-                    namebuilder.append(ordinationperiodList.get(arrayItem).getPalLastName());
-                    contentStream.beginText();
-                    contentStream.setFont(PDType1Font.COURIER, 12);
-                    contentStream.newLineAtOffset(startX, y);
-                    contentStream.showText("Ansvarig läk./sjuksk.:");
-                    contentStream.newLineAtOffset(xTab1 + 50, 0);
-                    contentStream.showText(namebuilder.toString());
-                    contentStream.endText();
-                    contentStream.beginText();
-                    contentStream.newLineAtOffset(xTab2, y);
-                    contentStream.showText("Title:");
-                    contentStream.newLineAtOffset(80, 0);
-                    TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getPalTitle());
-                    contentStream.endText();
-                }
-                else {
-                    contentStream.beginText();
-                    contentStream.setFont(PDType1Font.COURIER, 12);
-                    contentStream.newLineAtOffset(startX, y);
-                    contentStream.showText("Ansvarig läk./sjuksk.:");
-                    contentStream.newLineAtOffset(xTab1 + 50, 0);
-                    TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getCppalText());
-                    contentStream.endText();
-                    contentStream.beginText();
-                    contentStream.newLineAtOffset(xTab2, y);
-                    contentStream.showText("Title:");
-                    contentStream.newLineAtOffset(80, 0);
-                    TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getPalTitle());
-                    contentStream.endText();
-                }
+//                if(TextShower.stringIsNotNull(ordinationperiodList.get(arrayItem).getPalFirstName())){
+//                    StringBuilder namebuilder = new StringBuilder();
+//                    namebuilder.append(ordinationperiodList.get(arrayItem).getPalFirstName());
+//                    namebuilder.append(" ");
+//                    namebuilder.append(ordinationperiodList.get(arrayItem).getPalLastName());
+//                    contentStream.beginText();
+//                    contentStream.setFont(PDType1Font.COURIER, 12);
+//                    contentStream.newLineAtOffset(startX, y);
+//                    contentStream.showText("Ansvarig läk./sjuksk.:");
+//                    contentStream.newLineAtOffset(xTab1 + 50, 0);
+//                    contentStream.showText(namebuilder.toString());
+//                    contentStream.endText();
+//                    contentStream.beginText();
+//                    contentStream.newLineAtOffset(xTab2, y);
+//                    contentStream.showText("Title:");
+//                    contentStream.newLineAtOffset(80, 0);
+//                    TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getPalTitle());
+//                    contentStream.endText();
+//                }
+//                else {
+//                    contentStream.beginText();
+//                    contentStream.setFont(PDType1Font.COURIER, 12);
+//                    contentStream.newLineAtOffset(startX, y);
+//                    contentStream.showText("Ansvarig läk./sjuksk.:");
+//                    contentStream.newLineAtOffset(xTab1 + 50, 0);
+//                    TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getCppalText());
+//                    contentStream.endText();
+//                    contentStream.beginText();
+//                    contentStream.newLineAtOffset(xTab2, y);
+//                    contentStream.showText("Title:");
+//                    contentStream.newLineAtOffset(80, 0);
+//                    TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getPalTitle());
+//                    contentStream.endText();
+//                }
                 yHold = y;
                 yHold -= fontHeight / 2;
 

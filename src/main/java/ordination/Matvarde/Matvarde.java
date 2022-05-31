@@ -6,35 +6,22 @@ import java.sql.Date;
 import java.util.Objects;
 
 public class Matvarde {
-    @JsonProperty(index = 1)
+
     private String cid;                              // c.id
-    @JsonProperty(index = 2)
     private int pid;                                 // p.pid
-    @JsonProperty(index = 3)
     private String SSN;
-    @JsonProperty(index = 4)
     private Short SSN_TYPE;
-    @JsonProperty(index = 5)
     private String patFirstname;
-    @JsonProperty(index = 6)
     private String patLastname;
-    @JsonProperty(index = 7)
     private Short palTitle;
-    @JsonProperty(index = 8)
     private String palFirstname;
-    @JsonProperty(index = 9)
     private String palLastname;
 
     /** CREATININE **/
-    @JsonProperty(index = 10)
     private Short creatinin;
-    @JsonProperty(index = 11)
     private Date testdate;
-    @JsonProperty(index = 12)
     private String specimentComment;
-    @JsonProperty(index = 13)
     private String remissComment;
-    @JsonProperty(index = 14)
     private String analysisComment;
 
     public Matvarde(String cid,

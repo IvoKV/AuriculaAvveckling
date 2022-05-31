@@ -57,8 +57,8 @@ public class OrdinationsperiodIndikationerBuilder {
 
         while (rsOrdinationer.next()) {
             OrdinationsperiodIndikationer op = new OrdinationsperiodIndikationer(
-                    rsOrdinationer.getString("c.id"),               // varchar(30)
-                    rsOrdinationer.getInt("p.pid"),                 // int unsigned
+                    rsOrdinationer.getString("ID"),               // varchar(30)
+                    rsOrdinationer.getInt("PID"),                 // int unsigned
                     rsOrdinationer.getString("p.SSN"),              // varchar(30)
                     rsOrdinationer.getShort("p.SSN_TYPE"),         // tinyiny
                     rsOrdinationer.getString("rp.FIRSTNAME"),       // varchar(60)

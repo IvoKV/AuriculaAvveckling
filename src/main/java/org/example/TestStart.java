@@ -1,10 +1,15 @@
 package org.example;
 
 import Person.GeneralBefattningBuilder;
+import Person.GeneralBefattningException;
+import auxilliary.GeneralBefattningReadJSON;
+import auxilliary.GeneralBefattningReadJSONException;
 import auxilliary.StringWriter1;
 
+import java.io.IOException;
+
 public class TestStart {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws GeneralBefattningException, GeneralBefattningReadJSONException, IOException {
 //        String unpolished = "Ivo    Kristensjö   Vukmanovic";
 //        StringWriter1 str1 = new StringWriter1(unpolished, 50);
 //        System.out.println("Raw string was: " + unpolished);
@@ -17,6 +22,11 @@ public class TestStart {
 //        System.out.println("First row: " + str.getPolishedStringArray());
 //        //System.out.println("Second row: " + str.getPolishedString());
 
-
+        var genBef = new GeneralBefattningReadJSON("28r3");
+        System.out.println("genBef: ");
+        //genBef.deserializeObject();
+        System.out.println( genBef.getGeneralBefattningFirstName());
+        System.out.println(genBef.getGeneralBefattningLastName());
+        System.out.println(genBef.getGeneralBefattningTitel());
     }
 }
