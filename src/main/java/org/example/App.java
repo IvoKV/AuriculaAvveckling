@@ -30,7 +30,7 @@ public class App
 
     private static final String datasourceHost = "cluster";
 
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException {
+    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException {
 
         if(datasourceHost == "cluster") {
             myConnection = new MyConnection(databaseUse);
@@ -62,8 +62,11 @@ public class App
         //String regpatSSN = "19510403-5125";         // har waranordination comment 451 tecken (längst)
         //regpatSSN = "";
 
-        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
-        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
+        var generalBefattning = new GeneralBefattningBuilder(dbConnection);
+        generalBefattning.buildGeneralBefattning();
+
+//        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
+//        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
 ////
 //        var ordprov = new OrdinationperiodBuilder(dbConnection);
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
