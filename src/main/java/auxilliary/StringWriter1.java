@@ -1,5 +1,13 @@
 package auxilliary;
 
+/***
+ * author: Ivo Kristensjö Vukmanovic
+ * company: Regeionstockholm
+ * purpose: polishes incomming string, ensuring that only one white space appears between the words
+ * return an ListArray<String> of wrapped lines, according to user's preferred length
+ * date: 2022-05-15
+ */
+
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
