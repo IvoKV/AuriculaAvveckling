@@ -1,10 +1,8 @@
 package org.example;
 
-import Person.GeneralBefattningBuilder;
 import Person.GeneralBefattningException;
 import auxilliary.GeneralBefattningReadJSON;
 import auxilliary.GeneralBefattningReadJSONException;
-import auxilliary.StringWriter1;
 
 import java.io.IOException;
 

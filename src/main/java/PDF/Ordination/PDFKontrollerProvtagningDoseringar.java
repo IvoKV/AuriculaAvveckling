@@ -2,7 +2,7 @@ package PDF.Ordination;
 
 import auxilliary.FileOperations;
 import auxilliary.ListGenerics;
-import auxilliary.StringWriter1;
+import auxilliary.TextWrapper;
 import auxilliary.TextShower;
 import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringar;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -404,7 +404,7 @@ public class PDFKontrollerProvtagningDoseringar{
                 if(commentText != null) {
                     commentText = URLDecoder.decode(commentText, StandardCharsets.ISO_8859_1);
 
-                    StringWriter1 stringWriter = new StringWriter1(commentText, 55, false);
+                    TextWrapper stringWriter = new TextWrapper(commentText, 55, false);
                     List<String> polishedStringArray = stringWriter.getPolishedStringArray();
                     int commentLeading = 15;
                     boolean isFirstText = true;

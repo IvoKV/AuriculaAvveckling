@@ -17,7 +17,7 @@ import java.util.List;
 public class PDFOrdinationperiod {
     private List<Ordinationperiod> ordinationperiodList;
 
-    private final String pdfPathFileName = "PDFOrdinationperiod.pdf";
+    private final String pdfPathFileName = "out\\PDFOrdinationperiod.pdf";
     private float x = 0;
     private float y = 750;
     private final float leading = 20;
