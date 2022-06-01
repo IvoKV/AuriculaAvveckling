@@ -3,6 +3,7 @@ package ordination.KontrollerProvtagningDoseringar;
 import PDF.Ordination.PDFOrdinationperiod;
 import Person.PatientGeneralDataException;
 import Person.PersonInChargeException;
+import auxilliary.GeneralBefattningReadJSONException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.json.JSONArray;
@@ -29,7 +30,7 @@ public class OrdinationperiodBuilder {
         this.ordinationperiodList = new ArrayList<>();
     }
 
-    public void buildOrdinationperiod(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, IOException, PersonInChargeException, KontrollerProvtagningDoseringarException, OrdinationperiodException, PatientGeneralDataException {
+    public void buildOrdinationperiod(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, IOException, PersonInChargeException, KontrollerProvtagningDoseringarException, OrdinationperiodException, PatientGeneralDataException, GeneralBefattningReadJSONException {
         Path file = Path.of(sqlScriptFilePathOrdinationperiod);
 
         String sqlStatement = Files.readString(file);

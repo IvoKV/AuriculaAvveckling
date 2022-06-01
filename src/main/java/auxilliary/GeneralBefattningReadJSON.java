@@ -28,6 +28,10 @@ public class GeneralBefattningReadJSON {
     public GeneralBefattningReadJSON(String hsaId) throws GeneralBefattningReadJSONException {
         this.hsaId = hsaId;
 
+        if(hsaId.length() != 4){
+            throw new GeneralBefattningReadJSONException("hsaID validation error: length not = 4");
+        }
+
         try{
             Objects.requireNonNullElse(hsaId, "hsaId is null");
             Paths.get(JSONFilePathBefattning);

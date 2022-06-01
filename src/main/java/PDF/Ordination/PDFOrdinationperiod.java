@@ -1,8 +1,6 @@
 package PDF.Ordination;
 
-import auxilliary.FileOperations;
-import auxilliary.ListGenerics;
-import auxilliary.TextShower;
+import auxilliary.*;
 import com.mysql.cj.exceptions.CJOperationNotSupportedException;
 import ordination.KontrollerProvtagningDoseringar.Ordinationperiod;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -100,7 +98,7 @@ public class PDFOrdinationperiod {
         yHold -= leading;
 
         contentStream.beginText();
-        contentStream.newLineAtOffset(startX2 + 30, yHold);
+        contentStream.newLineAtOffset(startX2 + 30f, yHold);
         contentStream.showText("SSN Type:");
         contentStream.newLineAtOffset(xTab1 , 0);
         contentStream.showText(ordinationperiodList.get(0).getSsnType().toString());
@@ -116,7 +114,7 @@ public class PDFOrdinationperiod {
         y = Math.min(y, yHold);
     }
 
-    public void createOrdinationperiodDetails() throws IOException {
+    public void createOrdinationperiodDetails() throws IOException, GeneralBefattningReadJSONException {
         final float startX = page.getCropBox().getLowerLeftX() + 30;
         float endX = page.getCropBox().getUpperRightX() - 30;
         final float startX2 = startX + 280f;
@@ -144,6 +142,7 @@ public class PDFOrdinationperiod {
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                 contentStream.newLineAtOffset(startX + 160f, yHoldOID);
 
+                /* OID documentation  */
                 StringBuilder sb = new StringBuilder();
                 sb.append(ordinationperiodList.get(arrayItem).getOid());             // GET OID
                 sb.append(" (");
@@ -156,44 +155,26 @@ public class PDFOrdinationperiod {
                 contentStream.endText();
                 sb = null;
 
-                /* PAL TEXT */
-                /*-- kontrollera om T people innehåller PAL */
+                /* (PAL) Ansvarig - Resposible TEXT */
+                StringBuilder responsible = new StringBuilder();
+                GeneralBefattningReadJSON genBef = new GeneralBefattningReadJSON(ordinationperiodList.get(arrayItem).getCreatedBy());
+                responsible.append(genBef.getGeneralBefattningFirstName() + " ");
+                responsible.append(genBef.getGeneralBefattningLastName());
 
-                // todo: få fram title från user ... eller annan tabell
-//                if(TextShower.stringIsNotNull(ordinationperiodList.get(arrayItem).getPalFirstName())){
-//                    StringBuilder namebuilder = new StringBuilder();
-//                    namebuilder.append(ordinationperiodList.get(arrayItem).getPalFirstName());
-//                    namebuilder.append(" ");
-//                    namebuilder.append(ordinationperiodList.get(arrayItem).getPalLastName());
-//                    contentStream.beginText();
-//                    contentStream.setFont(PDType1Font.COURIER, 12);
-//                    contentStream.newLineAtOffset(startX, y);
-//                    contentStream.showText("Ansvarig läk./sjuksk.:");
-//                    contentStream.newLineAtOffset(xTab1 + 50, 0);
-//                    contentStream.showText(namebuilder.toString());
-//                    contentStream.endText();
-//                    contentStream.beginText();
-//                    contentStream.newLineAtOffset(xTab2, y);
-//                    contentStream.showText("Title:");
-//                    contentStream.newLineAtOffset(80, 0);
-//                    TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getPalTitle());
-//                    contentStream.endText();
-//                }
-//                else {
-//                    contentStream.beginText();
-//                    contentStream.setFont(PDType1Font.COURIER, 12);
-//                    contentStream.newLineAtOffset(startX, y);
-//                    contentStream.showText("Ansvarig läk./sjuksk.:");
-//                    contentStream.newLineAtOffset(xTab1 + 50, 0);
-//                    TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getCppalText());
-//                    contentStream.endText();
-//                    contentStream.beginText();
-//                    contentStream.newLineAtOffset(xTab2, y);
-//                    contentStream.showText("Title:");
-//                    contentStream.newLineAtOffset(80, 0);
-//                    TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getPalTitle());
-//                    contentStream.endText();
-//                }
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.COURIER, 12f);
+                contentStream.newLineAtOffset(startX, y);
+                contentStream.showText("Ansvarig:");
+                contentStream.newLineAtOffset(startX + 65f, 0);
+                contentStream.showText(responsible.toString());
+                contentStream.endText();
+                contentStream.beginText();
+                contentStream.newLineAtOffset(startX2 +30f, y);
+                contentStream.showText("Titel:");
+                contentStream.newLineAtOffset(50, 0);
+                contentStream.showText(genBef.getGeneralBefattningTitel());
+                contentStream.endText();
+                responsible = null;
                 yHold = y;
                 yHold -= fontHeight / 2;
 

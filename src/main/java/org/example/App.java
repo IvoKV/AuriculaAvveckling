@@ -2,6 +2,7 @@ package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
 import Person.*;
+import auxilliary.GeneralBefattningReadJSONException;
 import auxilliary.MyConnection;
 import com.jcraft.jsch.JSchException;
 import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringarBuilder;
@@ -30,7 +31,7 @@ public class App
 
     private static final String datasourceHost = "cluster";
 
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException {
+    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException {
 
         if(datasourceHost == "cluster") {
             myConnection = new MyConnection(databaseUse);
