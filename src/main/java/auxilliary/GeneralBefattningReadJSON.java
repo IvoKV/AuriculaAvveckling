@@ -12,6 +12,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/***
+ * author: Ivo Kristensjö Vukmanovic
+ * company: Regionstockholm
+ * purpose: unmarshalling (deserialisering) of JSON to POJO
+ * date: 2022-05-31
+ */
 public class GeneralBefattningReadJSON {
     private String hsaId;
 
