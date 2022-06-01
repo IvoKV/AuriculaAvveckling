@@ -1,4 +1,4 @@
-select c.ID,
+select c.ID AS CENTREID,
         op.OID,
         pat.PID,
     /*-- person id --*/

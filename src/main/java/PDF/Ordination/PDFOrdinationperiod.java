@@ -1,8 +1,10 @@
 package PDF.Ordination;
 
+import Mott.JournalcommentBuilder;
+import Mott.JournalcommentException;
+import PDF.Mott.PDFJournalcomment;
 import auxilliary.*;
-import com.mysql.cj.exceptions.CJOperationNotSupportedException;
-import ordination.KontrollerProvtagningDoseringar.Ordinationperiod;
+import Ordinationperiod.Ordinationperiod;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -10,10 +12,13 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class PDFOrdinationperiod {
     private List<Ordinationperiod> ordinationperiodList;
+    private Connection connection;
 
     private final String pdfPathFileName = "out\\PDFOrdinationperiod.pdf";
     private float x = 0;
@@ -31,8 +36,9 @@ public class PDFOrdinationperiod {
     private PDPageContentStream contentStream = null;
     private int sidaNo = 0;
 
-    public PDFOrdinationperiod(List<Ordinationperiod> ordinationplist) throws IOException {
+    public PDFOrdinationperiod(List<Ordinationperiod> ordinationplist, Connection connection) throws IOException {
         this.ordinationperiodList = ordinationplist;
+        this.connection = connection;
 
         /** Initialize document and first page **/
         this.document = new PDDocument();
@@ -114,7 +120,7 @@ public class PDFOrdinationperiod {
         y = Math.min(y, yHold);
     }
 
-    public void createOrdinationperiodDetails() throws IOException, GeneralBefattningReadJSONException {
+    public void createOrdinationperiodDetails() throws IOException, GeneralBefattningReadJSONException, JournalcommentException, SQLException {
         final float startX = page.getCropBox().getLowerLeftX() + 30;
         float endX = page.getCropBox().getUpperRightX() - 30;
         final float startX2 = startX + 280f;
@@ -133,10 +139,10 @@ public class PDFOrdinationperiod {
             writePatientInfo();     // written only once, on page 1
 
             int arraySize = ordinationperiodList.size();
-            int currentOID = 0;
-            int oidCounter = 0;
 
             for(int arrayItem = 0; arrayItem < arraySize; arrayItem++ ) {
+                int currentOID = ordinationperiodList.get(arrayItem).getOid();
+
                 /* ADDITION: OID */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
@@ -421,8 +427,15 @@ public class PDFOrdinationperiod {
                 TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getUpdatedBy());
                 contentStream.endText();
                 y -= leading;
+                /** end of Ordinationperiod page **/
 
-                /** end of page **/
+                /* adding JOURNALCOMMENT */
+                JournalcommentBuilder  journalcommentBuilder = new JournalcommentBuilder(connection, currentOID);
+                String centreId = ordinationperiodList.get(arrayItem).getCentreId();
+                String ssn = ordinationperiodList.get(arrayItem).getSsn();
+                journalcommentBuilder.buildJournalcomment(centreId, ssn, contentStream);
+                /** end of Journalcomment addition **/
+
                 contentStream.close();
 
                if (arrayItem < arraySize - 1) {

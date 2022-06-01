@@ -1,9 +1,7 @@
 package Person;
 
-import auxilliary.MappingPositions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringar;
 import org.json.JSONArray;
 
 import java.io.FileWriter;
