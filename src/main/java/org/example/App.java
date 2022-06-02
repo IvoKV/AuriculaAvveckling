@@ -1,15 +1,18 @@
 package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
+import Mott.JournalcommentBuilder;
+import Mott.JournalcommentException;
+import Ordinationperiod.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringarBuilder;
 import Person.*;
+import auxilliary.GeneralBefattningReadJSONException;
 import auxilliary.MyConnection;
 import com.jcraft.jsch.JSchException;
-import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringarBuilder;
-import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringarException;
-import ordination.KontrollerProvtagningDoseringar.OrdinationperiodBuilder;
-import ordination.KontrollerProvtagningDoseringar.OrdinationperiodException;
-import ordination.Matvarde.MatvardeInitializationException;
-import ordination.Waran.*;
+import Ordinationperiod.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringarException;
+import Ordinationperiod.OrdinationperiodBuilder;
+import Ordinationperiod.OrdinationperiodException;
+import Ordinationperiod.Matvarde.MatvardeInitializationException;
+import Ordinationperiod.Waran.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,7 +33,7 @@ public class App
 
     private static final String datasourceHost = "cluster";
 
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException {
+    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException, JournalcommentException {
 
         if(datasourceHost == "cluster") {
             myConnection = new MyConnection(databaseUse);
@@ -62,14 +65,15 @@ public class App
         //String regpatSSN = "19510403-5125";         // har waranordination comment 451 tecken (längst)
         //regpatSSN = "";
 
-        var generalBefattning = new GeneralBefattningBuilder(dbConnection);
-        generalBefattning.buildGeneralBefattning();
+//        var generalBefattning = new GeneralBefattningBuilder(dbConnection);
+//        generalBefattning.buildGeneralBefattning();
 
-//        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
-//        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
+        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
+        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
 ////
 //        var ordprov = new OrdinationperiodBuilder(dbConnection);
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
+
 
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file

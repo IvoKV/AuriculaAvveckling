@@ -1,10 +1,11 @@
 package PDF.Ordination;
 
-import auxilliary.FileOperations;
-import auxilliary.ListGenerics;
-import auxilliary.TextShower;
-import com.mysql.cj.exceptions.CJOperationNotSupportedException;
-import ordination.KontrollerProvtagningDoseringar.Ordinationperiod;
+import Mott.JournalcommentBuilder;
+import Mott.JournalcommentException;
+import PDF.Mott.PDFJournalcomment;
+import Person.GeneralBefattning;
+import auxilliary.*;
+import Ordinationperiod.Ordinationperiod;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -12,12 +13,15 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class PDFOrdinationperiod {
     private List<Ordinationperiod> ordinationperiodList;
+    private Connection connection;
 
-    private final String pdfPathFileName = "PDFOrdinationperiod.pdf";
+    private final String pdfPathFileName = "out\\PDFOrdinationperiod.pdf";
     private float x = 0;
     private float y = 750;
     private final float leading = 20;
@@ -33,8 +37,9 @@ public class PDFOrdinationperiod {
     private PDPageContentStream contentStream = null;
     private int sidaNo = 0;
 
-    public PDFOrdinationperiod(List<Ordinationperiod> ordinationplist) throws IOException {
+    public PDFOrdinationperiod(List<Ordinationperiod> ordinationplist, Connection connection) throws IOException {
         this.ordinationperiodList = ordinationplist;
+        this.connection = connection;
 
         /** Initialize document and first page **/
         this.document = new PDDocument();
@@ -79,7 +84,7 @@ public class PDFOrdinationperiod {
         contentStream.newLineAtOffset(startX, y);
         contentStream.showText("Förnamn:");
         contentStream.newLineAtOffset(xTab1, 0);
-        contentStream.showText(ordinationperiodList.get(0).getFirstName());
+        contentStream.showText(ordinationperiodList.get(0).getPatFirstName());
         contentStream.endText();
         y -= leading;
 
@@ -87,7 +92,7 @@ public class PDFOrdinationperiod {
         contentStream.newLineAtOffset(startX, y);
         contentStream.showText("Efternamn:");
         contentStream.newLineAtOffset(xTab1, 0);
-        contentStream.showText(ordinationperiodList.get(0).getLastName());
+        contentStream.showText(ordinationperiodList.get(0).getPatLastName());
         contentStream.endText();
         y -= leading;
 
@@ -100,10 +105,10 @@ public class PDFOrdinationperiod {
         yHold -= leading;
 
         contentStream.beginText();
-        contentStream.newLineAtOffset(startX2 + 30, yHold);
+        contentStream.newLineAtOffset(startX2 + 30f, yHold);
         contentStream.showText("SSN Type:");
         contentStream.newLineAtOffset(xTab1 , 0);
-        contentStream.showText(ordinationperiodList.get(0).getSsntype().toString());
+        contentStream.showText(ordinationperiodList.get(0).getSsnType().toString());
         contentStream.endText();
         yHold -= leading;
 
@@ -116,7 +121,7 @@ public class PDFOrdinationperiod {
         y = Math.min(y, yHold);
     }
 
-    public void createOrdinationperiodDetails() throws IOException {
+    public void createOrdinationperiodDetails() throws IOException, GeneralBefattningReadJSONException, JournalcommentException, SQLException {
         final float startX = page.getCropBox().getLowerLeftX() + 30;
         float endX = page.getCropBox().getUpperRightX() - 30;
         final float startX2 = startX + 280f;
@@ -135,17 +140,18 @@ public class PDFOrdinationperiod {
             writePatientInfo();     // written only once, on page 1
 
             int arraySize = ordinationperiodList.size();
-            int currentOID = 0;
-            int oidCounter = 0;
 
             for(int arrayItem = 0; arrayItem < arraySize; arrayItem++ ) {
+                int currentOID = ordinationperiodList.get(arrayItem).getOid();
+
                 /* ADDITION: OID */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
                 contentStream.newLineAtOffset(startX + 160f, yHoldOID);
 
+                /* OID documentation  */
                 StringBuilder sb = new StringBuilder();
-                sb.append(ordinationperiodList.get(arrayItem).getOid());
+                sb.append(ordinationperiodList.get(arrayItem).getOid());             // GET OID
                 sb.append(" (");
                 sb.append(arrayItem + 1);
                 sb.append( " av ");
@@ -156,44 +162,26 @@ public class PDFOrdinationperiod {
                 contentStream.endText();
                 sb = null;
 
-                /* PAL TEXT */
-                /*-- kontrollera om T people innehåller PAL */
+                /* (PAL) Ansvarig - Resposible TEXT */
+                StringBuilder responsible = new StringBuilder();
+                GeneralBefattningReadJSON genBef = new GeneralBefattningReadJSON(ordinationperiodList.get(arrayItem).getCreatedBy());
+                responsible.append(genBef.getGeneralBefattningFirstName() + " ");
+                responsible.append(genBef.getGeneralBefattningLastName());
 
-                // todo: få fram title från user ... eller annan tabell
-                if(TextShower.stringIsNotNull(ordinationperiodList.get(arrayItem).getPalFirstName())){
-                    StringBuilder namebuilder = new StringBuilder();
-                    namebuilder.append(ordinationperiodList.get(arrayItem).getPalFirstName());
-                    namebuilder.append(" ");
-                    namebuilder.append(ordinationperiodList.get(arrayItem).getPalLastName());
-                    contentStream.beginText();
-                    contentStream.setFont(PDType1Font.COURIER, 12);
-                    contentStream.newLineAtOffset(startX, y);
-                    contentStream.showText("Ansvarig läk./sjuksk.:");
-                    contentStream.newLineAtOffset(xTab1 + 50, 0);
-                    contentStream.showText(namebuilder.toString());
-                    contentStream.endText();
-                    contentStream.beginText();
-                    contentStream.newLineAtOffset(xTab2, y);
-                    contentStream.showText("Title:");
-                    contentStream.newLineAtOffset(80, 0);
-                    TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getPalTitle());
-                    contentStream.endText();
-                }
-                else {
-                    contentStream.beginText();
-                    contentStream.setFont(PDType1Font.COURIER, 12);
-                    contentStream.newLineAtOffset(startX, y);
-                    contentStream.showText("Ansvarig läk./sjuksk.:");
-                    contentStream.newLineAtOffset(xTab1 + 50, 0);
-                    TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getCppalText());
-                    contentStream.endText();
-                    contentStream.beginText();
-                    contentStream.newLineAtOffset(xTab2, y);
-                    contentStream.showText("Title:");
-                    contentStream.newLineAtOffset(80, 0);
-                    TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getPalTitle());
-                    contentStream.endText();
-                }
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.COURIER, 12f);
+                contentStream.newLineAtOffset(startX, y);
+                contentStream.showText("Ansvarig:");
+                contentStream.newLineAtOffset(startX + 65f, 0);
+                contentStream.showText(responsible.toString());
+                contentStream.endText();
+                contentStream.beginText();
+                contentStream.newLineAtOffset(startX2 +30f, y);
+                contentStream.showText("Titel:");
+                contentStream.newLineAtOffset(50, 0);
+                contentStream.showText(genBef.getGeneralBefattningTitel());
+                contentStream.endText();
+                genBef = null;
                 yHold = y;
                 yHold -= fontHeight / 2;
 
@@ -259,7 +247,6 @@ public class PDFOrdinationperiod {
                 contentStream.endText();
                 y -= leading;
 
-
                 /* DCCONVERSION */
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
@@ -296,7 +283,6 @@ public class PDFOrdinationperiod {
                 contentStream.endText();
                 y -= leading;
 
-
                 /* DOSE MODE */
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
@@ -305,7 +291,6 @@ public class PDFOrdinationperiod {
                 TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getDoseMode());
                 contentStream.endText();
                 y -= leading;
-
 
                 /*  CREAINTERVAL FIRSTYEAR */
                 contentStream.beginText();
@@ -428,20 +413,33 @@ public class PDFOrdinationperiod {
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Createdby:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getCreatedBy());
+                TextShower.showString(contentStream, responsible.toString());
                 contentStream.endText();
+                responsible = null;
 
                 /* -> UPDATEDBY */
+                StringBuilder updatedBy = new StringBuilder();
+                GeneralBefattningReadJSON genBef1 = new GeneralBefattningReadJSON(ordinationperiodList.get(arrayItem).getUpdatedBy());
+                updatedBy.append(genBef1.getGeneralBefattningFirstName() + " ");
+                updatedBy.append(genBef1.getGeneralBefattningLastName());
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX2, y);
                 contentStream.showText("Updatedby:");
                 contentStream.newLineAtOffset(x2Offset + 10f, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getUpdatedBy());
+                TextShower.showString(contentStream, updatedBy.toString());
                 contentStream.endText();
+                genBef1 = null;
                 y -= leading;
+                /** end of Ordinationperiod page **/
 
-                /** end of page **/
+                /* adding JOURNALCOMMENT */
+                JournalcommentBuilder  journalcommentBuilder = new JournalcommentBuilder(connection, currentOID);
+                String centreId = ordinationperiodList.get(arrayItem).getCentreId();
+                String ssn = ordinationperiodList.get(arrayItem).getSsn();
+                journalcommentBuilder.buildJournalcomment(centreId, ssn, contentStream);
+                /** end of Journalcomment addition **/
+
                 contentStream.close();
 
                if (arrayItem < arraySize - 1) {

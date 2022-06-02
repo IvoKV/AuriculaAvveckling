@@ -1,6 +1,6 @@
 package auxilliary;
 
-import ordination.KontrollerProvtagningDoseringar.OrdinationID;
+import Ordinationperiod.KontrollerProvtagningDoseringar.OrdinationID;
 
 import java.util.HashSet;
 import java.util.List;
