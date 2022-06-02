@@ -3,6 +3,7 @@ package PDF.Ordination;
 import Mott.JournalcommentBuilder;
 import Mott.JournalcommentException;
 import PDF.Mott.PDFJournalcomment;
+import Person.GeneralBefattning;
 import auxilliary.*;
 import Ordinationperiod.Ordinationperiod;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -180,7 +181,7 @@ public class PDFOrdinationperiod {
                 contentStream.newLineAtOffset(50, 0);
                 contentStream.showText(genBef.getGeneralBefattningTitel());
                 contentStream.endText();
-                responsible = null;
+                genBef = null;
                 yHold = y;
                 yHold -= fontHeight / 2;
 
@@ -246,7 +247,6 @@ public class PDFOrdinationperiod {
                 contentStream.endText();
                 y -= leading;
 
-
                 /* DCCONVERSION */
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
@@ -283,7 +283,6 @@ public class PDFOrdinationperiod {
                 contentStream.endText();
                 y -= leading;
 
-
                 /* DOSE MODE */
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
@@ -292,7 +291,6 @@ public class PDFOrdinationperiod {
                 TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getDoseMode());
                 contentStream.endText();
                 y -= leading;
-
 
                 /*  CREAINTERVAL FIRSTYEAR */
                 contentStream.beginText();
@@ -415,17 +413,23 @@ public class PDFOrdinationperiod {
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Createdby:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getCreatedBy());
+                TextShower.showString(contentStream, responsible.toString());
                 contentStream.endText();
+                responsible = null;
 
                 /* -> UPDATEDBY */
+                StringBuilder updatedBy = new StringBuilder();
+                GeneralBefattningReadJSON genBef1 = new GeneralBefattningReadJSON(ordinationperiodList.get(arrayItem).getUpdatedBy());
+                updatedBy.append(genBef1.getGeneralBefattningFirstName() + " ");
+                updatedBy.append(genBef1.getGeneralBefattningLastName());
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX2, y);
                 contentStream.showText("Updatedby:");
                 contentStream.newLineAtOffset(x2Offset + 10f, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getUpdatedBy());
+                TextShower.showString(contentStream, updatedBy.toString());
                 contentStream.endText();
+                genBef1 = null;
                 y -= leading;
                 /** end of Ordinationperiod page **/
 

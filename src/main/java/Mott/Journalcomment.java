@@ -11,7 +11,6 @@ public class Journalcomment {
     private int oid;
     private String journalcomment;
     private String createdBy;
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Timestamp tsCreated;
 
     private List<String> wrappedJournalComment;

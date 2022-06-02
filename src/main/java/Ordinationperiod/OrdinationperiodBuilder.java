@@ -1,10 +1,8 @@
 package Ordinationperiod;
 
 import Mott.JournalcommentException;
-import Ordinationperiod.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringarException;
 import PDF.Ordination.PDFOrdinationperiod;
 import Person.PatientGeneralDataException;
-import Person.PersonInChargeException;
 import auxilliary.GeneralBefattningReadJSONException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

@@ -16,7 +16,8 @@ import java.util.Map;
 public class PDFJournalcomment {
     private Map<Integer, Journalcomment> journalcommentList;
 
-    private final String pdfPathFileName = "out\\PDFJournalcomment.pdf";
+    // the Journalcomment is merged in to PDFOrdinationperiod
+    //private final String pdfPathFileName = "out\\PDFJournalcomment.pdf";
     private float x = 0;
     private float y = 750;
     private final float leading = 20;
@@ -123,7 +124,6 @@ public class PDFJournalcomment {
                 contentStream.endText();
                 ts = null;
             }
-            contentStream.close();
         }
     }
 }
