@@ -10,6 +10,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Map;
 
 public class PDFJournalcomment {
@@ -85,12 +86,13 @@ public class PDFJournalcomment {
                 contentStream.beginText();
                 contentStream.setFont(fontNormal, fontSize);
                 contentStream.newLineAtOffset(startX, y);
+                Timestamp ts = null;
 
                 for (var wrappedText : entry.getValue().getWrappedJournalComment()) {
                     contentStream.showText(wrappedText);
                     contentStream.newLine();
                     y -= leading;
-
+                    ts = entry.getValue().getTsCreated();
                 }
 
                 var createdBy = entry.getValue().getCreatedBy();
@@ -100,7 +102,7 @@ public class PDFJournalcomment {
                 responsible.append(genBef.getGeneralBefattningLastName());
 
                 contentStream.showText("Ansvarig: ");
-                contentStream.newLineAtOffset(startX + 65f, 0);
+                contentStream.newLineAtOffset(startX + 75f, 0);
                 contentStream.showText(responsible.toString());
                 contentStream.endText();
                 contentStream.beginText();
@@ -108,9 +110,17 @@ public class PDFJournalcomment {
                 contentStream.showText("Titel:");
                 contentStream.newLineAtOffset(50, 0);
                 contentStream.showText(genBef.getGeneralBefattningTitel());
-
                 contentStream.endText();
+                y -= leading;
                 responsible = null;
+
+                /* DATUM */
+                contentStream.beginText();
+                contentStream.newLineAtOffset(startX, y);
+                contentStream.showText("Dat. created:");
+                contentStream.newLineAtOffset(startX + 75f, 0);
+                contentStream.showText(ts.toString().substring(0, 19));
+                contentStream.endText();
             }
             contentStream.close();
         }

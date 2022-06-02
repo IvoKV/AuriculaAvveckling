@@ -45,44 +45,44 @@ public class OrdinationperiodBuilder {
 
         while (rs.next()) {
             Ordinationperiod ordinationperiod = new Ordinationperiod(
-                    rs.getString("CENTREID  "),
+                    rs.getString("CENTREID"),
                     rs.getInt("OID"),
                     rs.getInt("PID"),
                     rs.getString("FIRSTNAME"),
                     rs.getString("LASTNAME"),
 
                     rs.getString("SSN"),
-                    rs.getShort("SSN_TYPE"),                    // 5
+                    rs.getShort("SSN_TYPE"),
                     rs.getString("MEDICINETYPE_TXT"),
                     rs.getString("ATRIALFIB_TXT"),
                     rs.getString("VALVEMALFUNCTION_TXT"),
 
                     rs.getString("VENOUSTROMB_TXT"),
-                    rs.getString("OTHER_TXT"),                      // 10
+                    rs.getString("OTHER_TXT"),
                     rs.getString("OTHERCHILDINDICATION_TXT"),
                     rs.getString("DCCONVERSION_TXT"),
                     rs.getShort("DCTHERAPYDROPOUT"),
 
                     rs.getString("PERIODLENGTH_TXT"),
-                    rs.getString("MEDICIN_TXT"),                    // 15
+                    rs.getString("MEDICIN_TXT"),
                     rs.getString("DOSEMODE_TXT"),
                     rs.getString("CREAINTERVALFIRSTYEAR_TXT"),
                     rs.getString("CREAINTERVAL_TXT"),
 
                     rs.getDate("STARTDATE"),
-                    rs.getDate("ENDDATE"),                          // 20
+                    rs.getDate("ENDDATE"),
                     rs.getDate("CREACOMPLATESTCREATED"),
                     rs.getInt("CREACOMPLFOLYEAR"),
                     rs.getString("CREACOMPLFIRSTYEAR_TXT"),
 
                     rs.getString("REASONSTOPPED_TXT"),
-                    rs.getDate("CONTINUELATECHECK"),                // 25
+                    rs.getDate("CONTINUELATECHECK"),
                     rs.getString("CREATEDBY"),
                     rs.getString("UPDATEDBY"),
                     rs.getString("LENGTHCOMMENT"),
 
                     rs.getString("INRMETHOD_TXT"),
-                    rs.getShort("COMPLFOLYEAR")                     // 30
+                    rs.getShort("COMPLFOLYEAR")
             );
             ordinationperiodList.add(ordinationperiod);
         }
