@@ -121,6 +121,7 @@ public class PDFJournalcomment {
                 contentStream.newLineAtOffset(startX + 75f, 0);
                 contentStream.showText(ts.toString().substring(0, 19));
                 contentStream.endText();
+                ts = null;
             }
             contentStream.close();
         }
