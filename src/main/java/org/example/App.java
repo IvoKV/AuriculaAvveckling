@@ -1,18 +1,17 @@
 package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
-import Mott.JournalcommentBuilder;
 import Mott.JournalcommentException;
-import Ordinationperiod.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringarBuilder;
+import OrdinationMOTT.OrdinationperiodBuilder;
+import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilder;
+import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
 import Person.*;
 import auxilliary.GeneralBefattningReadJSONException;
 import auxilliary.MyConnection;
 import com.jcraft.jsch.JSchException;
-import Ordinationperiod.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringarException;
-import Ordinationperiod.OrdinationperiodBuilder;
-import Ordinationperiod.OrdinationperiodException;
-import Ordinationperiod.Matvarde.MatvardeInitializationException;
-import Ordinationperiod.Waran.*;
+import OrdinationperiodLKM.KontrollerProvtagningDoseringarException;
+import OrdinationMOTT.OrdinationperiodException;
+import OrdinationperiodLKM.Matvarde.MatvardeInitializationException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -68,11 +67,11 @@ public class App
 //        var generalBefattning = new GeneralBefattningBuilder(dbConnection);
 //        generalBefattning.buildGeneralBefattning();
 
-        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
-        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
-////
-//        var ordprov = new OrdinationperiodBuilder(dbConnection);
-//        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
+//        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
+//        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
+//////
+        var ordprov = new OrdinationperiodBuilder(dbConnection);
+        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
 
 //        var personPat = new PersonPatientBuilder(dbConnection);

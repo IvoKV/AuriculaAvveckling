@@ -1,4 +1,4 @@
-package Ordinationperiod.KontrollerProvtagningDoseringar;
+package OrdinationperiodLKM;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

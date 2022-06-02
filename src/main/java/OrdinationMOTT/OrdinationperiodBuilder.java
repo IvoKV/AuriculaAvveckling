@@ -1,4 +1,4 @@
-package Ordinationperiod;
+package OrdinationMOTT;
 
 import Mott.JournalcommentException;
 import PDF.Ordination.PDFOrdinationperiod;

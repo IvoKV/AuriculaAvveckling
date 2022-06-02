@@ -1,4 +1,4 @@
-package Ordinationperiod.KontrollerProvtagningDoseringar;
+package OrdinationperiodLKM;
 
 public class KontrollerProvtagningDoseringarException extends Exception {
 

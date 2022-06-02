@@ -1,5 +1,6 @@
-package Ordinationperiod.KontrollerProvtagningDoseringar;
+package OrdinationperiodLKM;
 
+import OrdinationperiodLKM.KontrollerProvtagningDoseringar;
 import PDF.Ordination.PDFKontrollerProvtagningDoseringar;
 import Person.PersonInChargeException;
 import com.fasterxml.jackson.databind.ObjectMapper;

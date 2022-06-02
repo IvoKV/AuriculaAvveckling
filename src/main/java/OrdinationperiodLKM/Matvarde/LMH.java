@@ -1,4 +1,4 @@
-package Ordinationperiod.Matvarde;
+package OrdinationperiodLKM.Matvarde;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

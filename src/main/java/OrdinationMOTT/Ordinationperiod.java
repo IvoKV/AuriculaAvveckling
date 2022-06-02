@@ -1,4 +1,4 @@
-package Ordinationperiod;
+package OrdinationMOTT;
 
 import Person.PatientGeneralData;
 import Person.PatientGeneralDataException;
