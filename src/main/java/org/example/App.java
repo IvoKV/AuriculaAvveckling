@@ -3,6 +3,7 @@ package org.example;
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
 import Mott.JournalcommentBuilder;
 import Mott.JournalcommentException;
+import Ordinationperiod.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringarBuilder;
 import Person.*;
 import auxilliary.GeneralBefattningReadJSONException;
 import auxilliary.MyConnection;
@@ -67,11 +68,11 @@ public class App
 //        var generalBefattning = new GeneralBefattningBuilder(dbConnection);
 //        generalBefattning.buildGeneralBefattning();
 
-//        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
-//        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
+        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
+        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
 ////
-        var ordprov = new OrdinationperiodBuilder(dbConnection);
-        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
+//        var ordprov = new OrdinationperiodBuilder(dbConnection);
+//        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
 
 //        var personPat = new PersonPatientBuilder(dbConnection);

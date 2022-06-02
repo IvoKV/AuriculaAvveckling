@@ -21,7 +21,7 @@ public class PDFKontrollerProvtagningDoseringar{
     List<KontrollerProvtagningDoseringar> kontrollerProvtagningDoseringarList;
 
     private ListGenerics listGenerics;
-    private final String pdfPathFileName = "PDFKontrollerProvtagningDoseringar.pdf";
+    private final String pdfPathFileName = "out\\PDFKontrollerProvtagningDoseringar.pdf";
 
 
     private float x = 0;
