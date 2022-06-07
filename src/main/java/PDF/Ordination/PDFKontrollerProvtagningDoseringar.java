@@ -23,7 +23,6 @@ public class PDFKontrollerProvtagningDoseringar{
     private ListGenerics listGenerics;
     private final String pdfPathFileName = "out\\PDFKontrollerProvtagningDoseringar.pdf";
 
-
     private float x = 0;
     private float y = 750;
     private final float leading = 20;

@@ -1,5 +1,17 @@
 package MV;
 
+import OrdinationMOTT.Ordinationperiod;
+import PDF.MV.PDFMatvardeL;
+import PDF.Ordination.PDFOrdinationperiod;
+import auxilliary.GeneralBefattningReadJSONException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.json.JSONArray;
+
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,15 +26,16 @@ public class MatvardeLBuilder {
     private Connection connection;
 
     private final String sqlScriptFileMatvardeL = "src/resource/sql/matvarde/MatvardeL.sql";
+    private final String JSONFileName = "temp/matvarde/matvardeL.json";
 
     List<MatvardeL> matvardeLList = null;
 
-    public MatvardeLBuilder(final Connection con) {
+    public MatvardeLBuilder(final Connection con) throws IOException {
         this.connection = con;
         this.matvardeLList = new ArrayList<>();
     }
 
-    public void buildMatvardeL(String centreId, String regpatSSN, Boolean writeToFile) throws IOException, SQLException, MatvardeLBuilderException {
+    public void buildMatvardeL(String centreId, String regpatSSN, Boolean writeToFile) throws IOException, SQLException, MatvardeLBuilderException, GeneralBefattningReadJSONException {
         Path file = Path.of(sqlScriptFileMatvardeL);
 
         String sqlStatement = Files.readString(file);
@@ -32,6 +45,8 @@ public class MatvardeLBuilder {
         preparedStatement.setString(2, regpatSSN);
 
         ResultSet rs = preparedStatement.executeQuery();
+
+        List<MatvardeL> matvardeLlist = new ArrayList<>();
 
         while (rs.next()) {
             MatvardeL matvardeL = new MatvardeL(
@@ -65,6 +80,38 @@ public class MatvardeLBuilder {
                     rs.getString("CHA2_UPDATEDBY"),
                     rs.getTimestamp("CHA2_TSCREATED")
             );
+            matvardeLlist.add(matvardeL);
         }
+
+        /***  Här skapas PDF dokumentet ***/
+        if(matvardeLlist.size() > 0) {
+            PDFMatvardeL pdfMatvardeL = new PDFMatvardeL(matvardeLlist);
+            pdfMatvardeL.createMatvardeLDetails();
+        }
+
+        System.out.println("Antal matvardeL: " + matvardeLlist.size());
+
+        System.out.println(matvardeLlist);
+
+        if(writeToFile) {
+            POJOListToJSONToFile(matvardeLlist);
+        }
+    }
+
+    private void POJOListToJSONToFile(List<MatvardeL> matvarde) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        String arrayToJson = objectMapper.writeValueAsString(matvarde);
+        JSONArray jArr = new JSONArray(arrayToJson);
+
+        // 1. Convert List of person objects to JSON :");
+        System.out.println(arrayToJson);
+        System.out.println("Total antal poster (json objekt): " + jArr.length());
+
+        FileWriter jsonWriter = new FileWriter(JSONFileName);
+        jsonWriter.write(arrayToJson);
+        jsonWriter.write("\nTotal antal poster (json objekt): " + jArr.length() + System.lineSeparator());
+        jsonWriter.close();
     }
 }
