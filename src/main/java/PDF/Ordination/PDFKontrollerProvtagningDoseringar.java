@@ -46,7 +46,7 @@ public class PDFKontrollerProvtagningDoseringar{
         this.page = new PDPage();
 
         /** Initialize content stream, first page **/
-        contentStream = new PDPageContentStream(document, page);
+        this.contentStream = new PDPageContentStream(document, page);
     }
 
     private void writeHeader() throws IOException {

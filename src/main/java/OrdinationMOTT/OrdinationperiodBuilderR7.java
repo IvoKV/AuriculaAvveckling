@@ -1,6 +1,8 @@
 package OrdinationMOTT;
 
+import Mott.JournalcommentBuilderR7;
 import Mott.JournalcommentException;
+import PDF.Mott.PDFJournalcommentR7;
 import PDF.Ordination.PDFOrdinationperiod;
 import PDF.Ordination.PDFOrdinationperiodR7;
 import Person.PatientGeneralDataException;
@@ -18,7 +20,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class OrdinationperiodBuilderR7 {
     private final String sqlScriptFilePathOrdinationperiod = "src/resource/sql/ordination/Ordinationperiod.sql";      // All titles, creating a total of employees in charge
@@ -95,10 +99,23 @@ public class OrdinationperiodBuilderR7 {
             ordinationperiodListR7.add(ordinationperiod);
         }
 
+        Set<Integer> oidList = new HashSet<>();
+        for(var item : ordinationperiodListR7){
+             oidList.add( item.getOid());
+        }
+
         /***  Här skapas PDF dokumentet ***/
+        String patFirstName = ordinationperiodListR7.get(0).getPatFirstName();
+        String patLastName = ordinationperiodListR7.get(0).getPatLastName();
+        Short ssnType = ordinationperiodListR7.get(0).getSsnType();
         if(ordinationperiodListR7.size() > 0) {
-            PDFOrdinationperiodR7 pdfOrdinationperiodR7 = new PDFOrdinationperiodR7(ordinationperiodListR7, myConnection);
-            pdfOrdinationperiodR7.createOrdinationperiodDetails();
+            PDFOrdinationperiodR7 pdfOrdinationperiodR7 = new PDFOrdinationperiodR7(ordinationperiodListR7);
+            pdfOrdinationperiodR7.createOrdinationperiodDetails(centreId, regpatSSN);
+        }
+        /*** Här skapas den tillhörande Journalcomment, 1 per Ordinationperiod ***/
+        for(var oidItem : oidList){
+            JournalcommentBuilderR7 journalcommentR7Builder = new JournalcommentBuilderR7(myConnection, centreId, oidItem, regpatSSN, ssnType, patFirstName, patLastName);
+            journalcommentR7Builder.buildJournalcomment();
         }
 
         ordinationperiodListR7.stream()

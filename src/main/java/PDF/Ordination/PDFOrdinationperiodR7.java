@@ -21,9 +21,9 @@ import java.util.List;
 
 public class PDFOrdinationperiodR7 {
     private List<OrdinationperiodR7> ordinationperiodListR7;
-    private Connection connection;
+    //private Connection connection;
 
-    private final String pdfPathFileName = "out\\PDFOrdinationperiodR7.pdf";
+    private final String pdfPathFileName = "out/PDFOrdinationperiodR7.pdf";
     private float x = 0;
     private float y = 750;
     private final float leading = 20;
@@ -39,16 +39,16 @@ public class PDFOrdinationperiodR7 {
     private PDPageContentStream contentStream = null;
     private int sidaNo = 0;
 
-    public PDFOrdinationperiodR7(List<OrdinationperiodR7> ordinationplist, Connection connection) throws IOException {
+    public PDFOrdinationperiodR7(List<OrdinationperiodR7> ordinationplist) throws IOException {
         this.ordinationperiodListR7 = ordinationplist;
-        this.connection = connection;
+        //this.connection = connection;
 
         /** Initialize document and first page **/
         this.document = new PDDocument();
         this.page = new PDPage();
 
         /** Initialize content stream, first page **/
-        contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+        contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, true, true);
     }
 
     private void writeHeader() throws IOException {
@@ -123,7 +123,7 @@ public class PDFOrdinationperiodR7 {
         y = Math.min(y, yHold);
     }
 
-    public void createOrdinationperiodDetails() throws IOException, GeneralBefattningReadJSONException, JournalcommentException, SQLException {
+    public void createOrdinationperiodDetails(String cid, String ssn) throws IOException, GeneralBefattningReadJSONException, JournalcommentException, SQLException {
         final float startX = page.getCropBox().getLowerLeftX() + 30;
         float endX = page.getCropBox().getUpperRightX() - 30;
         final float startX2 = startX + 280f;
@@ -353,15 +353,7 @@ public class PDFOrdinationperiodR7 {
                 TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getReasonStopped());
                 contentStream.endText();
                 y -= leading;
-
                 /** end of Ordinationperiod page **/
-
-                /* adding JOURNALCOMMENT */
-                JournalcommentBuilder  journalcommentBuilder = new JournalcommentBuilder(connection, currentOID);
-                String centreId = ordinationperiodListR7.get(arrayItem).getCentreId();
-                String ssn = ordinationperiodListR7.get(arrayItem).getSsn();
-                journalcommentBuilder.buildJournalcomment(centreId, ssn, contentStream);
-                /** end of Journalcomment addition **/
 
                 contentStream.close();
 
@@ -372,7 +364,6 @@ public class PDFOrdinationperiodR7 {
                    contentStream.setLeading(leading);
                    writeHeader();
                }
-
             }
             contentStream.close();
             writePageNumbers();
@@ -383,6 +374,7 @@ public class PDFOrdinationperiodR7 {
         String filenameWithSSN = fileWithoutExtension + "_" + ordinationperiodListR7.get(0).getSsn() + ".pdf";
         document.save(filenameWithSSN);
         document.close();
+        document = null;
     }
 
     private void writePageNumbers() throws IOException {
