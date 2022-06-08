@@ -1,12 +1,9 @@
 package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
-import MV.MatvardeL;
-import MV.MatvardeLBuilder;
 import MV.MatvardeLBuilderException;
 import Mott.JournalcommentException;
-import OrdinationMOTT.OrdinationperiodBuilder;
-import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilder;
+import OrdinationMOTT.OrdinationperiodBuilderR7;
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
 import Person.*;
 import auxilliary.GeneralBefattningReadJSONException;
@@ -68,8 +65,8 @@ public class App
         String regpatSSN = "19410603-9375";
         //regpatSSN = "";
 
-        var mvb = new MatvardeLBuilder(dbConnection);
-        mvb.buildMatvardeL(centreID, regpatSSN, false);
+//        var mvb = new MatvardeLBuilder(dbConnection);
+//        mvb.buildMatvardeL(centreID, regpatSSN, false);
 
 //        var generalBefattning = new GeneralBefattningBuilder(dbConnection);
 //        generalBefattning.buildGeneralBefattning();
@@ -79,6 +76,9 @@ public class App
 //////
 //        var ordprov = new OrdinationperiodBuilder(dbConnection);
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
+
+        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
+        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
 
 
 //        var personPat = new PersonPatientBuilder(dbConnection);

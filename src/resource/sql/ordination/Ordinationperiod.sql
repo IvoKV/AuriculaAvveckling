@@ -203,13 +203,21 @@ select c.ID AS CENTREID,
 		WHEN 3 THEN 'Coaguchek'
 	END as INRMETHOD_TXT,
 
-	op.COMPLFOLYEAR
+	op.COMPLFOLYEAR,
+	op.WEIGHT,
+	op.WEIGHTDATE,
+	op.LMH AS ORDINATION_LMH,
+	lmh1.DOSE AS LMH_DOSE,
+	op.PREFERED_INTERVAL_START,
+	op.PREFERED_INTERVAL_END
 
 FROM centre AS c
          JOIN centrepatient AS cp ON c.ID = cp.CENTREID
          JOIN regionpatient AS rp ON cp.RPID = rp.RPID
          JOIN patient as pat on rp.PID = pat.PID
          JOIN ordinationperiod as op on op.CPID = cp.CPID
+         LEFT JOIN inr AS inr1 ON op.OID = inr1.OID
+         LEFT JOIN lmh AS lmh1 ON inr1.INRID = lmh1.INRID
 WHERE c.ID = ?
 AND pat.SSN = ?
 ORDER BY op.OID

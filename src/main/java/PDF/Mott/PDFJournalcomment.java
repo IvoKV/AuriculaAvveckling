@@ -45,7 +45,7 @@ public class PDFJournalcomment {
     }
 
     private void writeHeader() throws IOException {
-        float yCordinate = page.getCropBox().getUpperRightY() - 500;
+        float yCordinate = page.getCropBox().getUpperRightY() - 425;
         float startX = page.getCropBox().getLowerLeftX() + 30;
         float endX = page.getCropBox().getUpperRightX() - 30;
 
