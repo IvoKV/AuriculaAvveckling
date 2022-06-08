@@ -1,4 +1,4 @@
-package Ordinationperiod;
+package OrdinationMOTT;
 
 public class OrdinationperiodException extends Exception{
 

@@ -1,10 +1,8 @@
-package Ordinationperiod.Matvarde;
+package OANT;
 
-import java.sql.Date;
-import java.util.Objects;
+import java.math.BigDecimal;
 
-public class Matvarde {
-
+public class Complication {
     private String cid;                              // c.id
     private int pid;                                 // p.pid
     private String SSN;
@@ -15,27 +13,30 @@ public class Matvarde {
     private String palFirstname;
     private String palLastname;
 
-    /** CREATININE **/
-    private Short creatinin;
-    private Date testdate;
-    private String specimentComment;
-    private String remissComment;
-    private String analysisComment;
+    /** Complication **/
+    private String complexExists;                    // CASE!!
+    private String bleeding;                        // CASE!!
+    private String trombosis;                       // CASE!!
+    private int daysOfCare;
+    private BigDecimal PKINR;
+    private String status;
 
-    public Matvarde(String cid,
-                    int pid,
-                    String SSN,
-                    Short SSN_TYPE,
-                    String patFirstname,
-                    String patLastname,
-                    Short palTitle,
-                    String palFirstname,
-                    String palLastname,
-                    Short creatinin,
-                    Date testdate,
-                    String specimentComment,
-                    String remissComment,
-                    String analysisComment) throws MatvardeInitializationException {
+    public Complication(String cid,
+                        int pid,
+                        String SSN,
+                        Short SSN_TYPE,
+                        String patFirstname,
+                        String patLastname,
+                        Short palTitle,
+                        String palFirstname,
+                        String palLastname,
+                        String complexExists,
+                        String bleeding,
+                        String trombosis,
+                        int daysOfCare,
+                        BigDecimal PKINR,
+                        String status)
+    {
         this.cid = cid;
         this.pid = pid;
         this.SSN = SSN;
@@ -45,16 +46,12 @@ public class Matvarde {
         this.palTitle = palTitle;
         this.palFirstname = palFirstname;
         this.palLastname = palLastname;
-        this.creatinin = creatinin;
-        try {
-            this.testdate = Objects.requireNonNullElse(testdate, new Date(0));
-            this.specimentComment = Objects.requireNonNullElse(specimentComment, "ingen kommentar");
-            this.remissComment = Objects.requireNonNullElse(remissComment, "ingen kommentar");
-            this.analysisComment = Objects.requireNonNullElse(analysisComment, "ingen kommentar");
-        }
-        catch (NullPointerException e){
-            throw new MatvardeInitializationException(e.getMessage());
-        }
+        this.complexExists = complexExists;
+        this.bleeding = bleeding;
+        this.trombosis = trombosis;
+        this.daysOfCare = daysOfCare;
+        this.PKINR = PKINR;
+        this.status = status;
     }
 
     public String getCid() {
@@ -129,49 +126,57 @@ public class Matvarde {
         this.palLastname = palLastname;
     }
 
-    public Short getCreatinin() {
-        return creatinin;
+    public String getComplexExists() {
+        return complexExists;
     }
 
-    public void setCreatinin(Short creatinin) {
-        this.creatinin = creatinin;
+    public void setComplexExists(String complexExists) {
+        this.complexExists = complexExists;
     }
 
-    public Date getTestdate() {
-        return testdate;
+    public String getBleeding() {
+        return bleeding;
     }
 
-    public void setTestdate(Date testdate) {
-        this.testdate = testdate;
+    public void setBleeding(String bleeding) {
+        this.bleeding = bleeding;
     }
 
-    public String getSpecimentComment() {
-        return specimentComment;
+    public String getTrombosis() {
+        return trombosis;
     }
 
-    public void setSpecimentComment(String specimentComment) {
-        this.specimentComment = specimentComment;
+    public void setTrombosis(String trombosis) {
+        this.trombosis = trombosis;
     }
 
-    public String getRemissComment() {
-        return remissComment;
+    public int getDaysOfCare() {
+        return daysOfCare;
     }
 
-    public void setRemissComment(String remissComment) {
-        this.remissComment = remissComment;
+    public void setDaysOfCare(int daysOfCare) {
+        this.daysOfCare = daysOfCare;
     }
 
-    public String getAnalysisComment() {
-        return analysisComment;
+    public BigDecimal getPKINR() {
+        return PKINR;
     }
 
-    public void setAnalysisComment(String analysisComment) {
-        this.analysisComment = analysisComment;
+    public void setPKINR(BigDecimal PKINR) {
+        this.PKINR = PKINR;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        return "Matvarde{" +
+        return "Complication{" +
                 "cid='" + cid + '\'' +
                 ", pid=" + pid +
                 ", SSN='" + SSN + '\'' +
@@ -181,11 +186,12 @@ public class Matvarde {
                 ", palTitle=" + palTitle +
                 ", palFirstname='" + palFirstname + '\'' +
                 ", palLastname='" + palLastname + '\'' +
-                ", creatinin='" + creatinin + '\'' +
-                ", testdate=" + testdate +
-                ", specimentComment='" + specimentComment + '\'' +
-                ", remissComment='" + remissComment + '\'' +
-                ", analysisComment='" + analysisComment + '\'' +
+                ", complexExists='" + complexExists + '\'' +
+                ", bleeding='" + bleeding + '\'' +
+                ", trombosis='" + trombosis + '\'' +
+                ", daysOfCare=" + daysOfCare +
+                ", PKINR=" + PKINR +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

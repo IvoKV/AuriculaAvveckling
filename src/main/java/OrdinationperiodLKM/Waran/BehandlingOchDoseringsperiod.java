@@ -1,4 +1,4 @@
-package Ordinationperiod.Waran;
+package OrdinationperiodLKM.Waran;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

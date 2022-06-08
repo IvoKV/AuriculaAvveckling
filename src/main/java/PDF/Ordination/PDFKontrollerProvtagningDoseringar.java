@@ -4,7 +4,7 @@ import auxilliary.FileOperations;
 import auxilliary.ListGenerics;
 import auxilliary.TextWrapper;
 import auxilliary.TextShower;
-import Ordinationperiod.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringar;
+import OrdinationperiodLKM.KontrollerProvtagningDoseringar;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -22,7 +22,6 @@ public class PDFKontrollerProvtagningDoseringar{
 
     private ListGenerics listGenerics;
     private final String pdfPathFileName = "out\\PDFKontrollerProvtagningDoseringar.pdf";
-
 
     private float x = 0;
     private float y = 750;

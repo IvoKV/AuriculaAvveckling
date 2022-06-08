@@ -1,4 +1,4 @@
-package Ordinationperiod.Waran;
+package Indikationer;
 
 import java.sql.Date;
 

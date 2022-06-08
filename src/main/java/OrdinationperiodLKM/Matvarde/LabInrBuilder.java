@@ -1,4 +1,4 @@
-package Ordinationperiod.Matvarde;
+package OrdinationperiodLKM.Matvarde;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

@@ -1,4 +1,4 @@
-package Ordinationperiod.Waran;
+package OrdinationperiodLKM.Waran;
 
 public class OrdinationsperiodInitializeException extends Exception {
 
