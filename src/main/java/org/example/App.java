@@ -62,7 +62,8 @@ public class App
         //String regpatSSN = "19470707-1157";
         //String regpatSSN = "19121212-1212";
         //String regpatSSN = "19510403-5125";         // har waranordination comment 451 tecken (längst)
-        String regpatSSN = "19410603-9375";
+        //String regpatSSN = "19410603-9375";
+        String regpatSSN = "19611010-1125";
         //regpatSSN = "";
 
 //        var mvb = new MatvardeLBuilder(dbConnection);
