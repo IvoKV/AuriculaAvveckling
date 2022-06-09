@@ -21,7 +21,7 @@ import java.util.Set;
 public class PDFOrdinationperiodR7 {
     private List<OrdinationperiodR7> ordinationperiodListR7;
 
-    private final String pdfPathFileName = "out/PDFOrdinationperiodR7.pdf";
+    private final String pdfPathFileName = "out/R7/PDFOrdinationperiodR7.pdf";
     private float x = 0;
     private float y = 750;
     private final float leading = 20;
@@ -377,7 +377,7 @@ public class PDFOrdinationperiodR7 {
             writePageNumbers();
         }
         FileOperations fop = new FileOperations(pdfPathFileName);
-        String fileWithoutExtension =  fop.getFilenameWithoutExtension(); // kontrollerProvtagningDoseringarList.get(0).getSsn();
+        String fileWithoutExtension =  fop.getFilenameWithoutExtension();
         fop = null;
         String filenameWithSSN = fileWithoutExtension + "_" + ordinationperiodListR7.get(0).getSsn() + ".pdf";
         document.save(filenameWithSSN);

@@ -23,7 +23,7 @@ public class PDFJournalcommentR7 {
     private Short ssnType;
 
     // this Journalcomment will be printed as stand-alone file
-    private final String pdfPathFileName = "out/PDFJournalcommentR7.pdf";
+    private final String pdfPathFileName = "out/R7/PDFJournalcommentR7.pdf";
     private float x = 0;
     private float y = 750;
     private final float leading = 20;
