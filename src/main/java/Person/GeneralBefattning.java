@@ -6,13 +6,13 @@ public class GeneralBefattning {
     private String hsaId;
     private String firstName;
     private String lastName;
-    private String Titel;
+    private String titel;
 
     public GeneralBefattning(String hsaId, String firstName, String lastName, String titel) throws GeneralBefattningException {
         this.hsaId = hsaId;
         this.firstName = firstName;
         this.lastName = lastName;
-        Titel = titel;
+        this.titel = titel;
 
         try{
             Objects.requireNonNullElse(hsaId, "hsaId is null");
@@ -23,6 +23,9 @@ public class GeneralBefattning {
         }catch (Exception exp){
             throw new GeneralBefattningException(exp.getMessage());
         }
+    }
+
+    public GeneralBefattning() {
     }
 
     public String getHsaId() {
@@ -50,11 +53,11 @@ public class GeneralBefattning {
     }
 
     public String getTitel() {
-        return Titel;
+        return titel;
     }
 
     public void setTitel(String titel) {
-        Titel = titel;
+        this.titel = titel;
     }
 
     @Override
@@ -63,7 +66,7 @@ public class GeneralBefattning {
                 "hsaId='" + hsaId + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", Titel='" + Titel + '\'' +
+                ", titel='" + titel + '\'' +
                 '}';
     }
 }

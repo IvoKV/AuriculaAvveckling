@@ -2,9 +2,9 @@ package PDF.Ordination;
 
 import auxilliary.FileOperations;
 import auxilliary.ListGenerics;
-import auxilliary.StringWriter1;
+import auxilliary.TextWrapper;
 import auxilliary.TextShower;
-import ordination.KontrollerProvtagningDoseringar.KontrollerProvtagningDoseringar;
+import OrdinationperiodLKM.KontrollerProvtagningDoseringar;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -21,8 +21,7 @@ public class PDFKontrollerProvtagningDoseringar{
     List<KontrollerProvtagningDoseringar> kontrollerProvtagningDoseringarList;
 
     private ListGenerics listGenerics;
-    private final String pdfPathFileName = "PDFKontrollerProvtagningDoseringar.pdf";
-
+    private final String pdfPathFileName = "out\\PDFKontrollerProvtagningDoseringar.pdf";
 
     private float x = 0;
     private float y = 750;
@@ -47,7 +46,7 @@ public class PDFKontrollerProvtagningDoseringar{
         this.page = new PDPage();
 
         /** Initialize content stream, first page **/
-        contentStream = new PDPageContentStream(document, page);
+        this.contentStream = new PDPageContentStream(document, page);
     }
 
     private void writeHeader() throws IOException {
@@ -404,7 +403,7 @@ public class PDFKontrollerProvtagningDoseringar{
                 if(commentText != null) {
                     commentText = URLDecoder.decode(commentText, StandardCharsets.ISO_8859_1);
 
-                    StringWriter1 stringWriter = new StringWriter1(commentText, 55, false);
+                    TextWrapper stringWriter = new TextWrapper(commentText, 55, false);
                     List<String> polishedStringArray = stringWriter.getPolishedStringArray();
                     int commentLeading = 15;
                     boolean isFirstText = true;

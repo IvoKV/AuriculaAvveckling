@@ -1,9 +1,11 @@
 package PDF.Ordination;
 
-import Mott.JournalcommentBuilder;
 import Mott.JournalcommentException;
-import auxilliary.*;
-import OrdinationMOTT.Ordinationperiod;
+import OrdinationMOTT.OrdinationperiodR7;
+import auxilliary.FileOperations;
+import auxilliary.GeneralBefattningReadJSON;
+import auxilliary.GeneralBefattningReadJSONException;
+import auxilliary.TextShower;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -11,15 +13,15 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class PDFOrdinationperiod {
-    private List<Ordinationperiod> ordinationperiodList;
-    private Connection connection;
+public class PDFOrdinationperiodR7 {
+    private List<OrdinationperiodR7> ordinationperiodListR7;
 
-    private final String pdfPathFileName = "out\\PDFOrdinationperiod.pdf";
+    private final String pdfPathFileName = "out/R7/PDFOrdinationperiodR7.pdf";
     private float x = 0;
     private float y = 750;
     private final float leading = 20;
@@ -33,18 +35,22 @@ public class PDFOrdinationperiod {
     private PDDocument document = null;
     private PDPage page = null;
     private PDPageContentStream contentStream = null;
-    private int sidaNo = 0;
+    private int oidCountTot = 0;
+    private int oidCounter = 0;
+    private int currentOid = 0;
 
-    public PDFOrdinationperiod(List<Ordinationperiod> ordinationplist, Connection connection) throws IOException {
-        this.ordinationperiodList = ordinationplist;
-        this.connection = connection;
+    public PDFOrdinationperiodR7(List<OrdinationperiodR7> ordinationplist) throws IOException {
+        this.ordinationperiodListR7 = ordinationplist;
+        //this.connection = connection;
 
         /** Initialize document and first page **/
         this.document = new PDDocument();
         this.page = new PDPage();
 
         /** Initialize content stream, first page **/
-        contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+        contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, true, true);
+
+        this.oidCountTot = getOidCount();
     }
 
     private void writeHeader() throws IOException {
@@ -56,7 +62,7 @@ public class PDFOrdinationperiod {
         contentStream.beginText();
         contentStream.setFont(PDType1Font.COURIER_BOLD, 14f);
         contentStream.newLineAtOffset( startX, yCordinate);
-        contentStream.showText("Ordinationperiod");
+        contentStream.showText("Ordinationperiod enl. R7");
         yHoldOID = yCordinate;
         yCordinate -= fontHeight;
         contentStream.endText();
@@ -82,7 +88,7 @@ public class PDFOrdinationperiod {
         contentStream.newLineAtOffset(startX, y);
         contentStream.showText("Förnamn:");
         contentStream.newLineAtOffset(xTab1, 0);
-        contentStream.showText(ordinationperiodList.get(0).getPatFirstName());
+        contentStream.showText(ordinationperiodListR7.get(0).getPatFirstName());
         contentStream.endText();
         y -= leading;
 
@@ -90,7 +96,7 @@ public class PDFOrdinationperiod {
         contentStream.newLineAtOffset(startX, y);
         contentStream.showText("Efternamn:");
         contentStream.newLineAtOffset(xTab1, 0);
-        contentStream.showText(ordinationperiodList.get(0).getPatLastName());
+        contentStream.showText(ordinationperiodListR7.get(0).getPatLastName());
         contentStream.endText();
         y -= leading;
 
@@ -98,7 +104,7 @@ public class PDFOrdinationperiod {
         contentStream.newLineAtOffset(startX2 + 30, yHold);
         contentStream.showText("SSN:");
         contentStream.newLineAtOffset(xTab1, 0);
-        contentStream.showText(ordinationperiodList.get(0).getSsn());
+        contentStream.showText(ordinationperiodListR7.get(0).getSsn());
         contentStream.endText();
         yHold -= leading;
 
@@ -106,7 +112,7 @@ public class PDFOrdinationperiod {
         contentStream.newLineAtOffset(startX2 + 30f, yHold);
         contentStream.showText("SSN Type:");
         contentStream.newLineAtOffset(xTab1 , 0);
-        contentStream.showText(ordinationperiodList.get(0).getSsnType().toString());
+        contentStream.showText(ordinationperiodListR7.get(0).getSsnType().toString());
         contentStream.endText();
         yHold -= leading;
 
@@ -119,7 +125,7 @@ public class PDFOrdinationperiod {
         y = Math.min(y, yHold);
     }
 
-    public void createOrdinationperiodDetails() throws IOException, GeneralBefattningReadJSONException, JournalcommentException, SQLException {
+    public void createOrdinationperiodDetails(String cid, String ssn) throws IOException, GeneralBefattningReadJSONException, JournalcommentException, SQLException {
         final float startX = page.getCropBox().getLowerLeftX() + 30;
         float endX = page.getCropBox().getUpperRightX() - 30;
         final float startX2 = startX + 280f;
@@ -137,24 +143,29 @@ public class PDFOrdinationperiod {
             writeHeader();
             writePatientInfo();     // written only once, on page 1
 
-            int arraySize = ordinationperiodList.size();
-
+            int arraySize = ordinationperiodListR7.size();
             for(int arrayItem = 0; arrayItem < arraySize; arrayItem++ ) {
-                int currentOID = ordinationperiodList.get(arrayItem).getOid();
+                int extractedOid = ordinationperiodListR7.get(arrayItem).getOid();
 
                 /* ADDITION: OID */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER_BOLD, 12f);
-                contentStream.newLineAtOffset(startX + 160f, yHoldOID);
+                contentStream.newLineAtOffset(startX + 230f, yHoldOID);
 
                 /* OID documentation  */
                 StringBuilder sb = new StringBuilder();
-                sb.append(ordinationperiodList.get(arrayItem).getOid());             // GET OID
+                sb.append(ordinationperiodListR7.get(arrayItem).getOid());             // GET OID
                 sb.append(" (");
-                sb.append(arrayItem + 1);
+
+                if(currentOid != extractedOid){
+                    currentOid = extractedOid;
+                    oidCounter++;
+                }
+                sb.append(oidCounter);
                 sb.append( " av ");
-                int ordListSize = ordinationperiodList.size();
-                sb.append(ordListSize);
+                // todo: nedan BUGG!!!!!!!!
+                //int ordListSize = ordinationperiodListR7.size();
+                sb.append(oidCountTot);
                 sb.append(")");
                 contentStream.showText(sb.toString());
                 contentStream.endText();
@@ -162,7 +173,7 @@ public class PDFOrdinationperiod {
 
                 /* (PAL) Ansvarig - Resposible TEXT */
                 StringBuilder responsible = new StringBuilder();
-                GeneralBefattningReadJSON genBef = new GeneralBefattningReadJSON(ordinationperiodList.get(arrayItem).getCreatedBy());
+                GeneralBefattningReadJSON genBef = new GeneralBefattningReadJSON(ordinationperiodListR7.get(arrayItem).getCreatedBy());
                 responsible.append(genBef.getGeneralBefattningFirstName() + " ");
                 responsible.append(genBef.getGeneralBefattningLastName());
 
@@ -190,58 +201,42 @@ public class PDFOrdinationperiod {
                 contentStream.stroke();
                 y = yHold - leading;
 
-                /* MEDICINE TYPE */
+                /* ATRIAL_FIB */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Medicine Type:");
+                contentStream.showText("Atrial Fib:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getMedicinetype());
-                contentStream.endText();
-
-                /* -> Atrial Fib */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX2, y);
-                contentStream.showText("AtrialFib:");
-                contentStream.newLineAtOffset(x2Offset, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getAtrialFib());
+                TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getAtrialFib());
                 contentStream.endText();
                 y -= leading;
 
                 /* VALVE MALFUNCTION */
                 contentStream.beginText();
-                contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Valve malfunction:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getValveMalfunction());
-                contentStream.endText();
-
-                /* -> VENOUS TROMB */
-                contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX2, y);
+                contentStream.newLineAtOffset(startX, y);
+                contentStream.showText("Valve Malfunction:");
+                contentStream.newLineAtOffset(xTab1, 0);
+                TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getValveMalfunction());
+                contentStream.endText();
+                y -= leading;
+
+                /* VENOUS TROMB */
+                contentStream.beginText();
+                contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Venous tromb:");
-                contentStream.newLineAtOffset(x2Offset, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getVenousTromb());
+                contentStream.newLineAtOffset(xTab1, 0);
+                TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getVenousTromb());
                 contentStream.endText();
                 y -= leading;
 
                 /* OTHER */
                 contentStream.beginText();
+                contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Other:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getOther());
-                contentStream.endText();
-
-                /* -> OTHER CHILDINDICATION */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX2, y);
-                contentStream.showText("Otherchildind:");
-                contentStream.newLineAtOffset(x2Offset, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getOtherChildIndication());
+                TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getOther());
                 contentStream.endText();
                 y -= leading;
 
@@ -250,25 +245,7 @@ public class PDFOrdinationperiod {
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Dcconversion:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getDcconversion());
-                contentStream.endText();
-
-                /* -> DCTHERAPYDROPOUT */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX2, y);
-                contentStream.showText("Dctherapydrop:");
-                contentStream.newLineAtOffset(x2Offset, 0);
-                TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getDctherapydropout());
-                contentStream.endText();
-                y -= leading;
-
-                /* PERIODLENGTH */
-                contentStream.beginText();
-                contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Period length:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getPeriodLength());
+                TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getDcconversion());
                 contentStream.endText();
 
                 /* -> MEDICIN */
@@ -277,112 +254,91 @@ public class PDFOrdinationperiod {
                 contentStream.newLineAtOffset(startX2, y);
                 contentStream.showText("Medicin:");
                 contentStream.newLineAtOffset(x2Offset, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getMedicin());
+                TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getMedicin());
                 contentStream.endText();
                 y -= leading;
 
                 /* DOSE MODE */
                 contentStream.beginText();
+                contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Dose mode:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getDoseMode());
+                TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getDoseMode());
                 contentStream.endText();
                 y -= leading;
 
-                /*  CREAINTERVAL FIRSTYEAR */
+                /* INR METHOD*/
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Cr.int.first Y.:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getCreaintervalFirstyear());
-                contentStream.endText();
-
-                /* -> STARTDATE */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX2, y);
-                contentStream.showText("Startdate:");
-                contentStream.newLineAtOffset(x2Offset, 0);
-                TextShower.showDate(contentStream, ordinationperiodList.get(arrayItem).getStartDate());
-                contentStream.endText();
-                y -= leading;
-
-                /* CREAINTERVAL */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Crea interval:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getCreainterval());
-                contentStream.endText();
-
-                /* -> ENDDATE */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX2, y);
-                contentStream.showText("Enddate:");
-                contentStream.newLineAtOffset(x2Offset, 0);
-                TextShower.showDate(contentStream, ordinationperiodList.get(arrayItem).getEndDate());
-                contentStream.endText();
-                y -= leading;
-
-                /* CREA COMPLATEST CREATED */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Cr. comp. testcr.:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showDate(contentStream, ordinationperiodList.get(arrayItem).getCreaComplaTestcreated());
-                contentStream.endText();
-
-                /* -> CREA COMPLETED FIRST YEAR */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX2, y);
-                contentStream.showText("Cr.complFirstY:");
-                contentStream.newLineAtOffset(x2Offset + 10f, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getCreaComplFirstYear());
-                contentStream.endText();
-                y -= leading;
-
-                /* CREA COMPL FOLL YEAR */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Cr.comp.folYear.:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getCreaComplFolYear());
-                contentStream.endText();
-
-                /* -> INR METHOD*/
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX2, y);
                 contentStream.showText("Inr method:");
-                contentStream.newLineAtOffset(x2Offset + 10f, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getInrmethod());
+                contentStream.newLineAtOffset(xTab1, 0);
+                TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getInrmethod());
                 contentStream.endText();
                 y -= leading;
 
-                /* CONTINUE LATE CHECK */
+                /* WEIGHT*/
                 contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
+                contentStream.setFont(PDType1Font.COURIER, fontSize);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Cont.latecheck:");
+                contentStream.showText("Weight:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showDate(contentStream, ordinationperiodList.get(arrayItem).getContinueLateCheck());
+                TextShower.showFloatToText(contentStream, ordinationperiodListR7.get(arrayItem).getWeight());
+                contentStream.endText();
+
+                /* -> WEIGHT DATE */
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.COURIER, fontSize);
+                contentStream.newLineAtOffset(startX2, y);
+                contentStream.showText("Weight date:");
+                contentStream.newLineAtOffset(xTab2, 0);
+                TextShower.showDate(contentStream, ordinationperiodListR7.get(arrayItem).getWeigthDate());
                 contentStream.endText();
                 y -= leading;
 
-                /* REASON STOPPED */
+                /* LMH DOSERING */
+                contentStream.beginText();
+                contentStream.newLineAtOffset(startX, y);
+                contentStream.showText("LMH dosering:");
+                contentStream.newLineAtOffset(xTab1, 0);
+                TextShower.showIntToText(contentStream, ordinationperiodListR7.get(arrayItem).getLmhDose());
+                contentStream.endText();
+                y -= leading;
+
+                /* PREFERED INTERVAL START */
+                contentStream.beginText();
+                contentStream.newLineAtOffset(startX, y);
+                contentStream.showText("Pref.Int.Start:");
+                contentStream.newLineAtOffset(xTab1, 0);
+                TextShower.showFloatToText(contentStream, ordinationperiodListR7.get(arrayItem).getPreferedIntStart());
+                contentStream.endText();
+
+                /* -> PREFERED INTERVAL END */
+                contentStream.beginText();
+                contentStream.newLineAtOffset(startX2, y);
+                contentStream.showText("Pref.Int.END:");
+                contentStream.newLineAtOffset(xTab2, 0);
+                TextShower.showFloatToText(contentStream, ordinationperiodListR7.get(arrayItem).getPreferedIntEnd());
+                contentStream.endText();
+                y -= leading;
+
+                /* ORDINATION STARTDATE */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Reason stopped:");
+                contentStream.showText("Ordp.Startdate:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getReasonStopped());
+                TextShower.showDate(contentStream, ordinationperiodListR7.get(arrayItem).getStartDate());
+                contentStream.endText();
+
+                /* -> ORDINATION ENDDATE */
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.COURIER, 12f);
+                contentStream.newLineAtOffset(startX2, y);
+                contentStream.showText("Ordp.Enddate:");
+                contentStream.newLineAtOffset(xTab2, 0);
+                TextShower.showDate(contentStream, ordinationperiodListR7.get(arrayItem).getEndDate());
                 contentStream.endText();
                 y -= leading;
 
@@ -392,51 +348,20 @@ public class PDFOrdinationperiod {
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Lengthcomment:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, ordinationperiodList.get(arrayItem).getLengthcomment());
-                contentStream.endText();
-
-                /* -> COMPLFOLYEAR */
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX2, y);
-                contentStream.showText("Compl Folyear:");
-                contentStream.newLineAtOffset(x2Offset + 10f, 0);
-                TextShower.showIntToText(contentStream, ordinationperiodList.get(arrayItem).getComplfolYear());
+                TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getLengthcomment());
                 contentStream.endText();
                 y -= leading;
 
-                /* CREATED BY */
+                /* REASON STOPPED */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Createdby:");
+                contentStream.showText("Reason stopped:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, responsible.toString());
+                TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getReasonStopped());
                 contentStream.endText();
-                responsible = null;
-
-                /* -> UPDATEDBY */
-                StringBuilder updatedBy = new StringBuilder();
-                GeneralBefattningReadJSON genBef1 = new GeneralBefattningReadJSON(ordinationperiodList.get(arrayItem).getUpdatedBy());
-                updatedBy.append(genBef1.getGeneralBefattningFirstName() + " ");
-                updatedBy.append(genBef1.getGeneralBefattningLastName());
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX2, y);
-                contentStream.showText("Updatedby:");
-                contentStream.newLineAtOffset(x2Offset + 10f, 0);
-                TextShower.showString(contentStream, updatedBy.toString());
-                contentStream.endText();
-                genBef1 = null;
                 y -= leading;
                 /** end of Ordinationperiod page **/
-
-                /* adding JOURNALCOMMENT */
-                JournalcommentBuilder  journalcommentBuilder = new JournalcommentBuilder(connection, currentOID);
-                String centreId = ordinationperiodList.get(arrayItem).getCentreId();
-                String ssn = ordinationperiodList.get(arrayItem).getSsn();
-                journalcommentBuilder.buildJournalcomment(centreId, ssn, contentStream);
-                /** end of Journalcomment addition **/
 
                 contentStream.close();
 
@@ -447,17 +372,17 @@ public class PDFOrdinationperiod {
                    contentStream.setLeading(leading);
                    writeHeader();
                }
-
             }
             contentStream.close();
             writePageNumbers();
         }
         FileOperations fop = new FileOperations(pdfPathFileName);
-        String fileWithoutExtension =  fop.getFilenameWithoutExtension(); // kontrollerProvtagningDoseringarList.get(0).getSsn();
+        String fileWithoutExtension =  fop.getFilenameWithoutExtension();
         fop = null;
-        String filenameWithSSN = fileWithoutExtension + "_" + ordinationperiodList.get(0).getSsn() + ".pdf";
+        String filenameWithSSN = fileWithoutExtension + "_" + ordinationperiodListR7.get(0).getSsn() + ".pdf";
         document.save(filenameWithSSN);
         document.close();
+        document = null;
     }
 
     private void writePageNumbers() throws IOException {
@@ -477,11 +402,19 @@ public class PDFOrdinationperiod {
             contentStream.setFont(PDType1Font.COURIER, 12);
 
             contentStream.beginText();
-            contentStream.newLineAtOffset(endX, yCordinate);
+            contentStream.newLineAtOffset(endX - 15, yCordinate);
             contentStream.showText(sb.toString());
             contentStream.endText();
             contentStream.close();
             pagecounter++;
         }
+    }
+
+    private int getOidCount(){
+        Set<Integer> oidSet = new HashSet<>();
+        for(var item : ordinationperiodListR7){
+            oidSet.add(item.getOid());
+        }
+        return oidSet.size();
     }
 }

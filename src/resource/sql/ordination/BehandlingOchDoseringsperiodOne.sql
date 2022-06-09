@@ -1,4 +1,4 @@
-# BehandlingOchDoseringsperiod, ALL patients
+,# BehandlingOchDoseringsperiod, ALL patients
 SELECT  c.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
     /* Patientansvarig läkare/enhet */
         pal.TITLE AS PAL_TITLE,
