@@ -55,7 +55,7 @@ public class PDFJournalcommentR7 {
     }
 
     private void writeHeader() throws IOException {
-        float yCordinate = page.getCropBox().getUpperRightY();
+        float yCordinate = page.getCropBox().getUpperRightY() - 30;
         float startX = page.getCropBox().getLowerLeftX() + 30;
         float endX = page.getCropBox().getUpperRightX() - 30;
 
@@ -70,15 +70,12 @@ public class PDFJournalcommentR7 {
         sb.append(journalcommentList.get(0).getOid());
         contentStream.newLineAtOffset(200, 0);
         contentStream.showText(sb.toString());
-
-        //yHoldOID = yCordinate;
-        yCordinate -= fontHeight;
         contentStream.endText();
+        yCordinate -= fontHeight;
 
         contentStream.setLineWidth(1f);
         contentStream.moveTo(startX, yCordinate);
         contentStream.lineTo(endX, yCordinate);
-
         contentStream.stroke();
         yCordinate -= leading;
         y = yCordinate;
@@ -124,7 +121,7 @@ public class PDFJournalcommentR7 {
         contentStream.newLineAtOffset(xTab1 , 0);
         TextShower.showIntToText(contentStream, ssnType);
         contentStream.endText();
-        yHold -= leading;
+        yHold -= fontHeight;
 
         contentStream.setLineWidth(0.5f);
         contentStream.moveTo(startX, yHold);
@@ -137,17 +134,24 @@ public class PDFJournalcommentR7 {
     }
 
     public void createJournalCommentDetails() throws IOException, GeneralBefattningReadJSONException {
-        final float startX = 30;
+        final float startX = page.getCropBox().getLowerLeftX() + 30;
+        float endX = page.getCropBox().getUpperRightX() - 30;
         final float startX2 = startX + 280f;
+        final float xTab1 = startX + 110f;
+        final float xTab2 = startX2 + 80f;
+        final float x2Offset = 100;
+        float yHold = y;
 
         if (contentStream != null) {
             /** First page (layout only for one, it is sufficient for this info type) **/
+            document.addPage(page);
+            contentStream = new PDPageContentStream(document, page);
             writeHeader();
             writePatientInfo();
 
-
+            contentStream.close();
         }
-        contentStream.close();
+
 
         FileOperations fop = new FileOperations(pdfPathFileName);
         String fileWithoutExtension =  fop.getFilenameWithoutExtension(); // kontrollerProvtagningDoseringarList.get(0).getSsn();
