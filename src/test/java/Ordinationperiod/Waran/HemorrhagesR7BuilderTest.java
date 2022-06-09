@@ -1,6 +1,5 @@
 package Ordinationperiod.Waran;
 
-import MV.HemorrhagesBuilder;
 import auxilliary.MyConnection;
 import com.jcraft.jsch.JSchException;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +11,7 @@ import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class HemorrhagesBuilderTest {
+class HemorrhagesR7BuilderTest {
     private static final String simpleConnectionFilePath = "src/resource/ConnectionString.txt";     // Används endast för öppen kanal till db source/-host
     private final String connectionString = "src/resource/ConnectionString.txt";
     private Connection dbConnection = null;
@@ -20,7 +19,7 @@ class HemorrhagesBuilderTest {
     private final String databaseUse = "auricula_export_TIO_100";
 
     // given
-    HemorrhagesBuilderTest() throws ClassNotFoundException, SQLException, JSchException, IOException {
+    HemorrhagesR7BuilderTest() throws ClassNotFoundException, SQLException, JSchException, IOException {
             MyConnection myConnection = new MyConnection(databaseUse);
             myConnection.createSshTunnel();                                     // todo: borde testas innan nästa steg, har skapat testcase för class: MyConnection
             dbConnection = myConnection.getSSHDbConnection();

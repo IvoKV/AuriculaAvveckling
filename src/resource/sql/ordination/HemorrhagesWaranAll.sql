@@ -1,10 +1,5 @@
 # Hemorrhages, ALL patients
-SELECT  C.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
-    /* Patientansvarig läkare/enhet */
-        pal.TITLE AS PAL_TITLE,
-        pal.FIRSTNAME AS PAL_FIRSTNAME,
-        pal.LASTNAME as PAL_LASTNAME,
-
+SELECT  c.id, pat.pid, pat.SSN, pat.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
         /* Hemorrhages (blödningar) */
         CASE herr.h1
             WHEN 1 THEN 'Nej'
@@ -76,11 +71,10 @@ SELECT  C.id, p.pid, p.SSN, p.SSN_TYPE, rp.FIRSTNAME, rp.LASTNAME,
            ELSE ''
            END AS Stroke
 
-FROM centre as C
-         join centrepatient as cp on C.id = cp.CENTREID
+FROM centre as c
+         join centrepatient as cp on c.id = cp.CENTREID
          join regionpatient as rp on cp.RPID = rp.RPID
          JOIN hemorrhages as herr on rp.rpid = herr.rpid
-         join patient as p on rp.PID = p.PID
-         join people AS pal on cp.PAL = pal.PEOPLEID
-where C.ID = ?
-order by p.PID;
+         join patient as pat on rp.PID = pat.PID
+where c.ID = ?
+order by pat.PID;

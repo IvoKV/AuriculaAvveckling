@@ -1,6 +1,8 @@
 package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
+import MV.HemorrhagesBuilderR7;
+import MV.HemorrhagesR7Exception;
 import MV.MatvardeLBuilderException;
 import Mott.JournalcommentException;
 import OrdinationMOTT.OrdinationperiodBuilderR7;
@@ -33,7 +35,7 @@ public class App
 
     private static final String datasourceHost = "cluster";
 
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException, JournalcommentException, MatvardeLBuilderException {
+    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException, JournalcommentException, MatvardeLBuilderException, HemorrhagesR7Exception {
 
         if(datasourceHost == "cluster") {
             myConnection = new MyConnection(databaseUse);
@@ -75,12 +77,16 @@ public class App
 
 //        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
 //        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
-////
+//////
 //        var ordprov = new OrdinationperiodBuilder(dbConnection);
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
-        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
-        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
+        /** R7 **/
+//        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
+//        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
+
+        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
+        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
 
 
 //        var personPat = new PersonPatientBuilder(dbConnection);
@@ -95,8 +101,6 @@ public class App
 //        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(dbConnection);
 //        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatSSN, false);
 
-//        HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(dbConnection);
-//        hemorrhagesBuilder.buildHemorrhages(centreID, regpatSSN, true);
 
 //        BehandlingOchDoseringsperiodBuilder behandlingOchDoseringsperiodBuilder = new BehandlingOchDoseringsperiodBuilder(dbConnection);
 //        behandlingOchDoseringsperiodBuilder.buildBehandlingOchDosering(centreID, regpatSSN, true);

@@ -1,15 +1,13 @@
 package MV;
 
-public class Hemorrhages {
-    private String cid;                              // c.id
-    private int pid;                                 // p.pid
-    private String SSN;
-    private Short SSN_TYPE;
-    private String patFirstname;
-    private String patLastname;
-    private Short palTitle;
-    private String palFirstname;
-    private String palLastname;
+import Person.PatientGeneralData;
+import Person.PatientGeneralDataException;
+
+import java.util.Objects;
+
+public class HemorrhagesR7 extends PatientGeneralData {
+    private String cid;
+
 
     /** Hemorrhages **/
     private String leverNjursjukdom;
@@ -25,33 +23,26 @@ public class Hemorrhages {
     private String storRiskForFall;
     private String stroke;
 
-    public Hemorrhages(String cid,
-                       int pid,
-                       String SSN,
-                       Short SSN_TYPE,
-                       String patFirstname,
-                       String patLastname,
-                       Short palTitle,
-                       String palFirstname,
-                       String palLastname,
-                       String leverNjursjukdom,
-                       String etanolmissbruk,
-                       String malignitet,
-                       String reduceratTrombocytantalFunktion,
-                       String tidigareBlodning,
-                       String hypertoni,
-                       String anemi,
-                       String genetiskaFaktorer,
-                       String storRiskForFall,
-                       String stroke) {
+    public HemorrhagesR7(String cid,
+                         int pid,
+                         String SSN,
+                         Short SSN_TYPE,
+                         String patFirstname,
+                         String patLastname,
+
+                         String leverNjursjukdom,
+                         String etanolmissbruk,
+                         String malignitet,
+                         String reduceratTrombocytantalFunktion,
+                         String tidigareBlodning,
+                         String hypertoni,
+                         String anemi,
+                         String genetiskaFaktorer,
+                         String storRiskForFall,
+                         String stroke) throws PatientGeneralDataException, HemorrhagesR7Exception {
+        super(pid, patFirstname, patLastname, SSN,SSN_TYPE);
         this.cid = cid;
-        this.pid = pid;
-        this.SSN = SSN;
-        this.SSN_TYPE = SSN_TYPE;
-        this.patFirstname = patFirstname;
-        this.patLastname = patLastname;
-        this.palTitle = palTitle;
-        this.palFirstname = palFirstname;
+
         this.leverNjursjukdom = leverNjursjukdom;
         this.etanolmissbruk = etanolmissbruk;
         this.malignitet = malignitet;
@@ -62,6 +53,14 @@ public class Hemorrhages {
         this.genetiskaFaktorer = genetiskaFaktorer;
         this.storRiskForFall = storRiskForFall;
         this.stroke = stroke;
+
+        try{
+            Objects.requireNonNullElse(cid, "cid is null");
+            Objects.requireNonNullElse(pid, "pid is null");
+        }
+        catch (Exception exp){
+            throw new HemorrhagesR7Exception(exp.getMessage());
+        }
     }
 
     public String getCid() {
@@ -70,70 +69,6 @@ public class Hemorrhages {
 
     public void setCid(String cid) {
         this.cid = cid;
-    }
-
-    public int getPid() {
-        return pid;
-    }
-
-    public void setPid(int pid) {
-        this.pid = pid;
-    }
-
-    public String getSSN() {
-        return SSN;
-    }
-
-    public void setSSN(String SSN) {
-        this.SSN = SSN;
-    }
-
-    public Short getSSN_TYPE() {
-        return SSN_TYPE;
-    }
-
-    public void setSSN_TYPE(Short SSN_TYPE) {
-        this.SSN_TYPE = SSN_TYPE;
-    }
-
-    public String getPatFirstname() {
-        return patFirstname;
-    }
-
-    public void setPatFirstname(String patFirstname) {
-        this.patFirstname = patFirstname;
-    }
-
-    public String getPatLastname() {
-        return patLastname;
-    }
-
-    public void setPatLastname(String patLastname) {
-        this.patLastname = patLastname;
-    }
-
-    public Short getPalTitle() {
-        return palTitle;
-    }
-
-    public void setPalTitle(Short palTitle) {
-        this.palTitle = palTitle;
-    }
-
-    public String getPalFirstname() {
-        return palFirstname;
-    }
-
-    public void setPalFirstname(String palFirstname) {
-        this.palFirstname = palFirstname;
-    }
-
-    public String getPalLastname() {
-        return palLastname;
-    }
-
-    public void setPalLastname(String palLastname) {
-        this.palLastname = palLastname;
     }
 
     public String getLeverNjursjukdom() {
@@ -218,16 +153,8 @@ public class Hemorrhages {
 
     @Override
     public String toString() {
-        return "Hemorrhages{" +
+        return "HemorrhagesR7{" +
                 "cid='" + cid + '\'' +
-                ", pid=" + pid +
-                ", SSN='" + SSN + '\'' +
-                ", SSN_TYPE=" + SSN_TYPE +
-                ", patFirstname='" + patFirstname + '\'' +
-                ", patLastname='" + patLastname + '\'' +
-                ", palTitle=" + palTitle +
-                ", palFirstname='" + palFirstname + '\'' +
-                ", palLastname='" + palLastname + '\'' +
                 ", leverNjursjukdom='" + leverNjursjukdom + '\'' +
                 ", etanolmissbruk='" + etanolmissbruk + '\'' +
                 ", malignitet='" + malignitet + '\'' +
