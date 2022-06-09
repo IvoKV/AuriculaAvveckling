@@ -1,8 +1,6 @@
 package PDF.Ordination;
 
-import Mott.JournalcommentBuilder;
 import Mott.JournalcommentException;
-import OrdinationMOTT.Ordinationperiod;
 import OrdinationMOTT.OrdinationperiodR7;
 import auxilliary.FileOperations;
 import auxilliary.GeneralBefattningReadJSON;
@@ -15,15 +13,15 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PDFOrdinationperiodR7 {
     private List<OrdinationperiodR7> ordinationperiodListR7;
-    private Connection connection;
 
-    private final String pdfPathFileName = "out\\PDFOrdinationperiodR7.pdf";
+    private final String pdfPathFileName = "out/R7/PDFOrdinationperiodR7.pdf";
     private float x = 0;
     private float y = 750;
     private final float leading = 20;
@@ -37,18 +35,22 @@ public class PDFOrdinationperiodR7 {
     private PDDocument document = null;
     private PDPage page = null;
     private PDPageContentStream contentStream = null;
-    private int sidaNo = 0;
+    private int oidCountTot = 0;
+    private int oidCounter = 0;
+    private int currentOid = 0;
 
-    public PDFOrdinationperiodR7(List<OrdinationperiodR7> ordinationplist, Connection connection) throws IOException {
+    public PDFOrdinationperiodR7(List<OrdinationperiodR7> ordinationplist) throws IOException {
         this.ordinationperiodListR7 = ordinationplist;
-        this.connection = connection;
+        //this.connection = connection;
 
         /** Initialize document and first page **/
         this.document = new PDDocument();
         this.page = new PDPage();
 
         /** Initialize content stream, first page **/
-        contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+        contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, true, true);
+
+        this.oidCountTot = getOidCount();
     }
 
     private void writeHeader() throws IOException {
@@ -123,7 +125,7 @@ public class PDFOrdinationperiodR7 {
         y = Math.min(y, yHold);
     }
 
-    public void createOrdinationperiodDetails() throws IOException, GeneralBefattningReadJSONException, JournalcommentException, SQLException {
+    public void createOrdinationperiodDetails(String cid, String ssn) throws IOException, GeneralBefattningReadJSONException, JournalcommentException, SQLException {
         final float startX = page.getCropBox().getLowerLeftX() + 30;
         float endX = page.getCropBox().getUpperRightX() - 30;
         final float startX2 = startX + 280f;
@@ -142,9 +144,8 @@ public class PDFOrdinationperiodR7 {
             writePatientInfo();     // written only once, on page 1
 
             int arraySize = ordinationperiodListR7.size();
-
             for(int arrayItem = 0; arrayItem < arraySize; arrayItem++ ) {
-                int currentOID = ordinationperiodListR7.get(arrayItem).getOid();
+                int extractedOid = ordinationperiodListR7.get(arrayItem).getOid();
 
                 /* ADDITION: OID */
                 contentStream.beginText();
@@ -155,10 +156,16 @@ public class PDFOrdinationperiodR7 {
                 StringBuilder sb = new StringBuilder();
                 sb.append(ordinationperiodListR7.get(arrayItem).getOid());             // GET OID
                 sb.append(" (");
-                sb.append(arrayItem + 1);
+
+                if(currentOid != extractedOid){
+                    currentOid = extractedOid;
+                    oidCounter++;
+                }
+                sb.append(oidCounter);
                 sb.append( " av ");
-                int ordListSize = ordinationperiodListR7.size();
-                sb.append(ordListSize);
+                // todo: nedan BUGG!!!!!!!!
+                //int ordListSize = ordinationperiodListR7.size();
+                sb.append(oidCountTot);
                 sb.append(")");
                 contentStream.showText(sb.toString());
                 contentStream.endText();
@@ -221,13 +228,14 @@ public class PDFOrdinationperiodR7 {
                 contentStream.newLineAtOffset(xTab1, 0);
                 TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getVenousTromb());
                 contentStream.endText();
+                y -= leading;
 
-                /* -> OTHER */
+                /* OTHER */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
-                contentStream.newLineAtOffset(startX2, y);
+                contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Other:");
-                contentStream.newLineAtOffset(x2Offset, 0);
+                contentStream.newLineAtOffset(xTab1, 0);
                 TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getOther());
                 contentStream.endText();
                 y -= leading;
@@ -353,15 +361,7 @@ public class PDFOrdinationperiodR7 {
                 TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getReasonStopped());
                 contentStream.endText();
                 y -= leading;
-
                 /** end of Ordinationperiod page **/
-
-                /* adding JOURNALCOMMENT */
-                JournalcommentBuilder  journalcommentBuilder = new JournalcommentBuilder(connection, currentOID);
-                String centreId = ordinationperiodListR7.get(arrayItem).getCentreId();
-                String ssn = ordinationperiodListR7.get(arrayItem).getSsn();
-                journalcommentBuilder.buildJournalcomment(centreId, ssn, contentStream);
-                /** end of Journalcomment addition **/
 
                 contentStream.close();
 
@@ -372,17 +372,17 @@ public class PDFOrdinationperiodR7 {
                    contentStream.setLeading(leading);
                    writeHeader();
                }
-
             }
             contentStream.close();
             writePageNumbers();
         }
         FileOperations fop = new FileOperations(pdfPathFileName);
-        String fileWithoutExtension =  fop.getFilenameWithoutExtension(); // kontrollerProvtagningDoseringarList.get(0).getSsn();
+        String fileWithoutExtension =  fop.getFilenameWithoutExtension();
         fop = null;
         String filenameWithSSN = fileWithoutExtension + "_" + ordinationperiodListR7.get(0).getSsn() + ".pdf";
         document.save(filenameWithSSN);
         document.close();
+        document = null;
     }
 
     private void writePageNumbers() throws IOException {
@@ -402,11 +402,19 @@ public class PDFOrdinationperiodR7 {
             contentStream.setFont(PDType1Font.COURIER, 12);
 
             contentStream.beginText();
-            contentStream.newLineAtOffset(endX, yCordinate);
+            contentStream.newLineAtOffset(endX - 15, yCordinate);
             contentStream.showText(sb.toString());
             contentStream.endText();
             contentStream.close();
             pagecounter++;
         }
+    }
+
+    private int getOidCount(){
+        Set<Integer> oidSet = new HashSet<>();
+        for(var item : ordinationperiodListR7){
+            oidSet.add(item.getOid());
+        }
+        return oidSet.size();
     }
 }
