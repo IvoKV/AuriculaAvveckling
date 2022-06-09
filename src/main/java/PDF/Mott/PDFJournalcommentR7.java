@@ -1,7 +1,9 @@
 package PDF.Mott;
 
 import Mott.Journalcomment;
+import Person.GeneralBefattning;
 import auxilliary.FileOperations;
+import auxilliary.GeneralBefattningReadJSON;
 import auxilliary.GeneralBefattningReadJSONException;
 import auxilliary.TextShower;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -36,7 +38,6 @@ public class PDFJournalcommentR7 {
     private PDPage page = null;
     private PDPageContentStream contentStream = null;
     private int oid = 0;
-    //private int sidaNo = 0;
 
     public PDFJournalcommentR7(List<Journalcomment> journalcommentList, String patFirstName, String patLastName, String SSN, short ssnType) throws IOException {
         this.journalcommentList = journalcommentList;
@@ -130,7 +131,6 @@ public class PDFJournalcommentR7 {
         yHold -= leading;
 
         y = Math.min(y, yHold);
-
     }
 
     public void createJournalCommentDetails() throws IOException, GeneralBefattningReadJSONException {
@@ -145,13 +145,46 @@ public class PDFJournalcommentR7 {
         if (contentStream != null) {
             /** First page (layout only for one, it is sufficient for this info type) **/
             document.addPage(page);
-            contentStream = new PDPageContentStream(document, page);
+            contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, true, true);
             writeHeader();
             writePatientInfo();
 
-            contentStream.close();
-        }
+            /* SECTION FOR JOUTNALCOMMENT, with wrapped lines */
+            for(int i = 0; i < journalcommentList.get(0).getWrappedJournalComment().size(); i++){
+                contentStream.beginText();
+                contentStream.newLineAtOffset(startX, y);
+                contentStream.showText( journalcommentList.get(0).getWrappedJournalComment().get(i));
+                contentStream.endText();
+                y -= leading;
 
+                if(y <= 50){
+                    contentStream.close();
+
+                    this.page = new PDPage();
+                    document.addPage(page);
+                    contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true);
+                    writeHeader();
+                    writePatientInfo();
+                }
+            }
+
+            /* CREATED BY */
+            StringBuilder sb = new StringBuilder();
+            GeneralBefattningReadJSON genBef = new GeneralBefattningReadJSON(journalcommentList.get(0).getCreatedBy());
+            sb.append(genBef.getGeneralBefattningFirstName() + " ");
+            sb.append(genBef.getGeneralBefattningLastName());
+            contentStream.beginText();
+            contentStream.newLineAtOffset(startX, y);
+            contentStream.showText("Created by:");
+            contentStream.newLineAtOffset(xTab1, 0);
+            contentStream.showText(sb.toString());
+            contentStream.endText();
+            sb = null;
+            genBef = null;
+
+            contentStream.close();
+            writePageNumbers();
+        }
 
         FileOperations fop = new FileOperations(pdfPathFileName);
         String fileWithoutExtension =  fop.getFilenameWithoutExtension(); // kontrollerProvtagningDoseringarList.get(0).getSsn();
