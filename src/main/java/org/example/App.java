@@ -5,6 +5,8 @@ import MV.HemorrhagesBuilderR7;
 import MV.HemorrhagesR7Exception;
 import MV.MatvardeLBuilderException;
 import Mott.JournalcommentException;
+import OANT.ComplicationBuilderR7;
+import OANT.ComplicationR7Exception;
 import OrdinationMOTT.OrdinationperiodBuilderR7;
 import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilder;
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
@@ -35,7 +37,7 @@ public class App
 
     private static final String datasourceHost = "cluster";
 
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException, JournalcommentException, MatvardeLBuilderException, HemorrhagesR7Exception {
+    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException, JournalcommentException, MatvardeLBuilderException, HemorrhagesR7Exception, ComplicationR7Exception {
 
         if(datasourceHost == "cluster") {
             myConnection = new MyConnection(databaseUse);
@@ -82,12 +84,14 @@ public class App
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
         /** R7 **/
-        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
-        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
+//        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
+//        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
 
 //        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
 //        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
 
+        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
+        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
 
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file

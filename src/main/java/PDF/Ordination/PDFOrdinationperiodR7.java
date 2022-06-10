@@ -164,7 +164,6 @@ public class PDFOrdinationperiodR7 {
                 }
                 sb.append(oidCounter);
                 sb.append( " av ");
-
                 sb.append(oidCountTot);
                 sb.append(")");
                 contentStream.showText(sb.toString());

@@ -20,16 +20,21 @@ import java.util.stream.Collectors;
  */
 public class GeneralBefattningReadJSON {
     private String hsaId;
+    private boolean isNull;
 
     List<GeneralBefattning> resultGeneralBefattning;
 
     private final String JSONFilePathBefattning = "temp\\generalBefattningar.json";
 
     public GeneralBefattningReadJSON(String hsaId) throws GeneralBefattningReadJSONException {
-        this.hsaId = hsaId;
-
-        if(hsaId.length() != 4){
-            throw new GeneralBefattningReadJSONException("hsaID validation error: length not = 4");
+        if(hsaId == null){
+            isNull = true;
+        }
+        else if(hsaId.length() != 4){
+            throw new GeneralBefattningReadJSONException("hsaID validation error: length not = 4, or hsaId is null");
+        }
+        else {
+            this.hsaId = hsaId;
         }
 
         try{
@@ -50,14 +55,23 @@ public class GeneralBefattningReadJSON {
     }
 
     public String getGeneralBefattningFirstName(){
-        return resultGeneralBefattning.get(0).getFirstName();
+        if(!isNull)
+            return resultGeneralBefattning.get(0).getFirstName();
+        else
+            return "is null";
     }
 
     public String getGeneralBefattningLastName(){
-        return resultGeneralBefattning.get(0).getLastName();
+        if(!isNull)
+            return resultGeneralBefattning.get(0).getLastName();
+        else
+            return "is null";
     }
 
     public String getGeneralBefattningTitel(){
-        return resultGeneralBefattning.get(0).getTitel();
+        if(!isNull)
+            return resultGeneralBefattning.get(0).getTitel();
+        else
+            return "is null";
     }
 }

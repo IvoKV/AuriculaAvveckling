@@ -3,6 +3,7 @@ package auxilliary;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
 
 public class TextShower {
@@ -62,6 +63,16 @@ public class TextShower {
         }
         else {
             contentStream.showText(comment);
+        }
+    }
+
+    public static void showBigdecimal(PDPageContentStream contentStream, BigDecimal bigDecimal) throws IOException {
+        if(bigDecimal == null){
+            contentStream.showText("no commment");
+        }
+        else {
+            String bdString = bigDecimal.toString();
+            contentStream.showText(bdString);
         }
     }
 
