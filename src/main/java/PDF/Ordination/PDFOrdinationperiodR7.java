@@ -154,6 +154,7 @@ public class PDFOrdinationperiodR7 {
 
                 /* OID documentation  */
                 StringBuilder sb = new StringBuilder();
+                sb.append("oid: ");
                 sb.append(ordinationperiodListR7.get(arrayItem).getOid());             // GET OID
                 sb.append(" (");
 
@@ -163,8 +164,6 @@ public class PDFOrdinationperiodR7 {
                 }
                 sb.append(oidCounter);
                 sb.append( " av ");
-                // todo: nedan BUGG!!!!!!!!
-                //int ordListSize = ordinationperiodListR7.size();
                 sb.append(oidCountTot);
                 sb.append(")");
                 contentStream.showText(sb.toString());

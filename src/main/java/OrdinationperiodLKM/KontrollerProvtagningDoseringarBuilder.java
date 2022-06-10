@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KontrollerProvtagningDoseringarBuilder {
-    private final String sqlScriptFilePathKontrollerProvtagningDoseringar = "src/resource/sql/matvarde/KontrollerProvtagningDoseringar.sql";      // All titles, creating a total of employees in charge
+    private final String sqlScriptFilePathKontrollerProvtagningDoseringar = "src/resource/sql/MV/KontrollerProvtagningDoseringar.sql";      // All titles, creating a total of employees in charge
     private Connection myConnection = null;
 
     private final String POJOFileName = "temp/matvarde/kontrollerProvtagningDoseringar.txt";

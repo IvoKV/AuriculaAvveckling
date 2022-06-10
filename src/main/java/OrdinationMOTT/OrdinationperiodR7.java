@@ -10,7 +10,7 @@ import java.util.Objects;
 public class OrdinationperiodR7 extends PatientGeneralData {
     private String centreId;
     private int oid;
-    private int pid;
+    private int pid;                        // patient PID
     private String medicinetype;             // (sql)
     private String atrialFib;                // se xml!
 
