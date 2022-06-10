@@ -82,11 +82,11 @@ public class App
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
         /** R7 **/
-//        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
-//        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
+        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
+        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
 
-        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
-        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
+//        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
+//        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
 
 
 //        var personPat = new PersonPatientBuilder(dbConnection);

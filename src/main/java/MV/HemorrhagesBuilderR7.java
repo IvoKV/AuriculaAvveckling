@@ -1,8 +1,10 @@
 package MV;
 
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
+import PDF.MV.PDFHemorrhagesR7;
 import Person.PatientGeneralDataException;
 import Person.PersonInitializationException;
+import auxilliary.GeneralBefattningReadJSONException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jcraft.jsch.JSchException;
@@ -36,7 +38,7 @@ public class HemorrhagesBuilderR7 {
 
     }
 
-    public void buildHemorrhages(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException, JSchException, PatientGeneralDataException, HemorrhagesR7Exception {
+    public void buildHemorrhages(String centreId, String regpatSSN, Boolean writeToFile) throws SQLException, ClassNotFoundException, IOException, PersonInitializationException, OrdinationsperiodInitializeException, JSchException, PatientGeneralDataException, HemorrhagesR7Exception, GeneralBefattningReadJSONException {
         sqlScriptFilePath = "src/resource/sql/MV/HemorrhagesR7.sql";
         Path file = Path.of(sqlScriptFilePath);
         String sqlStatement = Files.readString(file);
@@ -66,7 +68,10 @@ public class HemorrhagesBuilderR7 {
                     rsHemorrhages.getString("ANEMI"),
                     rsHemorrhages.getString("GENETISKA_FAKTORER"),
                     rsHemorrhages.getString("STOR_RISK_FOR_FALL"),
-                    rsHemorrhages.getString("STROKE")
+                    rsHemorrhages.getString("STROKE"),
+                    rsHemorrhages.getString("CREATEDBY"),
+                    rsHemorrhages.getString("UPDATEDBY"),
+                    rsHemorrhages.getTimestamp("TSCREATED")
             );
             hemorrhagesR7List.add(hemorrhages);
         }
@@ -78,7 +83,8 @@ public class HemorrhagesBuilderR7 {
         System.out.println("Total antal popster: " + listSize);
 
         if(hemorrhagesR7List.size() > 0){
-            // todo: call PDFHemorrhagesR7, should be created in directory: MV
+            PDFHemorrhagesR7 pdfHemorrhagesR7 = new PDFHemorrhagesR7(hemorrhagesR7List);
+            pdfHemorrhagesR7.createHemorrhagesR7();
         }
 
         if (writeToFile) {

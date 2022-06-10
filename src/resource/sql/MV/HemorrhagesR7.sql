@@ -79,7 +79,11 @@ SELECT  c.id AS CID, pat.pid AS PID, pat.SSN AS SSN, pat.SSN_TYPE AS SSN_TYPE, r
             WHEN 0 THEN 'Vet ej'
             WHEN 'NULLVALUE' THEN 'is null'
             ELSE 'okänt nyckelvärde'
-            END AS STROKE
+            END AS STROKE,
+
+        herr.CREATEDBY,
+        herr.UPDATEDBY,
+        herr.TSCREATED
 
 FROM centre AS c
          JOIN centrepatient AS cp ON c.id = cp.CENTREID

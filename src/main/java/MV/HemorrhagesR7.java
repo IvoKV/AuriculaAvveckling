@@ -3,6 +3,7 @@ package MV;
 import Person.PatientGeneralData;
 import Person.PatientGeneralDataException;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 
 public class HemorrhagesR7 extends PatientGeneralData {
@@ -23,6 +24,10 @@ public class HemorrhagesR7 extends PatientGeneralData {
     private String storRiskForFall;
     private String stroke;
 
+    private String createdBy;
+    private String updatedBy;
+    private Timestamp tsCreated;
+
     public HemorrhagesR7(String cid,
                          int pid,
                          String SSN,
@@ -39,7 +44,11 @@ public class HemorrhagesR7 extends PatientGeneralData {
                          String anemi,
                          String genetiskaFaktorer,
                          String storRiskForFall,
-                         String stroke) throws PatientGeneralDataException, HemorrhagesR7Exception {
+                         String stroke,
+
+                         String createdBy,
+                         String updatedBy,
+                         Timestamp tsCreated) throws PatientGeneralDataException, HemorrhagesR7Exception {
         super(pid, patFirstname, patLastname, SSN,SSN_TYPE);
         this.cid = cid;
 
@@ -54,6 +63,10 @@ public class HemorrhagesR7 extends PatientGeneralData {
         this.storRiskForFall = storRiskForFall;
         this.stroke = stroke;
 
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.tsCreated = tsCreated;
+
         try{
             Objects.requireNonNullElse(cid, "cid is null");
             Objects.requireNonNullElse(pid, "pid is null");
@@ -61,6 +74,18 @@ public class HemorrhagesR7 extends PatientGeneralData {
         catch (Exception exp){
             throw new HemorrhagesR7Exception(exp.getMessage());
         }
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public Timestamp getTsCreated() {
+        return tsCreated;
     }
 
     public String getCid() {
@@ -165,6 +190,9 @@ public class HemorrhagesR7 extends PatientGeneralData {
                 ", genetiskaFaktorer='" + genetiskaFaktorer + '\'' +
                 ", storRiskForFall='" + storRiskForFall + '\'' +
                 ", stroke='" + stroke + '\'' +
+                ", createdBy='" + createdBy + '\'' +
+                ", updatedBy='" + updatedBy + '\'' +
+                ", tsCreated=" + tsCreated +
                 '}';
     }
 }
