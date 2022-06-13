@@ -1,8 +1,9 @@
-package OANT;
+package PDF.OANT;
 
 import MV.HemorrhagesR7;
 import Mott.JournalcommentBuilder;
 import Mott.JournalcommentException;
+import OANT.ComplicationR7;
 import auxilliary.FileOperations;
 import auxilliary.GeneralBefattningReadJSON;
 import auxilliary.GeneralBefattningReadJSONException;
@@ -229,11 +230,21 @@ public class PDFComplicationR7 {
                 /* TSCREATED */
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Created:");
+                contentStream.showText("Created (TS):");
                 contentStream.newLineAtOffset(100, 0);
                 contentStream.showText(complicationR7List.get(arrayItem).getTsCreated().toString().substring(0, 19));
                 contentStream.endText();
                 y -= leading;
+
+                if(y <= 100){
+                    contentStream.close();
+                    this.page = new PDPage();
+                    document.addPage(page);
+                    contentStream = new PDPageContentStream(document, page);
+                    contentStream.setLeading(leading);
+                    writeHeader();
+                }
+
             }
             contentStream.close();
             writePageNumbers();

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class GeneralBefattningReadJSON {
     private String hsaId;
-    private boolean isNull;
+    private boolean isNull = false;
 
     List<GeneralBefattning> resultGeneralBefattning;
 
@@ -31,7 +31,10 @@ public class GeneralBefattningReadJSON {
             isNull = true;
         }
         else if(hsaId.length() != 4){
-            throw new GeneralBefattningReadJSONException("hsaID validation error: length not = 4, or hsaId is null");
+            StringBuilder sb = new StringBuilder();
+            sb.append("ej hsaid: ");
+            sb.append(hsaId);
+            this.hsaId = sb.toString();
         }
         else {
             this.hsaId = hsaId;
@@ -55,17 +58,21 @@ public class GeneralBefattningReadJSON {
     }
 
     public String getGeneralBefattningFirstName(){
-        if(!isNull)
+        if(!isNull && resultGeneralBefattning.size() > 0)
             return resultGeneralBefattning.get(0).getFirstName();
-        else
+        else if (hsaId == "is null")
             return "is null";
+        else
+            return hsaId;
     }
 
     public String getGeneralBefattningLastName(){
-        if(!isNull)
+        if(!isNull && resultGeneralBefattning.size() > 0)
             return resultGeneralBefattning.get(0).getLastName();
-        else
+        else if (hsaId == "is null")
             return "is null";
+        else
+            return "";      // får samma result värde som getGenerasBefattningFirstName()
     }
 
     public String getGeneralBefattningTitel(){

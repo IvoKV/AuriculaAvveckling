@@ -1,10 +1,9 @@
 package OANT;
 
-import MV.HemorrhagesR7;
 import MV.HemorrhagesR7Exception;
 import Mott.JournalcommentException;
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
-import PDF.MV.PDFHemorrhagesR7;
+import PDF.OANT.PDFComplicationR7;
 import Person.PatientGeneralDataException;
 import Person.PersonInitializationException;
 import auxilliary.GeneralBefattningReadJSONException;

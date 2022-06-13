@@ -12,5 +12,6 @@ FROM centre as c
              JOIN patient as pat on rp.PID = pat.PID
 WHERE c.ID = ?
 AND pat.SSN = ?
+ORDER BY comp.TSCREATED
 ;
 
