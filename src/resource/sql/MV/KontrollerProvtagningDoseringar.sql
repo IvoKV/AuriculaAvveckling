@@ -3,14 +3,9 @@ select c.ID,
        /*-- person id --*/
        rp.FIRSTNAME,
 	   rp.LASTNAME,
-	   p.SSN,
-	   p.SSN_TYPE,
-
-/*-- Patientansvarig läkare/enhet, adress, telefon*/
-       cp.PAL_TEXT AS CPPAL_TXT,
-       pal.FIRSTNAME AS PAL_FIRSTNAME,
-       pal.LASTNAME AS PAL_LASTNAME,
-       pal.TITLE AS PAL_TITLE,
+	   pat.PID,
+	   pat.SSN,
+	   pat.SSN_TYPE,
 
 /*-- Nästa omprövning alternativt behandlingsslut - datum (?)*/
 /*-- Nästa kontroll om X veckor, om X månader eller ett datum*/
@@ -27,7 +22,7 @@ select c.ID,
 	   w.COMMENT as COMMENT_DOSE,
 
 /*-- Antal tabletter*/
-/*-- Läkemedel t.ex. Waran eller Xarelto samt tablettstyrka*/
+/*-- Läkemedel t.ex. Waran eller Xarelto samt tablettstyrka */
 /*-- Läkemedel Namn på handelsvara*/
        CASE op.MEDICIN
            WHEN 1 THEN 'Waran 2,5 mg tabl'
@@ -47,7 +42,7 @@ select c.ID,
            WHEN 32 THEN 'Lixiana 60 mg tabl 1 gång dagligen'
            WHEN 21 THEN 'Warankapsel 0,3 mg kapsel'
            WHEN 22 THEN 'Warankapsel 0,9 mg kapsel'
-        END as      MEDICIN_TXT,
+        END AS MEDICIN_TXT,
 
 	  op.DOSE_MODE,
 
@@ -74,19 +69,26 @@ select c.ID,
 	   inr1.INRDATE,
 	   inr1.LABORATORY_ID,
 	   inr1.ANALYSIS_PATHOL,
+	   inr1.LABREM_COMMENT,
+	   inr1.SPECIMEN_COMMENT,
+	   inr1.ANALYSIS_COMMENT,
 
-	   CASE op.MEDICINETYPE
+	   CASE COALESCE(op.MEDICINETYPE, 'NULLVALUE')
 	   	WHEN 1 THEN 'Traditionella'
 		WHEN 2 THEN 'Nya'
-	   END as MEDICINETYPE_TXT,
+	    WHEN 'NULLVALUE' THEN 'värdet är null'
+	    ELSE 'ogiltigt nyckelvärde'
+	   END AS MEDICINETYPE_TXT,
+
 /*-- Coaguckeck, datum för kalibrering*/
 	   CASE op.INRMETHOD
 	   	WHEN 1 THEN 'Venöst'
 		WHEN 2 THEN 'Kapillärt'
 		WHEN 3 THEN 'Coaguchek'
-	   END as INRMETHOD_TXT,
+	   END AS INRMETHOD_TXT,
 
-#	   op.OID,
+	    op.STARTDATE,
+	    op.ENDDATE,
 
 /*-- Kreatinin (ELLER pk(INR))*/
 	   crea.LABRESULTID as LABRESULTID_CREATININ,
@@ -106,13 +108,18 @@ select c.ID,
 	   change1.SYSTEMS_ORDINATION_SUGG,
 	   change1.SYSTEMS_INTERVAL_SUGG,
 	   change1.USER_ORDINATION,
-	   change1.USER_INTERVAL
+	   change1.USER_INTERVAL,
+
+	   op.CREATEDBY AS OP_CREATEDBY, op.UPDATEDBY AS OP_UPDATEDBY, op.TSCREATED AS OP_TSCREATED,
+	    inr1.CREATEDBY AS INR_CREATEDBY, inr1.UPDATEDBY AS INR_UPDATEDBY, inr1.TSCREATED AS INR_TSCREATED,
+	    crea.CREATEDBY AS CREA_CREATEDBY, crea.UPDATEDBY AS CREA_UPDATEDBY, crea.TSCREATED AS CREA_TSCREATED,
+	    lab.CREATEDBY AS LAB_CREATEDBY,
+	    w.CREATEDBY AS W_CREATEDBY, w.UPDATEDBY AS W_UPDATEDBY, w.TSCREATED AS W_TSCREATED
 
 FROM centre AS c
          JOIN centrepatient AS cp ON c.ID = cp.CENTREID
          JOIN regionpatient AS rp ON cp.RPID = rp.RPID
-         LEFT JOIN people AS pal ON cp.PAL = pal.PEOPLEID
-         JOIN patient as p on rp.PID = p.PID
+         JOIN patient as pat on rp.PID = pat.PID
          JOIN ordinationperiod as op on op.CPID = cp.CPID
 
  		LEFT JOIN inr AS inr1 ON inr1.OID = op.OID
@@ -123,6 +130,6 @@ FROM centre AS c
 		LEFT JOIN changed_inr_interval AS change1 ON change1.INRID = inr1.INRID
 
 WHERE c.ID = ?
-AND p.SSN = ?
+AND pat.SSN = ?
 ORDER BY op.oid, w.ORDINATIONDATE
 ;
