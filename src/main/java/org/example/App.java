@@ -6,6 +6,7 @@ import MV.MatvardeLBuilderException;
 import Mott.JournalcommentException;
 import OANT.ComplicationBuilderR7;
 import OANT.ComplicationR7Exception;
+import OrdinationMOTT.OrdinationperiodBuilderR7;
 import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilderR7;
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
 import Person.*;
@@ -82,8 +83,8 @@ public class App
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
         /** R7 **/
-//        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
-//        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
+        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
+        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
 
 //        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
 //        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
@@ -91,8 +92,8 @@ public class App
 //        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
 //        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
 
-        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
-        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
+//        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
+//        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
 
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file
