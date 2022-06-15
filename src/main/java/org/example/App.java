@@ -1,10 +1,15 @@
 package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
+import MV.HemorrhagesR7Exception;
 import MV.MatvardeLBuilderException;
 import Mott.JournalcommentException;
+import OANT.ComplicationBuilderR7;
+import OANT.ComplicationR7Exception;
+import OANT.OrdpatientObservandaBuilderR7;
+import OANT.OrdpatientObservandaR7;
 import OrdinationMOTT.OrdinationperiodBuilderR7;
-import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilder;
+import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilderR7;
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
 import Person.*;
 import auxilliary.GeneralBefattningReadJSONException;
@@ -33,7 +38,7 @@ public class App
 
     private static final String datasourceHost = "cluster";
 
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException, JournalcommentException, MatvardeLBuilderException {
+    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException, JournalcommentException, MatvardeLBuilderException, HemorrhagesR7Exception, ComplicationR7Exception {
 
         if(datasourceHost == "cluster") {
             myConnection = new MyConnection(databaseUse);
@@ -64,7 +69,9 @@ public class App
         //String regpatSSN = "19121212-1212";
         //String regpatSSN = "19510403-5125";         // har waranordination comment 451 tecken (längst)
         //String regpatSSN = "19410603-9375";
-        String regpatSSN = "19611010-1125";
+        //String regpatSSN = "19611010-1125";
+        String regpatSSN = "19720701-0153";
+
         //regpatSSN = "";
 
 //        var mvb = new MatvardeLBuilder(dbConnection);
@@ -75,13 +82,25 @@ public class App
 
 //        var kontrollerProvtagningDoseringarBuilder = new KontrollerProvtagningDoseringarBuilder(dbConnection);
 //        kontrollerProvtagningDoseringarBuilder.buildKontrollerProvtagningDoseringar(centreID, regpatSSN, false);
-////
+//////
 //        var ordprov = new OrdinationperiodBuilder(dbConnection);
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
-        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
-        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
+        /** R7 **/
+//        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
+//        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
 
+//        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
+//        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
+
+//        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
+//        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
+
+//        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
+//        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
+
+        OrdpatientObservandaBuilderR7 ordpatientObservandaBuilderR7 = new OrdpatientObservandaBuilderR7(dbConnection);
+        ordpatientObservandaBuilderR7.buildObservandaR7(centreID, regpatSSN, false);
 
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file
@@ -95,8 +114,6 @@ public class App
 //        OrdinationsperiodIndikationerBuilder ordinationsPeriodBuilder = new OrdinationsperiodIndikationerBuilder(dbConnection);
 //        ordinationsPeriodBuilder.buildOrdinationPeriodIndikation(centreID, regpatSSN, false);
 
-//        HemorrhagesBuilder hemorrhagesBuilder = new HemorrhagesBuilder(dbConnection);
-//        hemorrhagesBuilder.buildHemorrhages(centreID, regpatSSN, true);
 
 //        BehandlingOchDoseringsperiodBuilder behandlingOchDoseringsperiodBuilder = new BehandlingOchDoseringsperiodBuilder(dbConnection);
 //        behandlingOchDoseringsperiodBuilder.buildBehandlingOchDosering(centreID, regpatSSN, true);

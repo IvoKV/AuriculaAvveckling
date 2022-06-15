@@ -154,6 +154,7 @@ public class PDFOrdinationperiodR7 {
 
                 /* OID documentation  */
                 StringBuilder sb = new StringBuilder();
+                sb.append("oid: ");
                 sb.append(ordinationperiodListR7.get(arrayItem).getOid());             // GET OID
                 sb.append(" (");
 
@@ -163,8 +164,6 @@ public class PDFOrdinationperiodR7 {
                 }
                 sb.append(oidCounter);
                 sb.append( " av ");
-                // todo: nedan BUGG!!!!!!!!
-                //int ordListSize = ordinationperiodListR7.size();
                 sb.append(oidCountTot);
                 sb.append(")");
                 contentStream.showText(sb.toString());
@@ -292,7 +291,7 @@ public class PDFOrdinationperiodR7 {
                 contentStream.setFont(PDType1Font.COURIER, fontSize);
                 contentStream.newLineAtOffset(startX2, y);
                 contentStream.showText("Weight date:");
-                contentStream.newLineAtOffset(xTab2, 0);
+                contentStream.newLineAtOffset(100, 0);
                 TextShower.showDate(contentStream, ordinationperiodListR7.get(arrayItem).getWeigthDate());
                 contentStream.endText();
                 y -= leading;
@@ -318,7 +317,7 @@ public class PDFOrdinationperiodR7 {
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX2, y);
                 contentStream.showText("Pref.Int.END:");
-                contentStream.newLineAtOffset(xTab2, 0);
+                contentStream.newLineAtOffset(100, 0);
                 TextShower.showFloatToText(contentStream, ordinationperiodListR7.get(arrayItem).getPreferedIntEnd());
                 contentStream.endText();
                 y -= leading;
@@ -337,7 +336,7 @@ public class PDFOrdinationperiodR7 {
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX2, y);
                 contentStream.showText("Ordp.Enddate:");
-                contentStream.newLineAtOffset(xTab2, 0);
+                contentStream.newLineAtOffset(100, 0);
                 TextShower.showDate(contentStream, ordinationperiodListR7.get(arrayItem).getEndDate());
                 contentStream.endText();
                 y -= leading;

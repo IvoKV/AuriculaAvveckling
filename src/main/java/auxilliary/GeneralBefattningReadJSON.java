@@ -20,16 +20,24 @@ import java.util.stream.Collectors;
  */
 public class GeneralBefattningReadJSON {
     private String hsaId;
+    private boolean isNull = false;
 
     List<GeneralBefattning> resultGeneralBefattning;
 
     private final String JSONFilePathBefattning = "temp\\generalBefattningar.json";
 
     public GeneralBefattningReadJSON(String hsaId) throws GeneralBefattningReadJSONException {
-        this.hsaId = hsaId;
-
-        if(hsaId.length() != 4){
-            throw new GeneralBefattningReadJSONException("hsaID validation error: length not = 4");
+        if(hsaId == null){
+            isNull = true;
+        }
+        else if(hsaId.length() != 4){
+            StringBuilder sb = new StringBuilder();
+            sb.append("ej hsaid: ");
+            sb.append(hsaId);
+            this.hsaId = sb.toString();
+        }
+        else {
+            this.hsaId = hsaId;
         }
 
         try{
@@ -50,14 +58,27 @@ public class GeneralBefattningReadJSON {
     }
 
     public String getGeneralBefattningFirstName(){
-        return resultGeneralBefattning.get(0).getFirstName();
+        if(!isNull && resultGeneralBefattning.size() > 0)
+            return resultGeneralBefattning.get(0).getFirstName();
+        else if (hsaId == "is null")
+            return "is null";
+        else
+            return hsaId;
     }
 
     public String getGeneralBefattningLastName(){
-        return resultGeneralBefattning.get(0).getLastName();
+        if(!isNull && resultGeneralBefattning.size() > 0)
+            return resultGeneralBefattning.get(0).getLastName();
+        else if (hsaId == "is null")
+            return "is null";
+        else
+            return "";      // får samma result värde som getGenerasBefattningFirstName()
     }
 
     public String getGeneralBefattningTitel(){
-        return resultGeneralBefattning.get(0).getTitel();
+        if(!isNull)
+            return resultGeneralBefattning.get(0).getTitel();
+        else
+            return "is null";
     }
 }
