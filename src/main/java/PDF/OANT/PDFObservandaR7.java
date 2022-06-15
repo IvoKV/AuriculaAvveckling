@@ -1,9 +1,7 @@
 package PDF.OANT;
 
-import MV.HemorrhagesR7;
-import Mott.JournalcommentBuilder;
 import Mott.JournalcommentException;
-import OANT.ComplicationR7;
+import OANT.OrdpatientObservandaR7;
 import auxilliary.FileOperations;
 import auxilliary.GeneralBefattningReadJSON;
 import auxilliary.GeneralBefattningReadJSONException;
@@ -18,11 +16,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PDFComplicationR7 {
+public class PDFObservandaR7 {
+    List<OrdpatientObservandaR7> observandaR7List;
 
-    private List<ComplicationR7> complicationR7List = null;
-
-    private final String pdfPathFileName = "out/R7/PDFComplicationR7.pdf";
+    private final String pdfPathFileName = "out/R7/PDFObservandaR7.pdf";
 
     private float x = 0;
     private float y = 750;
@@ -36,9 +33,8 @@ public class PDFComplicationR7 {
     private PDDocument document = null;
     private PDPage page = null;
     private PDPageContentStream contentStream = null;
-    private int sidaNo = 0;
-    public PDFComplicationR7(List<ComplicationR7> complicationR7List) throws IOException {
-        this.complicationR7List = complicationR7List;
+    public PDFObservandaR7(List<OrdpatientObservandaR7> observandaR7List) throws IOException {
+        this.observandaR7List = observandaR7List;
 
         /** Initialize document and first page **/
         this.document = new PDDocument();
@@ -57,7 +53,7 @@ public class PDFComplicationR7 {
         contentStream.beginText();
         contentStream.setFont(PDType1Font.COURIER_BOLD, 14f);
         contentStream.newLineAtOffset( startX, yCordinate);
-        contentStream.showText("Complication");
+        contentStream.showText("Observanda:");
         yCordinate -= fontHeight;
         contentStream.endText();
 
@@ -82,7 +78,7 @@ public class PDFComplicationR7 {
         contentStream.newLineAtOffset(startX, y);
         contentStream.showText("Förnamn:");
         contentStream.newLineAtOffset(xTab1, 0);
-        contentStream.showText(complicationR7List.get(0).getPatFirstName());
+        contentStream.showText(observandaR7List.get(0).getPatFirstName());
         contentStream.endText();
         y -= leading;
 
@@ -90,7 +86,7 @@ public class PDFComplicationR7 {
         contentStream.newLineAtOffset(startX, y);
         contentStream.showText("Efternamn:");
         contentStream.newLineAtOffset(xTab1, 0);
-        contentStream.showText(complicationR7List.get(0).getPatLastName());
+        contentStream.showText(observandaR7List.get(0).getPatLastName());
         contentStream.endText();
         y -= leading;
 
@@ -98,7 +94,7 @@ public class PDFComplicationR7 {
         contentStream.newLineAtOffset(startX2 + 30, yHold);
         contentStream.showText("SSN:");
         contentStream.newLineAtOffset(xTab1, 0);
-        contentStream.showText(complicationR7List.get(0).getSsn());
+        contentStream.showText(observandaR7List.get(0).getSsn());
         contentStream.endText();
         yHold -= leading;
 
@@ -106,7 +102,7 @@ public class PDFComplicationR7 {
         contentStream.newLineAtOffset(startX2 + 30f, yHold);
         contentStream.showText("SSN Type:");
         contentStream.newLineAtOffset(xTab1 , 0);
-        contentStream.showText(complicationR7List.get(0).getSsnType().toString());
+        contentStream.showText(observandaR7List.get(0).getSsnType().toString());
         contentStream.endText();
         yHold -= leading;
 
@@ -137,88 +133,61 @@ public class PDFComplicationR7 {
             writeHeader();
             writePatientInfo();     // written only once, on page 1
 
-            int arraySize = complicationR7List.size();
+            int arraySize = observandaR7List.size();
 
             for(int arrayItem = 0; arrayItem < arraySize; arrayItem++ ) {
 
-                /* OID */
+                /* RPID */
                 contentStream.beginText();
                 contentStream.setFont(fontBold, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("OID:");
+                contentStream.showText("RPID:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showIntToText(contentStream, complicationR7List.get(arrayItem).getOid());
+                TextShower.showIntToText(contentStream, observandaR7List.get(arrayItem).getOrdpatRPID());
                 contentStream.endText();
                 y -= leading;
 
-                /* BLEEDING */
+                /* OBSERVANDA COMMENT */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Bleeding:");
+                contentStream.showText("Observanda comment:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, complicationR7List.get(arrayItem).getBleeding());
+                TextShower.showString(contentStream, observandaR7List.get(arrayItem).getObservandaComment());
                 contentStream.endText();
                 y -= leading;
 
-                /* TROMBOSIS */
+                /* SEVERITY COMMENT */
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Trombosis:");
+                contentStream.showText("Severity comment:");
                 contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, complicationR7List.get(arrayItem).getTrombosis());
-                contentStream.endText();
-                y -= leading;
-
-                /* DAYS OF CARE */
-                contentStream.beginText();
-                contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Days of care:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showIntToText(contentStream, complicationR7List.get(arrayItem).getDaysOfCare());
-                contentStream.endText();
-                y -= leading;
-
-                /* PKVALUE */
-                contentStream.beginText();
-                contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("PK value:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showBigdecimal(contentStream, complicationR7List.get(arrayItem).getPKINR());
-                contentStream.endText();
-                y -= leading;
-
-                /* STATUS */
-                contentStream.beginText();
-                contentStream.newLineAtOffset(startX, y);
-                contentStream.showText("Status:");
-                contentStream.newLineAtOffset(xTab1, 0);
-                TextShower.showString(contentStream, complicationR7List.get(arrayItem).getStatus());
+                TextShower.showString(contentStream, observandaR7List.get(arrayItem).getServerityObservanda1());
                 contentStream.endText();
                 y -= leading;
 
                 /* CREATED BY */
-                StringBuilder sbcr = new StringBuilder();
-                GeneralBefattningReadJSON gbj = new GeneralBefattningReadJSON(complicationR7List.get(arrayItem).getCreatedBy());
-                sbcr.append(gbj.getGeneralBefattningFirstName() + " ");
-                sbcr.append(gbj.getGeneralBefattningLastName());
+                GeneralBefattningReadJSON generalBefattningReadJSON = new GeneralBefattningReadJSON(observandaR7List.get(arrayItem).getCreatedBy());
+                StringBuilder sb1 = new StringBuilder();
+                sb1.append(generalBefattningReadJSON.getGeneralBefattningFirstName() + " ");
+                sb1.append(generalBefattningReadJSON.getGeneralBefattningLastName() + " ");
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Created by:");
-                contentStream.newLineAtOffset(100, 0);
-                TextShower.showString(contentStream, sbcr.toString());
-                sbcr = null;
-                gbj = null;
+                contentStream.newLineAtOffset(xTab1, 0);
+                TextShower.showString(contentStream, sb1.toString());
                 contentStream.endText();
+                generalBefattningReadJSON = null;
+                sb1 = null;
+                y -= leading;
 
-                // todo: hur exact nullvärden i hsaId skall hanteras
-                /* -> UPDATED BY */
+                /* UPDATED BY */
                 StringBuilder sbupd = new StringBuilder();
-                GeneralBefattningReadJSON gbj2 = new GeneralBefattningReadJSON(complicationR7List.get(arrayItem).getUpdatedBy());
+                GeneralBefattningReadJSON gbj2 = new GeneralBefattningReadJSON(observandaR7List.get(arrayItem).getUpdatedBy());
                 sbupd.append(gbj2.getGeneralBefattningFirstName() + " ");
                 sbupd.append(gbj2.getGeneralBefattningLastName() + " ");
                 contentStream.beginText();
-                contentStream.newLineAtOffset(startX2, y);
+                contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Updated by:");
                 contentStream.newLineAtOffset(100, 0);
                 TextShower.showString(contentStream, sbupd.toString());
@@ -232,7 +201,7 @@ public class PDFComplicationR7 {
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Created (TS):");
                 contentStream.newLineAtOffset(100, 0);
-                contentStream.showText(complicationR7List.get(arrayItem).getTsCreated().toString().substring(0, 19));
+                contentStream.showText(observandaR7List.get(arrayItem).getTsCreated().toString().substring(0, 19));
                 contentStream.endText();
                 y -= leading;
 
@@ -252,7 +221,7 @@ public class PDFComplicationR7 {
         FileOperations fop = new FileOperations(pdfPathFileName);
         String fileWithoutExtension =  fop.getFilenameWithoutExtension(); // kontrollerProvtagningDoseringarList.get(0).getSsn();
         fop = null;
-        String filenameWithSSN = fileWithoutExtension + "_" + complicationR7List.get(0).getSsn() + ".pdf";
+        String filenameWithSSN = fileWithoutExtension + "_" + observandaR7List.get(0).getSsn() + ".pdf";
         document.save(filenameWithSSN);
         document.close();
     }
