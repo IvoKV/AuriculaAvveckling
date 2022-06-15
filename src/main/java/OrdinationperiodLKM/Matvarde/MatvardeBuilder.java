@@ -79,7 +79,7 @@ public class MatvardeBuilder {
             matvardes.add(comp);
         }
         int listSize = matvardes.size();
-        myConnection.close();
+        //myConnection.close();
 
         matvardes.stream()
                 .forEach(System.out::println);

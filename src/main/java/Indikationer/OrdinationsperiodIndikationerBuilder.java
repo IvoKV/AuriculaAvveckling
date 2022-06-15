@@ -83,7 +83,7 @@ public class OrdinationsperiodIndikationerBuilder {
             ordinationsperiodIndikationerList.add(op);
         }
         int listSize = ordinationsperiodIndikationerList.size();
-        myConnection.close();
+        //myConnection.close();
 
         ordinationsperiodIndikationerList.stream()
                 .forEach(System.out::println);

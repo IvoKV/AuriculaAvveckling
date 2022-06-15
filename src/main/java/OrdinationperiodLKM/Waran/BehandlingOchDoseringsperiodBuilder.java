@@ -89,7 +89,7 @@ public class BehandlingOchDoseringsperiodBuilder {
             behandlingOchDoseringsperiods.add(bdp);
         }
         int listSize = behandlingOchDoseringsperiods.size();
-        myConnection.close();
+        //myConnection.close();
 
         behandlingOchDoseringsperiods.stream()
                 .forEach(System.out::println);

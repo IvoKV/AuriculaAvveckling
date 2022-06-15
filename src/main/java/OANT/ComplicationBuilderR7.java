@@ -75,7 +75,7 @@ public class ComplicationBuilderR7 {
             complicationR7List.add(complicationR7);
         }
         int listSize = complicationR7List.size();
-        myConnection.close();
+        //myConnection.close();
 
         complicationR7List.stream()
                 .forEach(System.out::println);

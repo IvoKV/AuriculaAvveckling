@@ -55,7 +55,7 @@ public class PersonPatientBuilder {
 //                continue;
 //            }
         }
-        myConnection.close();
+        //myConnection.close();
         listCount = personPatients.size();
 
         personPatients.stream()

@@ -78,7 +78,7 @@ public class LabInrBuilder {
             labinrList.add(labInr);
         }
         int listSize = labinrList.size();
-        myConnection.close();
+        //myConnection.close();
 
         labinrList.stream()
                 .forEach(System.out::println);

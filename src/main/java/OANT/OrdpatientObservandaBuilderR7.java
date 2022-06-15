@@ -68,7 +68,7 @@ public class OrdpatientObservandaBuilderR7 {
         }
 
         int listSize = ordpatientObservandaR7List.size();
-        myConnection.close();
+        //myConnection.close();
 
         ordpatientObservandaR7List.stream()
                 .forEach(System.out::println);
