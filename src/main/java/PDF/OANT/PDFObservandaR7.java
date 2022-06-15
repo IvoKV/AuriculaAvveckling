@@ -189,7 +189,7 @@ public class PDFObservandaR7 {
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Updated by:");
-                contentStream.newLineAtOffset(100, 0);
+                contentStream.newLineAtOffset(xTab1, 0);
                 TextShower.showString(contentStream, sbupd.toString());
                 sbupd = null;
                 gbj2 = null;
@@ -200,7 +200,7 @@ public class PDFObservandaR7 {
                 contentStream.beginText();
                 contentStream.newLineAtOffset(startX, y);
                 contentStream.showText("Created (TS):");
-                contentStream.newLineAtOffset(100, 0);
+                contentStream.newLineAtOffset(xTab1, 0);
                 contentStream.showText(observandaR7List.get(arrayItem).getTsCreated().toString().substring(0, 19));
                 contentStream.endText();
                 y -= leading;
