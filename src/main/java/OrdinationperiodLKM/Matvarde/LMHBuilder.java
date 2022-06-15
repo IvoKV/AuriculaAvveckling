@@ -80,7 +80,7 @@ public class LMHBuilder {
             lmhList.add(labInr);
         }
         int listSize = lmhList.size();
-        myConnection.close();
+        //myConnection.close();
 
         lmhList.stream()
                 .forEach(System.out::println);

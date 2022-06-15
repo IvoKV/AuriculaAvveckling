@@ -1,13 +1,13 @@
 package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
+import MV.HemorrhagesBuilderR7;
 import MV.HemorrhagesR7Exception;
 import MV.MatvardeLBuilderException;
 import Mott.JournalcommentException;
 import OANT.ComplicationBuilderR7;
 import OANT.ComplicationR7Exception;
 import OANT.OrdpatientObservandaBuilderR7;
-import OANT.OrdpatientObservandaR7;
 import OrdinationMOTT.OrdinationperiodBuilderR7;
 import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilderR7;
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
@@ -31,6 +31,7 @@ import java.sql.SQLException;
  */
 public class App 
 {
+    private Connection myconnection = null;
     private static final String simpleConnectionFilePath = "src/resource/ConnectionString.txt";     // Används endast för öppen kanal till db source/-host
     private static final String databaseUse = "auricula_export_TIO_100";
     private static MyConnection myConnection = null;
@@ -87,17 +88,17 @@ public class App
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
         /** R7 **/
-//        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
-//        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
+        OrdinationperiodBuilderR7 ordinationperiodBuilderR7 = new OrdinationperiodBuilderR7(dbConnection);
+        ordinationperiodBuilderR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
 
-//        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
-//        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
+        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
+        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
 
-//        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
-//        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
+        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
+        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
 
-//        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
-//        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
+        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
+        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
 
         OrdpatientObservandaBuilderR7 ordpatientObservandaBuilderR7 = new OrdpatientObservandaBuilderR7(dbConnection);
         ordpatientObservandaBuilderR7.buildObservandaR7(centreID, regpatSSN, false);

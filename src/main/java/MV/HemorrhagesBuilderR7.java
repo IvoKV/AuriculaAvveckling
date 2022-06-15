@@ -76,7 +76,7 @@ public class HemorrhagesBuilderR7 {
             hemorrhagesR7List.add(hemorrhages);
         }
         int listSize = hemorrhagesR7List.size();
-        myConnection.close();
+        //myConnection.close();
 
         hemorrhagesR7List.stream()
                 .forEach(System.out::println);
