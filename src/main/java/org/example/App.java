@@ -6,6 +6,8 @@ import MV.MatvardeLBuilderException;
 import Mott.JournalcommentException;
 import OANT.ComplicationBuilderR7;
 import OANT.ComplicationR7Exception;
+import OANT.OrdpatientObservandaBuilderR7;
+import OANT.OrdpatientObservandaR7;
 import OrdinationMOTT.OrdinationperiodBuilderR7;
 import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilderR7;
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
@@ -67,7 +69,9 @@ public class App
         //String regpatSSN = "19121212-1212";
         //String regpatSSN = "19510403-5125";         // har waranordination comment 451 tecken (längst)
         //String regpatSSN = "19410603-9375";
-        String regpatSSN = "19611010-1125";
+        //String regpatSSN = "19611010-1125";
+        String regpatSSN = "19720701-0153";
+
         //regpatSSN = "";
 
 //        var mvb = new MatvardeLBuilder(dbConnection);
@@ -83,8 +87,8 @@ public class App
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
         /** R7 **/
-        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
-        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
+//        var ordprovR7 = new OrdinationperiodBuilderR7(dbConnection);
+//        ordprovR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
 
 //        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
 //        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
@@ -94,6 +98,9 @@ public class App
 
 //        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
 //        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
+
+        OrdpatientObservandaBuilderR7 ordpatientObservandaBuilderR7 = new OrdpatientObservandaBuilderR7(dbConnection);
+        ordpatientObservandaBuilderR7.buildObservandaR7(centreID, regpatSSN, false);
 
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file

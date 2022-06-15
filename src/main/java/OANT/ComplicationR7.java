@@ -10,14 +10,6 @@ import java.util.Objects;
 
 public class ComplicationR7 extends PatientGeneralData {
     private String cid;                              // c.id
-//    private int pid;                                 // p.pid
-//    private String SSN;
-//    private Short SSN_TYPE;
-//    private String patFirstname;
-//    private String patLastname;
-//    private Short palTitle;
-//    private String palFirstname;
-//    private String palLastname;
 
     /** OID **/
     private int oid;
