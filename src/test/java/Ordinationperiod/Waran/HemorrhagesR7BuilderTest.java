@@ -1,5 +1,6 @@
 package Ordinationperiod.Waran;
 
+import MV.HemorrhagesBuilderR7;
 import auxilliary.MyConnection;
 import com.jcraft.jsch.JSchException;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +27,7 @@ class HemorrhagesR7BuilderTest {
     }
 
     // when
-    HemorrhagesBuilder underTest = new HemorrhagesBuilder(dbConnection);
+    HemorrhagesBuilderR7 underTest = new HemorrhagesBuilderR7(dbConnection);
 
     @Test
     @DisplayName("HemorrhagesBuilderTest::Valid Connection")
