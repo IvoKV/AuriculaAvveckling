@@ -9,8 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.*;
 
 public class BrevpathBuilderR7 {
 
@@ -48,11 +49,38 @@ public class BrevpathBuilderR7 {
 
     public void preparePdfPath(int quantity) throws BrevpathExceptionR7 {
         for(int i = 0; i < quantity; i++){
-            String itemPath = brevpathR7List.get(i).getBrevPath();
+            String itemPath = brevpathR7List.get(i).getBrevPath();  // 2011/03/07/11012AK/SE_76021_1_1864723.pdf
+            String yyyymmdd = itemPath.substring(0, 10);
+            String itemPathWithMonth = getDateWithMonthLiteral(yyyymmdd);
+
             Path path = Paths.get(brevDirectory, itemPath);
 
             getPdfDocument(path);
         }
+    }
+
+    private String getDateWithMonthLiteral(String yyyymmdd) {
+        int year = Integer.valueOf(yyyymmdd.substring(0,4));
+        int month = Integer.parseInt(yyyymmdd.substring(6,7));
+        int day = Integer.valueOf(yyyymmdd.substring(9,10));
+        // todo: below formatting is not correct!!
+        String dayString = String.format(String.valueOf(day), "%d%d");
+
+        LocalDate date = LocalDate.of(year, month, day);
+        Month monthLiteral = date.getMonth();
+
+        String monthLiteralLowerCase = monthLiteral.toString().toLowerCase(Locale.getDefault());
+        String monthUCFL = monthLiteralLowerCase.substring(0,1).toUpperCase();
+        String monthCapitalized = monthUCFL + monthLiteralLowerCase.substring(1);
+
+        StringBuilder dateRebuild = new StringBuilder();
+        dateRebuild.append(year);
+        dateRebuild.append("/");
+        dateRebuild.append(monthCapitalized);
+        dateRebuild.append("/");
+        dateRebuild.append(day);
+
+        return dateRebuild.toString();
     }
 
     private void getPdfDocument(Path path) throws BrevpathExceptionR7 {
