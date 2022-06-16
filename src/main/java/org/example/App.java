@@ -1,15 +1,12 @@
 package org.example;
 
 /** GÖR INTE NÅGON IMPORTOPTIMERING!! **/
-import MV.HemorrhagesBuilderR7;
+import BOI.BrevpathBuilderR7;
+import BOI.BrevpathExceptionR7;
 import MV.HemorrhagesR7Exception;
 import MV.MatvardeLBuilderException;
 import Mott.JournalcommentException;
-import OANT.ComplicationBuilderR7;
 import OANT.ComplicationR7Exception;
-import OANT.OrdpatientObservandaBuilderR7;
-import OrdinationMOTT.OrdinationperiodBuilderR7;
-import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilderR7;
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
 import Person.*;
 import auxilliary.GeneralBefattningReadJSONException;
@@ -37,9 +34,9 @@ public class App
     private static MyConnection myConnection = null;
     private static Connection dbConnection = null;
 
-    private static final String datasourceHost = "stationär";
+    private static final String datasourceHost = "cluster";
 
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException, JournalcommentException, MatvardeLBuilderException, HemorrhagesR7Exception, ComplicationR7Exception {
+    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException, JournalcommentException, MatvardeLBuilderException, HemorrhagesR7Exception, ComplicationR7Exception, BrevpathExceptionR7 {
 
         if(datasourceHost == "cluster") {
             myConnection = new MyConnection(databaseUse);
@@ -80,6 +77,9 @@ public class App
 //        var mvb = new MatvardeLBuilder(dbConnection);
 //        mvb.buildMatvardeL(centreID, regpatSSN, false);
 
+        /** IMPORTANT!!
+         * This class (GeneralBefattning) must be processed once, before continuing processing the layouts.
+         */
 //        var generalBefattning = new GeneralBefattningBuilder(dbConnection);
 //        generalBefattning.buildGeneralBefattning();
 
@@ -90,21 +90,26 @@ public class App
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
         /** R7 **/
-        OrdinationperiodBuilderR7 ordinationperiodBuilderR7 = new OrdinationperiodBuilderR7(dbConnection);
-        ordinationperiodBuilderR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
+//        OrdinationperiodBuilderR7 ordinationperiodBuilderR7 = new OrdinationperiodBuilderR7(dbConnection);
+//        ordinationperiodBuilderR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
 
-        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
-        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
+//        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
+//        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
+//
+//        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
+//        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
+//
+//        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
+//        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
+//
+//        OrdpatientObservandaBuilderR7 ordpatientObservandaBuilderR7 = new OrdpatientObservandaBuilderR7(dbConnection);
+//        ordpatientObservandaBuilderR7.buildObservandaR7(centreID, regpatSSN, false);
 
-        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
-        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
+        BrevpathBuilderR7 brevpathBuilderR7 = new BrevpathBuilderR7(dbConnection);
+        brevpathBuilderR7.createBrevPathR7(regpatSSN, false);
+        brevpathBuilderR7.preparePdfPath(1);
 
-        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
-        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
-
-        OrdpatientObservandaBuilderR7 ordpatientObservandaBuilderR7 = new OrdpatientObservandaBuilderR7(dbConnection);
-        ordpatientObservandaBuilderR7.buildObservandaR7(centreID, regpatSSN, false);
-
+        /** -- R7 SLUT -- **/
 //        var personPat = new PersonPatientBuilder(dbConnection);
 //        personPat.buildPersonPatient(centreID, true);         // boolean: write to file
 
