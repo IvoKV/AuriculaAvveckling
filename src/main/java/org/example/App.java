@@ -63,14 +63,14 @@ public class App
         String centreID = "11012AK";
         //int regpatId = 54241;
         //int regpatId = 489980;
-        //String regpatSSN = "19840729-0249";     // Linda Madeleine
+        String regpatSSN = "19840729-0249";     // Linda Madeleine, har 11 autosentletters, VARAV:
         //String regpatSSN = "19420807-0815";
         //String regpatSSN = "19470707-1157";
         //String regpatSSN = "19121212-1212";
-        //String regpatSSN = "19510403-5125";         // har waranordination comment 451 tecken (längst)
-        //String regpatSSN = "19410603-9375";
-        //String regpatSSN = "19611010-1125";
-        String regpatSSN = "19720701-0153";
+        //String regpatSSN = "19510403-5125";         // har waranordination comment 451 tecken (längst), har 12 autosentletters
+        //String regpatSSN = "19410603-9375";           // har 1 autosentletters
+        //String regpatSSN = "19611010-1125";           // har 159 autosentletters
+        //String regpatSSN = "19720701-0153";             // har 56 autosentletters!
 
         //regpatSSN = "";
 
@@ -107,7 +107,7 @@ public class App
 
         BrevpathBuilderR7 brevpathBuilderR7 = new BrevpathBuilderR7(dbConnection);
         brevpathBuilderR7.createBrevPathR7(regpatSSN, false);
-        brevpathBuilderR7.preparePdfPath(1);
+        brevpathBuilderR7.preparePdfPath(77, false);
 
         /** -- R7 SLUT -- **/
 //        var personPat = new PersonPatientBuilder(dbConnection);
