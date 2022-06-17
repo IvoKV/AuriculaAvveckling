@@ -8,5 +8,13 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://sllmltprodapp01.dc.sll.se:30306/auricula_export_TIO_100</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="auricula_export_TIO_100@sllmltprodapp01.dc.sll.se [2]" uuid="0338797a-1bfe-4454-8200-777d10a48824">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <remarks>DB in cluster</remarks>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://sllmltprodapp01.dc.sll.se:30306/auricula_export_TIO_100</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
