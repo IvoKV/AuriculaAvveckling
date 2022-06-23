@@ -9,6 +9,7 @@ import Mott.JournalcommentException;
 import OANT.ComplicationR7Exception;
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
 import Person.*;
+import auxilliary.CreateDBConnection;
 import auxilliary.GeneralBefattningReadJSONException;
 import auxilliary.MyConnection;
 import com.jcraft.jsch.JSchException;
@@ -29,15 +30,20 @@ import java.sql.SQLException;
 public class App 
 {
     private Connection myconnection = null;
-    private static final String simpleConnectionFilePath = "src/resource/ConnectionString.txt";     // Används endast för öppen kanal till db source/-host [from:staionär dator]
+    private static final String simpleConnectionFilePath = "src/resource/ConnectionStringTolitds63513845.txt";     // Används endast för öppen kanal till db source/-host [from:staionär dator]
     private static final String databaseUse = "auricula_export_TIO_100";
     private static MyConnection myConnection = null;
     private static Connection dbConnection = null;
 
-    private static final String datasourceHost = "cluster";
+    private static final String datasourceHost = "stationär";
+    //private static final String datasourceHost = "cluster";
 
     public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException, JournalcommentException, MatvardeLBuilderException, HemorrhagesR7Exception, ComplicationR7Exception, BrevpathExceptionR7 {
 
+        CreateDBConnection createDBConnection = new CreateDBConnection(datasourceHost, databaseUse);
+        dbConnection = createDBConnection.createConnection();
+
+/*
         if(datasourceHost == "cluster") {
             myConnection = new MyConnection(databaseUse);
             myConnection.createSshTunnel();
@@ -59,6 +65,10 @@ public class App
             System.out.println("Improper choice of datacourceHost!");
             System.exit(0);
         }
+
+ */
+
+
 
         String centreID = "11012AK";
         //int regpatId = 54241;
@@ -136,6 +146,7 @@ public class App
 //          lmhBuilder.buildLMH(centreID, regpatSSN, true);
 
             dbConnection.close();
-            myConnection.disconnectSession();
+            //myConnection.disconnectSession();
+        createDBConnection.closeMyConnection();
     }
 }
