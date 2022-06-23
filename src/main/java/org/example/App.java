@@ -7,6 +7,7 @@ import MV.HemorrhagesR7Exception;
 import MV.MatvardeLBuilderException;
 import Mott.JournalcommentException;
 import OANT.ComplicationR7Exception;
+import OrdinationMOTT.OrdinationperiodBuilderR7;
 import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilderR7;
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
 import Person.*;
@@ -101,8 +102,8 @@ public class App
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
         /** R7 **/
-//        OrdinationperiodBuilderR7 ordinationperiodBuilderR7 = new OrdinationperiodBuilderR7(dbConnection);
-//        ordinationperiodBuilderR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
+        OrdinationperiodBuilderR7 ordinationperiodBuilderR7 = new OrdinationperiodBuilderR7(dbConnection);
+        ordinationperiodBuilderR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
 
 //        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
 //        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
@@ -110,8 +111,8 @@ public class App
 //        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
 //        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
 //
-        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
-        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
+//        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
+//        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
 
 //        OrdpatientObservandaBuilderR7 ordpatientObservandaBuilderR7 = new OrdpatientObservandaBuilderR7(dbConnection);
 //        ordpatientObservandaBuilderR7.buildObservandaR7(centreID, regpatSSN, false);
