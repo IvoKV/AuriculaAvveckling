@@ -159,7 +159,7 @@ public class PDFKontrollerProvtagningDoseringarR7 {
                 contentStream.showText(sb1.toString());
                 contentStream.endText();
                 contentStream.beginText();
-                contentStream.newLineAtOffset(startX2, y);
+                contentStream.newLineAtOffset(startX2 + 30, y);
                 contentStream.showText("Title:");
                 contentStream.newLineAtOffset(80, 0);
                 TextShower.showString(contentStream, genJSON1.getGeneralBefattningTitel());
