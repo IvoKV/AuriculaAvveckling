@@ -48,6 +48,5 @@ public class CreateDBConnection {
 
     public void closeMyConnection(){
         myConnection.disconnectSession();
-        System.out.println("Session is disconnected.");
     }
 }
