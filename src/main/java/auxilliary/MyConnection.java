@@ -102,6 +102,7 @@ public class MyConnection {
     public void disconnectSession(){
         if(session != null) {
             session.disconnect();
+            System.out.println("Session is disconnected.");
         }
     }
 }
