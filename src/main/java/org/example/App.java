@@ -6,6 +6,7 @@ import BOI.BrevpathExceptionR7;
 import MV.HemorrhagesR7Exception;
 import MV.MatvardeLBuilderException;
 import Mott.JournalcommentException;
+import OANT.ComplicationBuilderR7;
 import OANT.ComplicationR7Exception;
 import OrdinationMOTT.OrdinationperiodBuilderR7;
 import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilderR7;
@@ -78,11 +79,13 @@ public class App
         //String regpatSSN = "19840729-0249";     // Linda Madeleine, har 11 autosentletters, VARAV:
         //String regpatSSN = "19420807-0815";
         //String regpatSSN = "19470707-1157";
+        String regpatSSN = "19470707-1140";         // lämplig pat. för ComplicationR7
+
         //String regpatSSN = "19121212-1212";
         //String regpatSSN = "19510403-5125";         // har waranordination comment 451 tecken (längst), har 12 autosentletters
         //String regpatSSN = "19410603-9375";           // har 1 autosentletters
         //String regpatSSN = "19611010-1125";           // har 159 autosentletters
-        String regpatSSN = "19720701-0153";             // har 56 autosentletters!
+        //String regpatSSN = "19720701-0153";             // har 56 autosentletters!
 
         //regpatSSN = "";
 
@@ -102,15 +105,15 @@ public class App
 //        ordprov.buildOrdinationperiod(centreID, regpatSSN, false);
 
         /** R7 **/
-        OrdinationperiodBuilderR7 ordinationperiodBuilderR7 = new OrdinationperiodBuilderR7(dbConnection);
-        ordinationperiodBuilderR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
+//        OrdinationperiodBuilderR7 ordinationperiodBuilderR7 = new OrdinationperiodBuilderR7(dbConnection);
+//        ordinationperiodBuilderR7.buildOrdinationperiodR7(centreID, regpatSSN, false);
 
 //        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
 //        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
 //
-//        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
-//        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
-//
+        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
+        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
+
 //        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
 //        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
 
