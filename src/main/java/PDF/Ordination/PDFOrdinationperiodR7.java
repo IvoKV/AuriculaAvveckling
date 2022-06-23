@@ -341,6 +341,17 @@ public class PDFOrdinationperiodR7 {
                 contentStream.endText();
                 y -= leading;
 
+                /* PERIOD LENGTH */
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.COURIER, 12f);
+                contentStream.newLineAtOffset(startX, y);
+                contentStream.showText("Period length:");
+                contentStream.newLineAtOffset(xTab1, 0);
+                TextShower.showString(contentStream, ordinationperiodListR7.get(arrayItem).getPeriodLength());
+                contentStream.endText();
+                y -= leading;
+
+
                 /* LENGTHCOMMENT */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);

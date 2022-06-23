@@ -6,7 +6,10 @@ import BOI.BrevpathExceptionR7;
 import MV.HemorrhagesR7Exception;
 import MV.MatvardeLBuilderException;
 import Mott.JournalcommentException;
+import OANT.ComplicationBuilderR7;
 import OANT.ComplicationR7Exception;
+import OrdinationMOTT.OrdinationperiodBuilderR7;
+import OrdinationperiodLKM.KontrollerProvtagningDoseringarBuilderR7;
 import OrdinationperiodLKM.Waran.OrdinationsperiodInitializeException;
 import Person.*;
 import auxilliary.CreateDBConnection;
@@ -73,9 +76,11 @@ public class App
         String centreID = "11012AK";
         //int regpatId = 54241;
         //int regpatId = 489980;
-        String regpatSSN = "19840729-0249";     // Linda Madeleine, har 11 autosentletters, VARAV:
+        //String regpatSSN = "19840729-0249";     // Linda Madeleine, har 11 autosentletters, VARAV:
         //String regpatSSN = "19420807-0815";
         //String regpatSSN = "19470707-1157";
+        String regpatSSN = "19470707-1140";         // lämplig pat. för ComplicationR7
+
         //String regpatSSN = "19121212-1212";
         //String regpatSSN = "19510403-5125";         // har waranordination comment 451 tecken (längst), har 12 autosentletters
         //String regpatSSN = "19410603-9375";           // har 1 autosentletters
@@ -106,18 +111,18 @@ public class App
 //        HemorrhagesBuilderR7 hemorrhagesBuilderR7 = new HemorrhagesBuilderR7(dbConnection);
 //        hemorrhagesBuilderR7.buildHemorrhages(centreID, regpatSSN, false);
 //
-//        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
-//        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
-//
+        ComplicationBuilderR7 complicationBuilderR7 = new ComplicationBuilderR7(dbConnection);
+        complicationBuilderR7.buildComplicationR7(centreID, regpatSSN, false);
+
 //        KontrollerProvtagningDoseringarBuilderR7 kontrollerProvtagningDoseringarBuilderR7 = new KontrollerProvtagningDoseringarBuilderR7(dbConnection);
 //        kontrollerProvtagningDoseringarBuilderR7.buildKontrollerProvtagningDoseringarR7(centreID, regpatSSN, false);
-//
+
 //        OrdpatientObservandaBuilderR7 ordpatientObservandaBuilderR7 = new OrdpatientObservandaBuilderR7(dbConnection);
 //        ordpatientObservandaBuilderR7.buildObservandaR7(centreID, regpatSSN, false);
 
-        BrevpathBuilderR7 brevpathBuilderR7 = new BrevpathBuilderR7(dbConnection);
-        brevpathBuilderR7.createBrevPathR7(regpatSSN, false);
-        brevpathBuilderR7.preparePdfPath(77, false);
+//        BrevpathBuilderR7 brevpathBuilderR7 = new BrevpathBuilderR7(dbConnection);
+//        brevpathBuilderR7.createBrevPathR7(regpatSSN, false);
+//        brevpathBuilderR7.preparePdfPath(77, false);
 
         /** -- R7 SLUT -- **/
 //        var personPat = new PersonPatientBuilder(dbConnection);

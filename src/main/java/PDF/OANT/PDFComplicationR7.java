@@ -151,6 +151,16 @@ public class PDFComplicationR7 {
                 contentStream.endText();
                 y -= leading;
 
+                /* COMPL EXISTS */
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.COURIER, 12f);
+                contentStream.newLineAtOffset(startX, y);
+                contentStream.showText("Compl. exists:");
+                contentStream.newLineAtOffset(xTab1, 0);
+                TextShower.showString(contentStream, complicationR7List.get(arrayItem).getComplexExists());
+                contentStream.endText();
+                y -= leading;
+
                 /* BLEEDING */
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.COURIER, 12f);
