@@ -100,6 +100,8 @@ public class MyConnection {
     }
 
     public void disconnectSession(){
-        session.disconnect();
+        if(session != null) {
+            session.disconnect();
+        }
     }
 }

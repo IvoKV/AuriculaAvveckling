@@ -45,4 +45,9 @@ public class CreateDBConnection {
             return null;
         }
     }
+
+    public void closeMyConnection(){
+        myConnection.disconnectSession();
+        System.out.println("Session is disconnected.");
+    }
 }

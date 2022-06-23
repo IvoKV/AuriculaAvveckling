@@ -35,16 +35,15 @@ public class App
     private static MyConnection myConnection = null;
     private static Connection dbConnection = null;
 
-    //private static final String datasourceHost = "stationär";
-    private static final String datasourceHost = "cluster";
+    private static final String datasourceHost = "stationär";
+    //private static final String datasourceHost = "cluster";
 
     public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException, PersonInitializationException, PersonInChargeException, OrdinationsperiodInitializeException, MatvardeInitializationException, JSchException, KontrollerProvtagningDoseringarException, OrdinationperiodException, GeneralBefattningException, PatientGeneralDataException, GeneralBefattningReadJSONException, JournalcommentException, MatvardeLBuilderException, HemorrhagesR7Exception, ComplicationR7Exception, BrevpathExceptionR7 {
 
         CreateDBConnection createDBConnection = new CreateDBConnection(datasourceHost, databaseUse);
         dbConnection = createDBConnection.createConnection();
 
-
-        /*
+/*
         if(datasourceHost == "cluster") {
             myConnection = new MyConnection(databaseUse);
             myConnection.createSshTunnel();
@@ -67,7 +66,9 @@ public class App
             System.exit(0);
         }
 
-         */
+ */
+
+
 
         String centreID = "11012AK";
         //int regpatId = 54241;
@@ -145,6 +146,7 @@ public class App
 //          lmhBuilder.buildLMH(centreID, regpatSSN, true);
 
             dbConnection.close();
-            myConnection.disconnectSession();
+            //myConnection.disconnectSession();
+        createDBConnection.closeMyConnection();
     }
 }
